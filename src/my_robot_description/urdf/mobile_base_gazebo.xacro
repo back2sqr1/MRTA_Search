@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+    <xacro:macro name="mobile_base_gazebo" params="robot_name">
+        
+        <gazebo reference="${robot_name}_caster_wheel_link">
+            <mu1 value="0.1" />
+            <mu2 value="0.1" />
+        </gazebo>
+        
+        <gazebo reference="${robot_name}_left_wheel_link">
+            <mu1 value="1.0" />
+            <mu2 value="1.0" />
+        </gazebo>
+        
+        <gazebo reference="${robot_name}_right_wheel_link">
+            <mu1 value="1.0" />
+            <mu2 value="1.0" />
+        </gazebo>
+        
+        <gazebo>
+            <plugin
+                filename="gz-sim-diff-drive-system"
+                name="gz::sim::systems::DiffDrive">
+                <left_joint>${robot_name}_base_left_wheel_joint</left_joint>
+                <right_joint>${robot_name}_base_right_wheel_joint</right_joint>
+                <wheel_separation>0.45</wheel_separation>
+                <wheel_radius>0.1</wheel_radius>
+                <max_wheel_torque>20</max_wheel_torque>
+                <max_wheel_acceleration>1.0</max_wheel_acceleration>
+                <odom_frame>${robot_name}_odom</odom_frame>
+                <robot_base_frame>${robot_name}_base_footprint</robot_base_frame>
+                <topic>/model/${robot_name}/cmd_vel</topic>
+                <odom_topic>/model/${robot_name}/odometry</odom_topic>
+                <tf_topic>/model/${robot_name}/tf</tf_topic>
+                <publish_odom>true</publish_odom>
+                <publish_odom_tf>true</publish_odom_tf>
+                <publish_wheel_tf>true</publish_wheel_tf>
+            </plugin>
+        </gazebo>
+        
+        <gazebo>
+            <plugin
+                filename="gz-sim-joint-state-publisher-system"
+                name="gz::sim::systems::JointStatePublisher">
+                <topic>/world/empty/model/${robot_name}/joint_state</topic>
+            </plugin>
+        </gazebo>
+        
+    </xacro:macro>
+
+</robot>

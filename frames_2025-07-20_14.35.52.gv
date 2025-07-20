@@ -1,0 +1,22 @@
+digraph G {
+"world_base_footprint" -> "robot_1_base_footprint"[label=" Broadcaster: default_authority\nAverage rate: 50.205\nBuffer length: 4.88\nMost recent transform: 63.9\nOldest transform: 59.02\n"];
+"map" -> "world_base_footprint"[label=" Broadcaster: default_authority\nAverage rate: 10000.0\nBuffer length: 0.0\nMost recent transform: 0.0\nOldest transform: 0.0\n"];
+"robot_3_base_link" -> "robot_3_caster_wheel_link"[label=" Broadcaster: default_authority\nAverage rate: 10000.0\nBuffer length: 0.0\nMost recent transform: 0.0\nOldest transform: 0.0\n"];
+"robot_3_base_footprint" -> "robot_3_base_link"[label=" Broadcaster: default_authority\nAverage rate: 10000.0\nBuffer length: 0.0\nMost recent transform: 0.0\nOldest transform: 0.0\n"];
+"world_base_footprint" -> "robot_3_base_footprint"[label=" Broadcaster: default_authority\nAverage rate: 50.205\nBuffer length: 4.88\nMost recent transform: 63.88\nOldest transform: 59.0\n"];
+"world_base_footprint" -> "robot_2_base_footprint"[label=" Broadcaster: default_authority\nAverage rate: 50.205\nBuffer length: 4.88\nMost recent transform: 63.9\nOldest transform: 59.02\n"];
+"robot_2_base_link" -> "robot_2_caster_wheel_link"[label=" Broadcaster: default_authority\nAverage rate: 10000.0\nBuffer length: 0.0\nMost recent transform: 0.0\nOldest transform: 0.0\n"];
+"robot_2_base_footprint" -> "robot_2_base_link"[label=" Broadcaster: default_authority\nAverage rate: 10000.0\nBuffer length: 0.0\nMost recent transform: 0.0\nOldest transform: 0.0\n"];
+"robot_1_base_link" -> "robot_1_caster_wheel_link"[label=" Broadcaster: default_authority\nAverage rate: 10000.0\nBuffer length: 0.0\nMost recent transform: 0.0\nOldest transform: 0.0\n"];
+"robot_1_base_footprint" -> "robot_1_base_link"[label=" Broadcaster: default_authority\nAverage rate: 10000.0\nBuffer length: 0.0\nMost recent transform: 0.0\nOldest transform: 0.0\n"];
+"robot_1_base_link" -> "robot_1_left_wheel_link"[label=" Broadcaster: default_authority\nAverage rate: 10.204\nBuffer length: 4.9\nMost recent transform: 1753040152.38155\nOldest transform: 1753040147.481545\n"];
+"robot_1_base_link" -> "robot_1_right_wheel_link"[label=" Broadcaster: default_authority\nAverage rate: 10.204\nBuffer length: 4.9\nMost recent transform: 1753040152.38155\nOldest transform: 1753040147.481545\n"];
+"robot_2_base_link" -> "robot_2_left_wheel_link"[label=" Broadcaster: default_authority\nAverage rate: 10.204\nBuffer length: 4.9\nMost recent transform: 1753040152.391585\nOldest transform: 1753040147.491661\n"];
+"robot_2_base_link" -> "robot_2_right_wheel_link"[label=" Broadcaster: default_authority\nAverage rate: 10.204\nBuffer length: 4.9\nMost recent transform: 1753040152.391585\nOldest transform: 1753040147.491661\n"];
+"robot_3_base_link" -> "robot_3_left_wheel_link"[label=" Broadcaster: default_authority\nAverage rate: 10.204\nBuffer length: 4.9\nMost recent transform: 1753040152.392773\nOldest transform: 1753040147.492829\n"];
+"robot_3_base_link" -> "robot_3_right_wheel_link"[label=" Broadcaster: default_authority\nAverage rate: 10.204\nBuffer length: 4.9\nMost recent transform: 1753040152.392773\nOldest transform: 1753040147.492829\n"];
+edge [style=invis];
+ subgraph cluster_legend { style=bold; color=black; label ="view_frames Result";
+"Recorded at time: 1753040152.4946573"[ shape=plaintext ] ;
+}->"map";
+}

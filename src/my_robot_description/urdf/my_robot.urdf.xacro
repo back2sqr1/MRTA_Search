@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<robot name="my_robot" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+    <!-- Robot name parameter for multi-robot support -->
+    <xacro:arg name="robot_name" default="robot" />
+    <xacro:property name="robot_name" value="$(arg robot_name)" />
+    
+    <!-- Robot position parameters for multi-robot setup -->
+    <xacro:arg name="robot_x" default="0.0" />
+    <xacro:arg name="robot_y" default="0.0" />
+    <xacro:arg name="robot_z" default="0.0" />
+    <xacro:arg name="robot_yaw" default="0.0" />
+    
+    <xacro:property name="robot_x" value="$(arg robot_x)" />
+    <xacro:property name="robot_y" value="$(arg robot_y)" />
+    <xacro:property name="robot_z" value="$(arg robot_z)" />
+    <xacro:property name="robot_yaw" value="$(arg robot_yaw)" />
+
+    <xacro:include filename="$(find my_robot_description)/urdf/common_properties.xacro" />
+    <xacro:include filename="$(find my_robot_description)/urdf/mobile_base.xacro" />
+    <xacro:include filename="$(find my_robot_description)/urdf/mobile_base_gazebo.xacro" />
+
+    <!-- Central base footprint for multi-robot coordination -->
+    <link name="world_base_footprint" />
+    
+    <!-- Connection joint from world to robot's base footprint -->
+    <joint name="${robot_name}_world_connection" type="fixed">
+        <parent link="world_base_footprint" />
+        <child link="${robot_name}_base_footprint" />
+        <origin xyz="${robot_x} ${robot_y} ${robot_z}" rpy="0 0 ${robot_yaw}" />
+    </joint>
+
+    <!-- Instantiate the mobile base with robot name -->
+    <xacro:mobile_base robot_name="${robot_name}" />
+    <xacro:mobile_base_gazebo robot_name="${robot_name}" />
+</robot>
