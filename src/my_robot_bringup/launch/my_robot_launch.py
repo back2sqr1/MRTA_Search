@@ -5,6 +5,62 @@ from launch_ros.actions import Node, PushRosNamespace
 from launch_ros.substitutions import FindPackageShare
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 import launch
+import yaml
+import os
+
+def load_config():
+    """Load configuration from YAML file"""
+    config_path = os.path.join(
+        os.path.dirname(__file__), 
+        '..', 'config', 'robot_launch_config.yaml'
+    )
+    config_path = os.path.abspath(config_path)
+    
+    try:
+        with open(config_path, 'r') as file:
+            return yaml.safe_load(file)
+    except FileNotFoundError:
+        print(f"Warning: Config file not found at {config_path}. Using default values.")
+        return get_default_config()
+    except yaml.YAMLError as e:
+        print(f"Warning: Error parsing YAML file: {e}. Using default values.")
+        return get_default_config()
+
+def get_default_config():
+    """Return default configuration if YAML file is not available"""
+    return {
+        'robots': {
+            'num_robots': 1,
+            'default_positions': [[0.0, 0.0, 0.0], [2.0, 0.0, 0.0], [4.0, 0.0, 0.0]],
+            'name_prefix': 'robot_',
+            'auto_spacing': {'x': 2.0, 'y': 0.0, 'z': 0.0}
+        },
+        'paths': {
+            'urdf_file': 'urdf/my_robot.urdf.xacro',
+            'rviz_config': 'rviz/urdf_config.rviz',
+            'gazebo_bridge_config': 'config/gazebo_bridge.yaml'
+        },
+        'gazebo': {
+            'gz_args': 'empty.sdf -r'
+        },
+        'transforms': {
+            'map_to_world': {
+                'translation': [0.0, 0.0, 0.0],
+                'rotation': [0.0, 0.0, 0.0],
+                'parent_frame': 'map',
+                'child_frame': 'world_base_footprint'
+            }
+        },
+        'output': {
+            'mode': 'screen'
+        },
+        'remappings': {
+            'bridge': {
+                'tf': '/tf',
+                'tf_static': '/tf_static'
+            }
+        }
+    }
 
 def parse_robot_positions(position_string):
     """Parse position string into list of [x, y, z] coordinates"""
@@ -22,6 +78,9 @@ def parse_robot_positions(position_string):
 def launch_setup(context, *args, **kwargs):
     """Setup function to handle dynamic robot spawning"""
     
+    # Load configuration
+    config = load_config()
+    
     # Get the actual values of launch configurations
     num_robots = int(LaunchConfiguration('num_robots').perform(context))
     robot_positions_str = LaunchConfiguration('robot_positions').perform(context)
@@ -29,23 +88,38 @@ def launch_setup(context, *args, **kwargs):
     # Parse positions
     positions = parse_robot_positions(robot_positions_str)
     
+    # If no positions provided, use default from config
+    if not positions or positions == [[0.0, 0.0, 0.0]]:
+        positions = config['robots']['default_positions']
+    
     # Ensure we have enough positions for all robots
     while len(positions) < num_robots:
         last_pos = positions[-1]
-        new_pos = [last_pos[0] + 2.0, last_pos[1], last_pos[2]]
+        spacing = config['robots']['auto_spacing']
+        new_pos = [
+            last_pos[0] + spacing['x'], 
+            last_pos[1] + spacing['y'], 
+            last_pos[2] + spacing['z']
+        ]
         positions.append(new_pos)
     
-    # Package paths
+    # Package paths from config
     urdf_path = PathJoinSubstitution([
         FindPackageShare('my_robot_description'),
-        'urdf', 'my_robot.urdf.xacro'
+        config['paths']['urdf_file']
     ])
+    
+    # Get output mode from config
+    output_mode = config['output']['mode']
+    
+    # Get robot name prefix from config
+    name_prefix = config['robots']['name_prefix']
     
     # Create robot groups dynamically based on num_robots
     robot_actions = []
     
     for i in range(num_robots):
-        robot_name = f'robot_{i+1}'
+        robot_name = f'{name_prefix}{i+1}'
         pos = positions[i]
         
         # Robot state publisher in global namespace to publish TF correctly
@@ -67,7 +141,7 @@ def launch_setup(context, *args, **kwargs):
                 ('/robot_description', f'/{robot_name}/robot_description'),
                 ('/joint_states', f'/{robot_name}/joint_states')
             ],
-            output='screen'
+            output=output_mode
         )
         
         # Joint state publisher for wheel joints
@@ -79,7 +153,7 @@ def launch_setup(context, *args, **kwargs):
                 ('/robot_description', f'/{robot_name}/robot_description'),
                 ('/joint_states', f'/{robot_name}/joint_states')
             ],
-            output='screen'
+            output=output_mode
         )
         
         # Gazebo spawn in robot namespace
@@ -95,7 +169,7 @@ def launch_setup(context, *args, **kwargs):
                     '-y', str(pos[1]),
                     '-z', str(pos[2])
                 ],
-                output='screen'
+                output=output_mode
             )
         ])
         
@@ -106,73 +180,87 @@ def launch_setup(context, *args, **kwargs):
     return robot_actions
 
 def generate_launch_description():
-    # Declare arguments
+    # Load configuration
+    config = load_config()
+    
+    # Declare arguments with defaults from config
     num_robots_arg = DeclareLaunchArgument(
         'num_robots',
-        default_value='1',
+        default_value=str(config['robots']['num_robots']),
         description='Number of robots to spawn'
     )
     
+    # Convert default positions to string format
+    default_positions_str = ';'.join([
+        ','.join([str(coord) for coord in pos]) 
+        for pos in config['robots']['default_positions']
+    ])
+    
     robot_positions_arg = DeclareLaunchArgument(
         'robot_positions',
-        default_value='0.0,0.0,0.0;2.0,0.0,0.0;4.0,0.0,0.0',
+        default_value=default_positions_str,
         description='Robot positions as x,y,z;x,y,z;... format'
     )
     
-    # Package paths
+    # Package paths from config
     gazebo_config_path = PathJoinSubstitution([
         FindPackageShare('my_robot_bringup'),
-        'config', 'gazebo_bridge.yaml'
+        config['paths']['gazebo_bridge_config']
     ])
     
     rviz_config_path = PathJoinSubstitution([
         FindPackageShare('my_robot_description'),
-        'rviz', 'urdf_config.rviz'
+        config['paths']['rviz_config']
     ])
     
-    # Launch Gazebo
+    # Launch Gazebo with config
     gazebo_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([
             FindPackageShare('ros_gz_sim'),
             '/launch/gz_sim.launch.py'
         ]),
-        launch_arguments={'gz_args': 'empty.sdf -r'}.items()
+        launch_arguments={'gz_args': config['gazebo']['gz_args']}.items()
     )
     
     # Use OpaqueFunction to handle dynamic robot creation
     robot_spawning = OpaqueFunction(function=launch_setup)
     
-    # Static transform publisher for world base footprint
+    # Static transform publisher for world base footprint from config
+    transform_config = config['transforms']['map_to_world']
     world_tf_publisher = Node(
         package='tf2_ros',
         executable='static_transform_publisher',
-        arguments=['0', '0', '0', '0', '0', '0', 'map', 'world_base_footprint'],
-        output='screen'
+        arguments=[
+            '--x', str(transform_config['translation'][0]),
+            '--y', str(transform_config['translation'][1]),
+            '--z', str(transform_config['translation'][2]),
+            '--roll', str(transform_config['rotation'][0]),
+            '--pitch', str(transform_config['rotation'][1]),
+            '--yaw', str(transform_config['rotation'][2]),
+            '--frame-id', transform_config['parent_frame'],
+            '--child-frame-id', transform_config['child_frame']
+        ],
+        output=config['output']['mode']
     )
     
-    # Static transform publisher for world base footprint
-    world_tf_publisher = Node(
-        package='tf2_ros',
-        executable='static_transform_publisher',
-        arguments=['0', '0', '0', '0', '0', '0', 'map', 'world_base_footprint'],
-        output='screen'
-    )
-    
-    # Bridge and RViz
+    # Bridge and RViz with config
+    bridge_remappings = config['remappings']['bridge']
     bridge_node = Node(
         package='ros_gz_bridge',
         executable='parameter_bridge',
         parameters=[{'config_file': gazebo_config_path}],
         remappings=[
-            ('/tf', '/tf'),
-            ('/tf_static', '/tf_static')
-        ]
+            ('/tf', bridge_remappings['tf']),
+            ('/tf_static', bridge_remappings['tf_static'])
+        ],
+        output=config['output']['mode']
     )
     
     rviz_node = Node(
         package='rviz2',
         executable='rviz2',
-        arguments=['-d', rviz_config_path]
+        arguments=['-d', rviz_config_path],
+        output=config['output']['mode']
     )
     
     return LaunchDescription([

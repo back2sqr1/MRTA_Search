@@ -1,0 +1,63 @@
+# Robot Launch Configuration Parameters
+
+# Robot spawning configuration
+robots:
+  # Number of robots to spawn
+  num_robots: 1
+  
+  # Default robot positions (x, y, z coordinates)
+  # Format: list of [x, y, z] coordinates
+  default_positions:
+    - [0.0, 0.0, 0.0]
+    - [2.0, 0.0, 0.0]
+    - [4.0, 0.0, 0.0]
+  
+  # Robot naming configuration
+  name_prefix: "robot_"
+  
+  # Spacing between robots when auto-generating positions
+  auto_spacing:
+    x: 2.0
+    y: 0.0
+    z: 0.0
+
+# File paths configuration
+paths:
+  # URDF/Xacro file path (relative to my_robot_description package)
+  urdf_file: "urdf/my_robot.urdf.xacro"
+  
+  # RViz configuration file path (relative to my_robot_description package)
+  rviz_config: "rviz/urdf_config.rviz"
+  
+  # Gazebo bridge configuration file path (relative to my_robot_bringup package)
+  gazebo_bridge_config: "config/gazebo_bridge.yaml"
+
+# Gazebo configuration
+gazebo:
+  # Gazebo launch arguments
+  gz_args: "empty.sdf -r"
+  
+  # World file (if using a specific world instead of empty)
+  # world_file: "worlds/my_world.sdf"
+
+# Transform configuration
+transforms:
+  # Static transform from map to world_base_footprint
+  # Uses new-style arguments for static_transform_publisher (--x, --y, etc.)
+  map_to_world:
+    translation: [0.0, 0.0, 0.0]  # x, y, z
+    rotation: [0.0, 0.0, 0.0]     # roll, pitch, yaw (in radians)
+    parent_frame: "map"
+    child_frame: "world_base_footprint"
+
+# Node output configuration
+output:
+  # Output mode for all nodes (screen, log, both)
+  mode: "screen"
+
+# ROS remapping configuration
+remappings:
+  # Global remappings for bridge node
+  bridge:
+    tf: "/tf"
+    tf_static: "/tf_static"
