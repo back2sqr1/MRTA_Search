@@ -7,6 +7,7 @@ from launch.launch_description_sources import PythonLaunchDescriptionSource
 import launch
 import yaml
 import os
+import json
 
 def load_config():
     """Load configuration from YAML file"""
@@ -139,6 +140,9 @@ def launch_setup(context, *args, **kwargs):
 def generate_launch_description():
     # Load configuration
     config = load_config()
+
+    with open('src/my_robot_bringup/config/bdd.json', 'r') as file:
+        bdd_config = json.load(file)
     
     # Declare arguments with defaults from config
     num_robots_arg = DeclareLaunchArgument(
@@ -182,6 +186,46 @@ def generate_launch_description():
     # Use OpaqueFunction to handle dynamic robot creation
     robot_spawning = OpaqueFunction(function=launch_setup)
     
+    # Spawn a marker at (0, 0, 0) - a red cylinder
+
+    markers = []
+    marker_spawn = Node(
+        package='ros_gz_sim',
+        executable='create',
+        arguments=[
+            '-file', PathJoinSubstitution([
+                FindPackageShare('my_robot_description'),
+                'urdf',
+                'marker.sdf'
+            ]),
+            '-name', 'origin_marker',
+            '-x', '0',
+            '-y', '0', 
+            '-z', '0'
+        ],
+        output=config['output']['mode']
+    )
+    markers.append(marker_spawn)
+
+    for location, pose in bdd_config['locations'].items():
+        marker = Node(
+            package='ros_gz_sim',
+            executable='create',
+            arguments=[
+                '-file', PathJoinSubstitution([
+                    FindPackageShare('my_robot_description'),
+                    'urdf',
+                    'marker.sdf'
+                ]),
+                '-name', f"marker_{location}",
+                '-x', str(pose[0]),
+                '-y', str(pose[1]),
+                '-z', str(0)
+            ],
+            output=config['output']['mode']
+        )
+        markers.append(marker)
+
     # Static transform publisher for world base footprint from config
     transform_config = config['transforms']['map_to_world']
     world_tf_publisher = Node(
@@ -219,13 +263,15 @@ def generate_launch_description():
         arguments=['-d', rviz_config_path],
         output=config['output']['mode']
     )
-    
-    return LaunchDescription([
+    final_list = [
         num_robots_arg,
         robot_positions_arg,
         gazebo_launch,
         world_tf_publisher,
         robot_spawning,
         bridge_node,
-        rviz_node
-    ])
+        # rviz_node
+    ]
+    final_list.extend(markers)
+
+    return LaunchDescription(final_list)

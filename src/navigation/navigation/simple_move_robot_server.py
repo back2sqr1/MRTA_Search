@@ -78,6 +78,7 @@ class SimpleMoveRobotServer(Node):
         """Handle pose array from Gazebo bridge"""
         if len(msg.poses) > 0:
             # Find the pose of the robot if the name is robot 1-> index 1, robot 2-> index 0
+            # REMEMBER: INDICES ARE REVERSED IN POSEARRAY
             index = 0 if self.robot_name == 'robot_2' else 1
             pose = msg.poses[index]
             self.current_pose = pose
