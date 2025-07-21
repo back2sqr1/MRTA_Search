@@ -3,7 +3,7 @@
 # Robot spawning configuration
 robots:
   # Number of robots to spawn
-  num_robots: 1
+  num_robots: 2
   
   # Default robot positions (x, y, z coordinates)
   # Format: list of [x, y, z] coordinates
@@ -17,7 +17,7 @@ robots:
   
   # Spacing between robots when auto-generating positions
   auto_spacing:
-    x: 2.0
+    x: 0.0
     y: 0.0
     z: 0.0
 

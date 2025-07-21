@@ -27,7 +27,7 @@
     <joint name="${robot_name}_world_connection" type="fixed">
         <parent link="world_base_footprint" />
         <child link="${robot_name}_base_footprint" />
-        <origin xyz="${robot_x} ${robot_y} ${robot_z}" rpy="0 0 ${robot_yaw}" />
+        <origin xyz="0 0 0" rpy="0 0 ${robot_yaw}" />
     </joint>
 
     <!-- Instantiate the mobile base with robot name -->

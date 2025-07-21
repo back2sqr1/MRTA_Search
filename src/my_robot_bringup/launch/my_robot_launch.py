@@ -21,46 +21,8 @@ def load_config():
             return yaml.safe_load(file)
     except FileNotFoundError:
         print(f"Warning: Config file not found at {config_path}. Using default values.")
-        return get_default_config()
-    except yaml.YAMLError as e:
-        print(f"Warning: Error parsing YAML file: {e}. Using default values.")
-        return get_default_config()
+        return []
 
-def get_default_config():
-    """Return default configuration if YAML file is not available"""
-    return {
-        'robots': {
-            'num_robots': 1,
-            'default_positions': [[0.0, 0.0, 0.0], [2.0, 0.0, 0.0], [4.0, 0.0, 0.0]],
-            'name_prefix': 'robot_',
-            'auto_spacing': {'x': 2.0, 'y': 0.0, 'z': 0.0}
-        },
-        'paths': {
-            'urdf_file': 'urdf/my_robot.urdf.xacro',
-            'rviz_config': 'rviz/urdf_config.rviz',
-            'gazebo_bridge_config': 'config/gazebo_bridge.yaml'
-        },
-        'gazebo': {
-            'gz_args': 'empty.sdf -r'
-        },
-        'transforms': {
-            'map_to_world': {
-                'translation': [0.0, 0.0, 0.0],
-                'rotation': [0.0, 0.0, 0.0],
-                'parent_frame': 'map',
-                'child_frame': 'world_base_footprint'
-            }
-        },
-        'output': {
-            'mode': 'screen'
-        },
-        'remappings': {
-            'bridge': {
-                'tf': '/tf',
-                'tf_static': '/tf_static'
-            }
-        }
-    }
 
 def parse_robot_positions(position_string):
     """Parse position string into list of [x, y, z] coordinates"""
@@ -73,6 +35,7 @@ def parse_robot_positions(position_string):
             coords = [float(x.strip()) for x in pos_str.split(',')]
             if len(coords) == 3:
                 positions.append(coords)
+    print(f"Parsed robot positions: {positions}")
     return positions if positions else [[0.0, 0.0, 0.0]]
 
 def launch_setup(context, *args, **kwargs):
@@ -91,17 +54,6 @@ def launch_setup(context, *args, **kwargs):
     # If no positions provided, use default from config
     if not positions or positions == [[0.0, 0.0, 0.0]]:
         positions = config['robots']['default_positions']
-    
-    # Ensure we have enough positions for all robots
-    while len(positions) < num_robots:
-        last_pos = positions[-1]
-        spacing = config['robots']['auto_spacing']
-        new_pos = [
-            last_pos[0] + spacing['x'], 
-            last_pos[1] + spacing['y'], 
-            last_pos[2] + spacing['z']
-        ]
-        positions.append(new_pos)
     
     # Package paths from config
     urdf_path = PathJoinSubstitution([
@@ -176,6 +128,11 @@ def launch_setup(context, *args, **kwargs):
         robot_actions.append(robot_state_pub)
         robot_actions.append(joint_state_pub)
         robot_actions.append(robot_spawn_group)
+    
+    # Flatten positions array for parameter passing
+    flattened_positions = []
+    for i in range(min(num_robots, len(positions))):
+        flattened_positions.extend(positions[i])
     
     return robot_actions
 

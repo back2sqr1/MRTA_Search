@@ -26,16 +26,25 @@
                 <right_joint>${robot_name}_base_right_wheel_joint</right_joint>
                 <wheel_separation>0.45</wheel_separation>
                 <wheel_radius>0.1</wheel_radius>
-                <max_wheel_torque>20</max_wheel_torque>
-                <max_wheel_acceleration>1.0</max_wheel_acceleration>
-                <odom_frame>${robot_name}_odom</odom_frame>
-                <robot_base_frame>${robot_name}_base_footprint</robot_base_frame>
+                <max_wheel_torque>200</max_wheel_torque>
+                <max_wheel_acceleration>10.0</max_wheel_acceleration>
                 <topic>/model/${robot_name}/cmd_vel</topic>
-                <odom_topic>/model/${robot_name}/odometry</odom_topic>
-                <tf_topic>/model/${robot_name}/tf</tf_topic>
-                <publish_odom>true</publish_odom>
-                <publish_odom_tf>true</publish_odom_tf>
-                <publish_wheel_tf>true</publish_wheel_tf>
+                
+            </plugin>
+        </gazebo>
+        
+        <!-- Pose Publisher Plugin (simulates GPS with exact positioning) -->
+        <gazebo>
+            <plugin
+                filename="gz-sim-pose-publisher-system"
+                name="gz::sim::systems::PosePublisher">
+                <publish_link_pose>true</publish_link_pose>
+                <publish_collision_pose>false</publish_collision_pose>
+                <publish_visual_pose>false</publish_visual_pose>
+                <use_pose_vector_msg>true</use_pose_vector_msg>
+                <static_publisher>true</static_publisher>
+                <static_update_frequency>10</static_update_frequency>
+                <link_name>${robot_name}_base_footprint</link_name>
             </plugin>
         </gazebo>
         
@@ -43,7 +52,7 @@
             <plugin
                 filename="gz-sim-joint-state-publisher-system"
                 name="gz::sim::systems::JointStatePublisher">
-                <topic>/world/empty/model/${robot_name}/joint_state</topic>
+                <topic>${robot_name}/joint_state</topic>
             </plugin>
         </gazebo>
         
