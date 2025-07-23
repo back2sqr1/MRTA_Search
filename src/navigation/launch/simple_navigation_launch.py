@@ -27,8 +27,8 @@ def generate_launch_description():
         output='screen',
         parameters=[{
             'robot_name': 'robot_1',
-            'max_linear_velocity': 0.1,
-            'max_angular_velocity': 0.8,     # Reduced from 1.0 to be less aggressiveive
+            'max_linear_velocity': 1.0,
+            'max_angular_velocity': 1.0,     # Reduced from 1.0 to be less aggressiveive
         }]
     )
     
@@ -41,8 +41,8 @@ def generate_launch_description():
         output='screen',
         parameters=[{
             'robot_name': 'robot_2',
-            'max_linear_velocity': 0.1,
-            'max_angular_velocity': 0.8,     # Reduced from 1.0 to be less aggressive
+            'max_linear_velocity': 1.0,
+            'max_angular_velocity': 1.0,     # Reduced from 1.0 to be less aggressive
         }]
     )
     

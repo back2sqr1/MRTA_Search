@@ -24,8 +24,8 @@ class SimpleMoveRobotServer(Node):
         self.declare_parameter('robot_name', 'robot_1')
         self.declare_parameter('max_linear_velocity', 0.1)
         self.declare_parameter('max_angular_velocity', 0.3)
-        self.declare_parameter('position_tolerance', 0.01)
-        self.declare_parameter('angular_tolerance', 0.001)
+        self.declare_parameter('position_tolerance', 0.05)
+        self.declare_parameter('angular_tolerance', 0.005)
         
         # Get parameters
         self.robot_name = self.get_parameter('robot_name').get_parameter_value().string_value
