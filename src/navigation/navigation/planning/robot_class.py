@@ -1,5 +1,7 @@
 class Robot:
-    def __init__(self, id, position = [0,0], assigned_loc = '', cost = 0.0, time = 0.0):
+    def __init__(self, id, position = None, assigned_loc = '', cost = 0.0, time = 0.0):
+        if position is None:
+            position = [0, 0]
         self.id : str = id
         self.position: tuple[int, int] = position
         self.assigned_loc: str = assigned_loc

@@ -1,10 +1,6 @@
 Robot Assignments: robot_2 -> (5, 5)
-{}
+{'p': 'T'}
 robot_2 -> a
-Robot Assignments: robot_2 -> (10, 10)
-{'p': 'F'}
-robot_2 -> e
-Robot Assignments: robot_1 -> (0, 0), robot_2 -> (10, 10)
-{'p': 'F', 'p*': 'F', 'p**': 'T'}
+Robot Assignments: robot_1 -> (0, 0)
+{'p': 'T'}
 robot_1 -> d
-robot_2 -> e

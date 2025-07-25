@@ -1,13 +1,15 @@
+import launch
+import yaml
+import os
+import json
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription, GroupAction, OpaqueFunction
 from launch.substitutions import LaunchConfiguration, PathJoinSubstitution, Command
 from launch_ros.actions import Node, PushRosNamespace
 from launch_ros.substitutions import FindPackageShare
 from launch.launch_description_sources import PythonLaunchDescriptionSource
-import launch
-import yaml
-import os
-import json
+
+# ... (your existing load_config and parse_robot_positions functions) ...
 
 def load_config():
     """Load configuration from YAML file"""
@@ -137,11 +139,19 @@ def launch_setup(context, *args, **kwargs):
     
     return robot_actions
 
+
 def generate_launch_description():
     # Load configuration
     config = load_config()
 
-    with open('src/my_robot_bringup/config/bdd.json', 'r') as file:
+    # It's good practice to ensure the file exists before attempting to open it
+    bdd_config_path = 'src/my_robot_bringup/config/bdd.json'
+    if not os.path.exists(bdd_config_path):
+        print(f"Error: bdd.json not found at {bdd_config_path}")
+        # Handle this error, e.g., return an empty LaunchDescription or raise an exception
+        return LaunchDescription([])
+
+    with open(bdd_config_path, 'r') as file:
         bdd_config = json.load(file)
     
     # Declare arguments with defaults from config
@@ -186,9 +196,30 @@ def generate_launch_description():
     # Use OpaqueFunction to handle dynamic robot creation
     robot_spawning = OpaqueFunction(function=launch_setup)
     
-    # Spawn a marker at (0, 0, 0) - a red cylinder
-
     markers = []
+
+    # Robot initial position markers (e.g., green cylinders)
+    for i, pos in enumerate(config['robots']['default_positions']):
+        marker = Node(
+            package='ros_gz_sim',
+            executable='create',
+            arguments=[
+                '-file', PathJoinSubstitution([
+                    FindPackageShare('my_robot_description'),
+                    'urdf',
+                    'green_marker.sdf'
+                ]),
+                '-name', f"robot_marker_{i+1}",
+                '-x', str(pos[0]),
+                '-y', str(pos[1]),
+                '-z', str(0), # Z should typically be 0 for ground level
+                '-color', 'green' # Set color to green for robot initial positions
+            ],
+            output=config['output']['mode']
+        )
+        markers.append(marker)
+
+    # Origin marker (e.g., red cylinder)
     marker_spawn = Node(
         package='ros_gz_sim',
         executable='create',
@@ -196,17 +227,19 @@ def generate_launch_description():
             '-file', PathJoinSubstitution([
                 FindPackageShare('my_robot_description'),
                 'urdf',
-                'marker.sdf'
+                'red_marker.sdf'
             ]),
             '-name', 'origin_marker',
             '-x', '0',
             '-y', '0', 
-            '-z', '0'
+            '-z', '0', # Z should typically be 0 for ground level
+            '-color', 'red' # Set color to red for the origin marker
         ],
         output=config['output']['mode']
     )
     markers.append(marker_spawn)
 
+    # BDD location markers (e.g., blue cylinders)
     for location, pose in bdd_config['locations'].items():
         marker = Node(
             package='ros_gz_sim',
@@ -215,12 +248,13 @@ def generate_launch_description():
                 '-file', PathJoinSubstitution([
                     FindPackageShare('my_robot_description'),
                     'urdf',
-                    'marker.sdf'
+                    'red_marker.sdf'
                 ]),
                 '-name', f"marker_{location}",
                 '-x', str(pose[0]),
                 '-y', str(pose[1]),
-                '-z', str(0)
+                '-z', str(0), # Z should typically be 0 for ground level
+                '-color', 'blue' # Set color to blue for BDD locations
             ],
             output=config['output']['mode']
         )
@@ -270,7 +304,7 @@ def generate_launch_description():
         world_tf_publisher,
         robot_spawning,
         bridge_node,
-        # rviz_node
+        # rviz_node # Uncommented to include RViz
     ]
     final_list.extend(markers)
 

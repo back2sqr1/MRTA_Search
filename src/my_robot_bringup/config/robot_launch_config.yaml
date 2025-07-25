@@ -8,8 +8,8 @@ robots:
   # Default robot positions (x, y, z coordinates)
   # Format: list of [x, y, z] coordinates
   default_positions:
-    - [0.0, 0.0, 0.0]
-    - [2.0, 0.0, 0.0]
+    - [1.0, 1.0, 0.0]
+    - [2.0, 2.0, 0.0]
     - [4.0, 0.0, 0.0]
   
   # Robot naming configuration
@@ -20,6 +20,10 @@ robots:
     x: 0.0
     y: 0.0
     z: 0.0
+
+  initial_resolutions: {}
+
+  
 
 # File paths configuration
 paths:
