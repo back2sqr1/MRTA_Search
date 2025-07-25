@@ -1,5 +1,5 @@
-from robot_class import Robot, RobotMap
-from time_step_node_class import TimeStepNode
+from .robot_class import Robot, RobotMap
+from .time_step_node_class import TimeStepNode
 import copy
 import uuid
 
@@ -26,8 +26,9 @@ class RobotManager:
     location_to_pin : dict[str, tuple[int, int]] = {}
     pin_to_location: dict[tuple[int, int], str] = {}
     location_to_prop : dict[str, list[str]] = {}
+    initial_resolution : dict[str, str] = {}
 
-    def __init__(self, robot_map, next_question_map, initial_question, props, location_to_pin=None, pin_to_location=None, location_to_prop=None):
+    def __init__(self, robot_map, next_question_map, initial_question, props, location_to_pin=None, pin_to_location=None, location_to_prop=None, initial_resolution=None):
         self.next_question_map = next_question_map
         self.initial_question = initial_question
         self.props = props
@@ -43,7 +44,7 @@ class RobotManager:
             query = initial_question,
             next = [],
             type = 'robot_assignment',
-            resolved_questions= {},
+            resolved_questions= copy.deepcopy(initial_resolution) if initial_resolution else {},
         )
         start_node.visited_locations = set()
         self.head_time_step_node = TimeStepNode(
@@ -52,7 +53,7 @@ class RobotManager:
             query = initial_question,
             next = [start_node],
             type = 'query',
-            resolved_questions= {},
+            resolved_questions= copy.deepcopy(initial_resolution) if initial_resolution else {},
         )
         self.head_time_step_node.visited_locations = set()
         self.time_step_queue = []
@@ -99,7 +100,7 @@ class RobotManager:
 
         new_visited_locations = copy.deepcopy(current_time_step.visited_locations)
         new_visited_locations.update(visited_locations_this_step)
-        
+
         known_properties = _known_properties(new_visited_locations, self.location_to_prop)
         query = copy.deepcopy(current_time_step.query)
         possible_resolutions = self.possible_resolutions(0, copy.deepcopy(list(known_properties)), resolved_questions)

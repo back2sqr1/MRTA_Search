@@ -1,8 +1,8 @@
 import copy
 import json, uuid
-from robot_class import Robot, RobotMap
-from robot_manager import RobotManager, euclidean_distance, DISTANCE_TOLERANCE   
-from time_step_node_class import TimeStepNode
+from .robot_class import Robot, RobotMap
+from .robot_manager import RobotManager, euclidean_distance, DISTANCE_TOLERANCE   
+from .time_step_node_class import TimeStepNode
 import os
 
 COST_TOLERANCE = 0.001
@@ -124,8 +124,8 @@ class SearchTree:
             )
             query_node.visited_locations = visited_locations
             query_node.visited_locations.update(self.check_robot_destinations(robot_map))
-            # for robot in arrived_robots:
-            #     query_node.robot_map[robot.id].assigned_loc = ''
+            for robot in arrived_robots:
+                query_node.robot_map[robot.id].assigned_loc = ''
 
 
             current_node.next.append(query_node)
@@ -139,8 +139,8 @@ class SearchTree:
             robot_manager.assign_robot_to_location(robot_id=robot_id, location=location, robot_map=robot_map)
         
         self.process_robot_movement(robot_manager, robot_map, current_time_step)
-        
-    def search(self, initial_robot_map: RobotMap) -> TimeStepNode:
+
+    def search(self, initial_robot_map: RobotMap, initial_resolution: dict[str, str]) -> TimeStepNode:
         robot_manager = RobotManager(
             robot_map=copy.deepcopy(initial_robot_map),
             next_question_map=self.next_query,
@@ -148,7 +148,8 @@ class SearchTree:
             props=self.props,
             location_to_pin=self.location_to_pin,
             pin_to_location=self.pin_to_location,
-            location_to_prop=self.location_to_prop
+            location_to_prop=self.location_to_prop,
+            initial_resolution=copy.deepcopy(initial_resolution)
         )
 
         while robot_manager.time_step_queue: 
@@ -201,23 +202,26 @@ class SearchTree:
     
 
     # By cost = cumulative distance traveled by all robots
-    def get_best_plan(self, initial_robot_map: RobotMap) -> list[RobotAssignments]:
-        cur_node = self.search(initial_robot_map)
+    def get_best_plan(self, initial_robot_map: RobotMap, initial_resolution: dict[str, str]) -> tuple[list[(str, tuple[int, int])], list[str]]:
+        cur_node = self.search(initial_robot_map, initial_resolution)
         best_cost = self.determine_cost(cur_node)
-        best_plan = []
+        best_plan_text = []
+        best_plan : list[(str, tuple[int, int])] = []
         while cur_node is not None:
             with open ('current_node.txt', 'a') as f:
                 f.write(f"{cur_node}\n")
             for next_node in cur_node.next:
                 if (abs(self.determine_cost(next_node) - best_cost)) < COST_TOLERANCE:
                     if next_node.type == 'robot_moving':
-                        best_plan.append(str(RobotAssignments(next_node, self.location_to_pin)))
+                        best_plan_text.append(str(RobotAssignments(next_node, self.location_to_pin)))
                     elif next_node.type == 'query':
-                        best_plan.append(next_node.resolved_questions)
+                        best_plan_text.append(next_node.resolved_questions)
                     elif next_node.type == 'robot_assignment':
                         for robot_id, robot in next_node.robot_map.items():
                             if robot.assigned_loc != '':
-                                best_plan.append(f"{robot_id} -> {robot.assigned_loc}")
+                                best_plan.append((robot_id, self.location_to_pin[robot.assigned_loc]))
+
+                                best_plan_text.append(f"{robot_id} -> {robot.assigned_loc}")
 
                     cur_node = next_node
                     break
@@ -225,25 +229,30 @@ class SearchTree:
             else:
                 cur_node = None
 
-        return best_plan
+        return (best_plan, best_plan_text)
 
-search_tree = SearchTree()
-initial_robot_map = RobotMap({
-    'robot_1': Robot(id='robot_1', position=(1, 1)),
-    'robot_2': Robot(id='robot_2', position=(2, 2))
-})
-if os.path.exists('current_node.txt'):
-    os.remove('current_node.txt')
-if os.path.exists('best_path.txt'):
-    os.remove('best_path.txt')
+# search_tree = SearchTree()
+# initial_robot_map = RobotMap({
+#     'robot_1': Robot(id='robot_1', position=(1, 1)),
+#     'robot_2': Robot(id='robot_2', position=(2, 2))
+# })
+# initial_resolution = {
+#     'p': 'T'
+# }
+# if os.path.exists('current_node.txt'):
+#     os.remove('current_node.txt')
+# if os.path.exists('best_path.txt'):
+#     os.remove('best_path.txt')
 
-best_plan = search_tree.get_best_plan(initial_robot_map)
+# best_plan, best_plan_text = search_tree.get_best_plan(initial_robot_map, initial_resolution)
 
 
 
-with open('best_path.txt', 'a') as f:
-    for assignment in best_plan:
-        f.write(f"{assignment}\n")
+# with open('best_path.txt', 'a') as f:
+#     for assignment in best_plan_text:
+#         f.write(f"{assignment}\n")
+
+# print(best_plan)
     
 
 

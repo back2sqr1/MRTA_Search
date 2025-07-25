@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<sdf version="1.6" xmlns:xacro="http://ros.org/wiki/xacro">
+
+    <model name="marker_model">
+        <pose>0 0 1 0 0 0</pose>
+        <static>true</static>
+        <link name="marker_link">
+            <visual name="marker_visual">
+                <geometry>
+                    <cylinder>
+                        <radius>0.1</radius>
+                        <length>2</length>
+                    </cylinder>
+                </geometry>
+                <material>
+                    <ambient>1 0 0 0.7</ambient>
+                    <diffuse>1 0 0 0.7</diffuse>
+                </material>
+            </visual>
+        </link>
+    </model>
+</sdf>

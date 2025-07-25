@@ -1,4 +1,4 @@
-from robot_class import Robot, RobotMap
+from .robot_class import Robot, RobotMap
 
 class TimeStepNode: 
     @property

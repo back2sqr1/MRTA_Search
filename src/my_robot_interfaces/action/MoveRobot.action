@@ -1,17 +1,9 @@
-
-# Goal: Define target position and movement parameters
-geometry_msgs/Pose target_pose        # Target position and orientation
-float64 max_velocity                  # Maximum velocity (m/s)
-float64 tolerance                     # Position tolerance (m)
+# Goal
+geometry_msgs/Pose target_pose
 ---
-# Result: Final outcome of the movement
-bool success                          # Whether the robot reached the target
-string message                        # Status message
-geometry_msgs/Pose final_pose         # Final position achieved
-float64 distance_error                # Distance from target (m)
+# Result
+bool success
+string message
 ---
-# Feedback: Periodic updates during movement
-geometry_msgs/Pose current_pose       # Current robot position
-float64 distance_to_target           # Remaining distance to target (m)
-float64 percentage_complete          # Progress percentage (0-100)
-float64 current_velocity             # Current velocity (m/s)
+# Feedback
+float32 current_distance
