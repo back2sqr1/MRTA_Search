@@ -1,0 +1,824 @@
+<?xml version="1.0"?>
+<robot name="tugbot" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <!-- Define some common properties -->
+  <xacro:property name="PI" value="3.14159265359"/>
+  <xacro:property name="wheel_radius" value="0.195"/>
+  <xacro:property name="wheel_separation" value="0.5605"/>
+  <xacro:property name="base_mass" value="46.2"/>
+
+  <!-- Material definitions -->
+  <material name="orange">
+    <color rgba="1.0 0.5 0.0 0.5"/>
+  </material>
+  
+  <material name="green">
+    <color rgba="0.0 1.0 0.0 1.0"/>
+  </material>
+  
+  <material name="white">
+    <color rgba="1.0 1.0 1.0 1.0"/>
+  </material>
+  
+  <material name="gray">
+    <color rgba="0.3 0.3 0.3 1.0"/>
+  </material>
+
+  <!-- Base Link -->
+  <link name="base_link">
+    <inertial>
+      <origin xyz="-0.1 0 0.1" rpy="0 0 0"/>
+      <mass value="${base_mass}"/>
+      <inertia ixx="1.55925" ixy="0" ixz="0"
+               iyy="1.55925" iyz="0"
+               izz="1.55925"/>
+    </inertial>
+    
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://my_robot_description/meshes/base/tugbot_simp.stl"/>
+      </geometry>
+    </collision>
+    
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://my_robot_description/meshes/base/tugbot_simp.dae"/>
+      </geometry>
+    </visual>
+    
+    <!-- Additional visuals -->
+    <visual name="movai_logo">
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://my_robot_description/meshes/base/movai_logo.dae"/>
+      </geometry>
+      <material name="white"/>
+    </visual>
+    
+    <visual name="light_led">
+      <origin xyz="-0.1 0 0.1945" rpy="0 ${PI/2} 0"/>
+      <geometry>
+        <mesh filename="package://my_robot_description/meshes/light_link/light_led.stl"/>
+      </geometry>
+      <material name="green"/>
+    </visual>
+    
+    <visual name="warning_light">
+      <origin xyz="-0.099 0 0.195" rpy="0 ${PI/2} 0"/>
+      <geometry>
+        <mesh filename="package://my_robot_description/meshes/light_link/light.stl" scale="1.02 1.02 1.02"/>
+      </geometry>
+      <material name="orange"/>
+    </visual>
+  </link>
+
+  <!-- IMU Link -->
+  <link name="imu_link">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="1.0"/>
+      <inertia ixx="1" ixy="0" ixz="0"
+               iyy="1" iyz="0"
+               izz="1"/>
+    </inertial>
+  </link>
+
+  <joint name="imu_link_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="imu_link"/>
+    <origin xyz="0.14 0.02 0.25" rpy="0 0 -1.57"/>
+  </joint>
+
+  <!-- Warning Light -->
+  <link name="warning_light">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="0.1"/>
+      <inertia ixx="1.6875e-05" ixy="0" ixz="0"
+               iyy="1e-08" iyz="0"
+               izz="1.6875e-05"/>
+    </inertial>
+  </link>
+
+  <joint name="warning_light_joint" type="continuous">
+    <parent link="base_link"/>
+    <child link="warning_light"/>
+    <origin xyz="-0.185 0 0.46" rpy="0 0 -0.105"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="1000" velocity="20"/>
+    <dynamics damping="0" friction="0"/>
+  </joint>
+
+  <!-- Front Camera -->
+  <link name="camera_front">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="1.0"/>
+      <inertia ixx="1" ixy="0" ixz="0"
+               iyy="1" iyz="0"
+               izz="1"/>
+    </inertial>
+  </link>
+
+  <joint name="camera_front_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="camera_front"/>
+    <origin xyz="0.0553 0 0.4323" rpy="0 0 0"/>
+  </joint>
+
+  <!-- Back Camera -->
+  <link name="camera_back">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="1.0"/>
+      <inertia ixx="1" ixy="0" ixz="0"
+               iyy="1" iyz="0"
+               izz="1"/>
+    </inertial>
+  </link>
+
+  <joint name="camera_back_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="camera_back"/>
+    <origin xyz="-0.241 0 0.2303" rpy="0 0 ${PI}"/>
+  </joint>
+
+  <!-- Front Scan -->
+  <link name="scan_front">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="1.0"/>
+      <inertia ixx="1" ixy="0" ixz="0"
+               iyy="1" iyz="0"
+               izz="1"/>
+    </inertial>
+  </link>
+
+  <joint name="scan_front_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="scan_front"/>
+    <origin xyz="0.221 0 0.1404" rpy="0 0 0"/>
+  </joint>
+
+  <!-- Back Scan -->
+  <link name="scan_back">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="1.0"/>
+      <inertia ixx="1" ixy="0" ixz="0"
+               iyy="1" iyz="0"
+               izz="1"/>
+    </inertial>
+  </link>
+
+  <joint name="scan_back_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="scan_back"/>
+    <origin xyz="-0.2075 0 0.205" rpy="0 0 ${PI}"/>
+  </joint>
+
+  <!-- Omni Scan (Velodyne) -->
+  <link name="scan_omni">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="1.0"/>
+      <inertia ixx="1" ixy="0" ixz="0"
+               iyy="1" iyz="0"
+               izz="1"/>
+    </inertial>
+    
+    <!-- Velodyne visuals -->
+    <visual name="velodyne_base">
+      <origin xyz="0 0 -0.035" rpy="0 0 0"/>
+      <geometry>
+        <cylinder radius="0.06" length="0.0015"/>
+      </geometry>
+    </visual>
+    
+    <visual name="velodyne_support_1">
+      <origin xyz="-0.035 0.035 -0.08" rpy="0 0 0"/>
+      <geometry>
+        <cylinder radius="0.005" length="0.09"/>
+      </geometry>
+    </visual>
+    
+    <visual name="velodyne_support_2">
+      <origin xyz="-0.035 -0.035 -0.08" rpy="0 0 0"/>
+      <geometry>
+        <cylinder radius="0.005" length="0.09"/>
+      </geometry>
+    </visual>
+    
+    <visual name="velodyne_support_3">
+      <origin xyz="0.0495 0 -0.08" rpy="0 0 0"/>
+      <geometry>
+        <cylinder radius="0.005" length="0.09"/>
+      </geometry>
+    </visual>
+    
+    <visual name="velodyne_base_mesh">
+      <origin xyz="0 0 -0.035" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://my_robot_description/meshes/VLP16_base_1.dae"/>
+      </geometry>
+    </visual>
+    
+    <visual name="velodyne_sensor_mesh">
+      <origin xyz="0 0 -0.035" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://my_robot_description/meshes/VLP16_base_2.dae"/>
+      </geometry>
+    </visual>
+    
+    <visual name="velodyne_scan_mesh">
+      <origin xyz="0 0 -0.035" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://my_robot_description/meshes/VLP16_scan.dae"/>
+      </geometry>
+    </visual>
+  </link>
+
+  <joint name="scan_omni_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="scan_omni"/>
+    <origin xyz="-0.1855 0 0.5318" rpy="0 0 0"/>
+  </joint>
+
+  <!-- Gripper -->
+  <link name="gripper">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="1.0"/>
+      <inertia ixx="0.001667" ixy="0" ixz="0"
+               iyy="0.001667" iyz="0"
+               izz="0.001667"/>
+    </inertial>
+    
+    <collision>
+      <origin xyz="-0.005 0 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.15 0.1 0.1"/>
+      </geometry>
+    </collision>
+    
+    <visual>
+      <origin xyz="0 0 0" rpy="-${PI/2} 0 0"/>
+      <geometry>
+        <mesh filename="package://my_robot_description/meshes/gripper2/gripper2.dae"/>
+      </geometry>
+    </visual>
+  </link>
+
+  <joint name="gripper_joint" type="revolute">
+    <parent link="base_link"/>
+    <child link="gripper"/>
+    <origin xyz="-0.35 0 0.1" rpy="0 0 0"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="-0.7" upper="0.7" effort="4" velocity="0.5"/>
+    <dynamics damping="0" friction="0.5"/>
+  </joint>
+
+  <!-- Gripper Hand -->
+  <link name="gripper_hand">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="0.2"/>
+      <inertia ixx="1.6e-05" ixy="0" ixz="0"
+               iyy="1.6e-05" iyz="0"
+               izz="1.6e-05"/>
+    </inertial>
+    
+    <collision name="gripper_hand_main">
+      <origin xyz="0.015 0 0.006" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.04 0.1 0.017"/>
+      </geometry>
+    </collision>
+    
+    <collision name="gripper_hand_sideL">
+      <origin xyz="0 0.08 0.03" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.01 0.05 0.07"/>
+      </geometry>
+    </collision>
+    
+    <collision name="gripper_hand_sideR">
+      <origin xyz="0 -0.08 0.03" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.01 0.05 0.07"/>
+      </geometry>
+    </collision>
+    
+    <visual>
+      <origin xyz="0 0 0" rpy="${PI/2} 0 ${PI/2}"/>
+      <geometry>
+        <mesh filename="package://my_robot_description/meshes/gripper2/gripper_hand.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="gray"/>
+    </visual>
+  </link>
+
+  <joint name="gripper_hand_joint" type="revolute">
+    <parent link="gripper"/>
+    <child link="gripper_hand"/>
+    <origin xyz="-0.1 0 -0.07" rpy="0 -0.35 0"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="-0.35" upper="0.1" effort="100" velocity="0.5"/>
+    <dynamics damping="0" friction="0"/>
+  </joint>
+
+  <!-- Front Wheel (caster) -->
+  <link name="wheel_front">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="0.1"/>
+      <inertia ixx="1.75e-05" ixy="0" ixz="0"
+               iyy="1.75e-05" iyz="0"
+               izz="1.75e-05"/>
+    </inertial>
+    
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.025"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="wheel_front_joint" type="continuous">
+    <parent link="base_link"/>
+    <child link="wheel_front"/>
+    <origin xyz="0.145 0 0.0345" rpy="${PI/2} 0 0"/>
+    <axis xyz="0 0 1"/>
+    <dynamics damping="10" friction="0"/>
+  </joint>
+
+  <!-- Back Wheel (caster) -->
+  <link name="wheel_back">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="0.1"/>
+      <inertia ixx="1.75e-05" ixy="0" ixz="0"
+               iyy="1.75e-05" iyz="0"
+               izz="1.75e-05"/>
+    </inertial>
+    
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <sphere radius="0.035"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="wheel_back_joint" type="continuous">
+    <parent link="base_link"/>
+    <child link="wheel_back"/>
+    <origin xyz="-0.225 0 0.035" rpy="${PI/2} 0 0"/>
+    <axis xyz="0 0 1"/>
+    <dynamics damping="10" friction="0"/>
+  </joint>
+
+  <!-- Left Wheel (drive) -->
+  <link name="wheel_left">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="0.1"/>
+      <inertia ixx="1.75e-05" ixy="0" ixz="0"
+               iyy="1.75e-05" iyz="0"
+               izz="3.125e-05"/>
+    </inertial>
+    
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <cylinder radius="${wheel_radius}" length="0.05"/>
+      </geometry>
+    </collision>
+    
+    <visual>
+      <origin xyz="0 0 -0.03" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://my_robot_description/meshes/wheel/wheel.dae" scale="0.98 0.98 1"/>
+      </geometry>
+    </visual>
+  </link>
+
+  <joint name="wheel_left_joint" type="continuous">
+    <parent link="base_link"/>
+    <child link="wheel_left"/>
+    <origin xyz="0 0.257 0.195" rpy="-${PI/2} 0 0"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="9.6" velocity="100"/>
+    <dynamics damping="3" friction="0.5"/>
+  </joint>
+
+  <!-- Right Wheel (drive) -->
+  <link name="wheel_right">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="0.1"/>
+      <inertia ixx="1.75e-05" ixy="0" ixz="0"
+               iyy="1.75e-05" iyz="0"
+               izz="3.125e-05"/>
+    </inertial>
+    
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <cylinder radius="${wheel_radius}" length="0.05"/>
+      </geometry>
+    </collision>
+    
+    <visual>
+      <origin xyz="0 0 -0.03" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://my_robot_description/meshes/wheel/wheel.dae" scale="0.98 0.98 1"/>
+      </geometry>
+    </visual>
+  </link>
+
+  <joint name="wheel_right_joint" type="continuous">
+    <parent link="base_link"/>
+    <child link="wheel_right"/>
+    <origin xyz="0 -0.257 0.195" rpy="${PI/2} 0 0"/>
+    <axis xyz="0 0 -1"/>
+    <limit effort="9.6" velocity="100"/>
+    <dynamics damping="3" friction="0.5"/>
+  </joint>
+
+  <!-- Ignition Gazebo plugins -->
+  <gazebo>
+    <!-- Differential Drive Plugin -->
+    <plugin name="ignition::gazebo::systems::DiffDrive" filename="ignition-gazebo-diff-drive-system">
+      <left_joint>wheel_left_joint</left_joint>
+      <right_joint>wheel_right_joint</right_joint>
+      <wheel_separation>${wheel_separation}</wheel_separation>
+      <wheel_radius>${wheel_radius}</wheel_radius>
+      <odom_publish_frequency>20</odom_publish_frequency>
+      <frame_id>odom</frame_id>
+      <child_frame_id>base_link</child_frame_id>
+    </plugin>
+
+    <!-- Joint Controllers -->
+    <plugin name="ignition::gazebo::systems::JointController" filename="ignition-gazebo-joint-controller-system">
+      <joint_name>gripper_joint</joint_name>
+      <use_force_commands>true</use_force_commands>
+      <p_gain>0.2</p_gain>
+      <i_gain>0.01</i_gain>
+    </plugin>
+
+    <plugin name="ignition::gazebo::systems::JointController" filename="ignition-gazebo-joint-controller-system">
+      <joint_name>gripper_hand_joint</joint_name>
+      <use_force_commands>true</use_force_commands>
+      <p_gain>0.2</p_gain>
+      <i_gain>0.01</i_gain>
+    </plugin>
+
+    <plugin name="ignition::gazebo::systems::JointController" filename="ignition-gazebo-joint-controller-system">
+      <joint_name>warning_light_joint</joint_name>
+      <initial_velocity>10.0</initial_velocity>
+    </plugin>
+
+    <!-- Pose Publisher -->
+    <plugin name="ignition::gazebo::systems::PosePublisher" filename="ignition-gazebo-pose-publisher-system">
+      <publish_link_pose>true</publish_link_pose>
+      <publish_collision_pose>false</publish_collision_pose>
+      <publish_visual_pose>false</publish_visual_pose>
+      <publish_sensor_pose>false</publish_sensor_pose>
+      <publish_nested_model_pose>true</publish_nested_model_pose>
+      <update_frequency>20</update_frequency>
+    </plugin>
+
+    <!-- Battery Plugin -->
+    <plugin name="ignition::gazebo::systems::LinearBatteryPlugin" filename="ignition-gazebo-linearbatteryplugin-system">
+      <battery_name>linear_battery</battery_name>
+      <voltage>24.592</voltage>
+      <open_circuit_voltage_constant_coef>24.592</open_circuit_voltage_constant_coef>
+      <capacity>1.2009</capacity>
+      <power_load>6.5</power_load>
+      <fix_issue_225>true</fix_issue_225>
+      <enable_recharge>true</enable_recharge>
+      <charging_time>3.0</charging_time>
+      <recharge_by_topic>true</recharge_by_topic>
+    </plugin>
+
+    <!-- Joint State Publisher -->
+    <plugin name="ignition::gazebo::systems::JointStatePublisher" filename="ignition-gazebo-joint-state-publisher-system">
+      <joint_name>gripper_joint</joint_name>
+      <joint_name>gripper_hand_joint</joint_name>
+    </plugin>
+  </gazebo>
+
+  <!-- Sensor configurations for Ignition Gazebo -->
+  <gazebo reference="imu_link">
+    <sensor name="imu" type="imu">
+      <pose>0 0 0 0 0 0</pose>
+      <topic>__default__</topic>
+      <update_rate>30</update_rate>
+      <imu>
+        <orientation_reference_frame>
+          <localization>CUSTOM</localization>
+          <custom_rpy>0 0 0</custom_rpy>
+          <grav_dir_x>1 0 0</grav_dir_x>
+        </orientation_reference_frame>
+        <angular_velocity>
+          <x>
+            <noise type="none">
+              <mean>0</mean>
+              <stddev>0</stddev>
+            </noise>
+          </x>
+          <y>
+            <noise type="none">
+              <mean>0</mean>
+              <stddev>0</stddev>
+            </noise>
+          </y>
+          <z>
+            <noise type="none">
+              <mean>0</mean>
+              <stddev>0</stddev>
+            </noise>
+          </z>
+        </angular_velocity>
+        <linear_acceleration>
+          <x>
+            <noise type="none">
+              <mean>0</mean>
+              <stddev>0</stddev>
+            </noise>
+          </x>
+          <y>
+            <noise type="none">
+              <mean>0</mean>
+              <stddev>0</stddev>
+            </noise>
+          </y>
+          <z>
+            <noise type="none">
+              <mean>0</mean>
+              <stddev>0</stddev>
+            </noise>
+          </z>
+        </linear_acceleration>
+        <enable_orientation>true</enable_orientation>
+      </imu>
+    </sensor>
+  </gazebo>
+
+  <gazebo reference="camera_front">
+    <sensor name="color" type="camera">
+      <pose>0 0.0325 0.0125 0 0 0</pose>
+      <topic>__default__</topic>
+      <update_rate>6</update_rate>
+      <camera>
+        <horizontal_fov>1.2043</horizontal_fov>
+        <image>
+          <width>848</width>
+          <height>480</height>
+          <format>RGB_INT8</format>
+          <anti_aliasing>4</anti_aliasing>
+        </image>
+        <clip>
+          <near>0.1</near>
+          <far>50</far>
+        </clip>
+        <noise>
+          <type>none</type>
+          <mean>0</mean>
+          <stddev>0</stddev>
+        </noise>
+        <distortion>
+          <k1>0</k1>
+          <k2>0</k2>
+          <k3>0</k3>
+          <p1>0</p1>
+          <p2>0</p2>
+          <center>0.5 0.5</center>
+        </distortion>
+      </camera>
+    </sensor>
+
+    <sensor name="depth" type="depth_camera">
+      <pose>0 0.0175 0.0125 0 0 0</pose>
+      <topic>__default__</topic>
+      <update_rate>6</update_rate>
+      <camera>
+        <horizontal_fov>1.5184</horizontal_fov>
+        <image>
+          <width>848</width>
+          <height>480</height>
+          <format>R_FLOAT32</format>
+          <anti_aliasing>4</anti_aliasing>
+        </image>
+        <clip>
+          <near>0.1</near>
+          <far>10</far>
+        </clip>
+        <noise>
+          <type>none</type>
+          <mean>0</mean>
+          <stddev>0</stddev>
+        </noise>
+        <distortion>
+          <k1>0</k1>
+          <k2>0</k2>
+          <k3>0</k3>
+          <p1>0</p1>
+          <p2>0</p2>
+          <center>0.5 0.5</center>
+        </distortion>
+      </camera>
+    </sensor>
+  </gazebo>
+
+  <gazebo reference="camera_back">
+    <sensor name="color" type="camera">
+      <pose>0 0.0325 0.0125 0 0 0</pose>
+      <topic>__default__</topic>
+      <update_rate>6</update_rate>
+      <camera>
+        <horizontal_fov>1.2043</horizontal_fov>
+        <image>
+          <width>848</width>
+          <height>480</height>
+          <format>RGB_INT8</format>
+          <anti_aliasing>4</anti_aliasing>
+        </image>
+        <clip>
+          <near>0.1</near>
+          <far>50</far>
+        </clip>
+        <noise>
+          <type>none</type>
+          <mean>0</mean>
+          <stddev>0</stddev>
+        </noise>
+      </camera>
+    </sensor>
+
+    <sensor name="depth" type="depth_camera">
+      <pose>0 0.0175 0.0125 0 0 0</pose>
+      <topic>__default__</topic>
+      <update_rate>6</update_rate>
+      <camera>
+        <horizontal_fov>1.5184</horizontal_fov>
+        <image>
+          <width>848</width>
+          <height>480</height>
+          <format>R_FLOAT32</format>
+          <anti_aliasing>4</anti_aliasing>
+        </image>
+        <clip>
+          <near>0.1</near>
+          <far>10</far>
+        </clip>
+        <noise>
+          <type>none</type>
+          <mean>0</mean>
+          <stddev>0</stddev>
+        </noise>
+      </camera>
+    </sensor>
+  </gazebo>
+
+  <gazebo reference="scan_front">
+    <sensor name="scan_front" type="gpu_lidar">
+      <pose>0 0 0 0 0 0</pose>
+      <topic>__default__</topic>
+      <update_rate>10</update_rate>
+      <lidar>
+        <scan>
+          <horizontal>
+            <samples>674</samples>
+            <resolution>1</resolution>
+            <min_angle>-1.4704</min_angle>
+            <max_angle>1.4704</max_angle>
+          </horizontal>
+          <vertical>
+            <samples>1</samples>
+            <min_angle>0</min_angle>
+            <max_angle>0</max_angle>
+            <resolution>1</resolution>
+          </vertical>
+        </scan>
+        <range>
+          <min>0.01</min>
+          <max>5</max>
+          <resolution>0.01</resolution>
+        </range>
+        <noise>
+          <type>none</type>
+          <mean>0</mean>
+          <stddev>0</stddev>
+        </noise>
+      </lidar>
+    </sensor>
+  </gazebo>
+
+  <gazebo reference="scan_back">
+    <sensor name="scan_back" type="gpu_lidar">
+      <pose>0 0 0 0 0 0</pose>
+      <topic>__default__</topic>
+      <update_rate>5</update_rate>
+      <lidar>
+        <scan>
+          <horizontal>
+            <samples>480</samples>
+            <resolution>1</resolution>
+            <min_angle>-1.4704</min_angle>
+            <max_angle>1.4704</max_angle>
+          </horizontal>
+          <vertical>
+            <samples>1</samples>
+            <min_angle>0</min_angle>
+            <max_angle>0</max_angle>
+            <resolution>1</resolution>
+          </vertical>
+        </scan>
+        <range>
+          <min>0.01</min>
+          <max>5</max>
+          <resolution>0.01</resolution>
+        </range>
+        <noise>
+          <type>none</type>
+          <mean>0</mean>
+          <stddev>0</stddev>
+        </noise>
+      </lidar>
+    </sensor>
+  </gazebo>
+
+  <gazebo reference="scan_omni">
+    <sensor name="scan_omni" type="gpu_lidar">
+      <pose>0 0 0 0 0 0</pose>
+      <topic>__default__</topic>
+      <update_rate>10</update_rate>
+      <lidar>
+        <scan>
+          <horizontal>
+            <samples>900</samples>
+            <resolution>1</resolution>
+            <min_angle>-3.14159</min_angle>
+            <max_angle>3.14159</max_angle>
+          </horizontal>
+          <vertical>
+            <samples>16</samples>
+            <min_angle>-0.2618</min_angle>
+            <max_angle>0.2618</max_angle>
+            <resolution>1</resolution>
+          </vertical>
+        </scan>
+        <range>
+          <min>0.2</min>
+          <max>100</max>
+          <resolution>0.01</resolution>
+        </range>
+        <noise>
+          <type>none</type>
+          <mean>0</mean>
+          <stddev>0</stddev>
+        </noise>
+      </lidar>
+    </sensor>
+  </gazebo>
+
+  <gazebo reference="gripper">
+    <sensor name="sensor_contact" type="gpu_lidar">
+      <pose>-0.075 0 0.035 0 0 -3.14159</pose>
+      <topic>__default__</topic>
+      <update_rate>10</update_rate>
+      <lidar>
+        <scan>
+          <horizontal>
+            <samples>3</samples>
+            <resolution>1</resolution>
+            <min_angle>-0.02</min_angle>
+            <max_angle>0.02</max_angle>
+          </horizontal>
+          <vertical>
+            <samples>1</samples>
+            <min_angle>0</min_angle>
+            <max_angle>0</max_angle>
+            <resolution>1</resolution>
+          </vertical>
+        </scan>
+        <range>
+          <min>0.001</min>
+          <max>0.01</max>
+          <resolution>0.001</resolution>
+        </range>
+        <noise>
+          <type>none</type>
+          <mean>0</mean>
+          <stddev>0</stddev>
+        </noise>
+      </lidar>
+    </sensor>
+  </gazebo>
+
+</robot>

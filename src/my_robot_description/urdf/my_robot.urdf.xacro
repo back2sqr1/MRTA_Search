@@ -19,6 +19,9 @@
     <xacro:include filename="$(find my_robot_description)/urdf/common_properties.xacro" />
     <xacro:include filename="$(find my_robot_description)/urdf/mobile_base.xacro" />
     <xacro:include filename="$(find my_robot_description)/urdf/mobile_base_gazebo.xacro" />
+    <xacro:include filename="$(find my_robot_description)/urdf/imu_sensor.xacro" />
+    <xacro:include filename="$(find my_robot_description)/urdf/imu_gazebo.xacro" />
+
 
     <!-- Central base footprint for multi-robot coordination -->
     <link name="world_base_footprint" />
@@ -33,4 +36,8 @@
     <!-- Instantiate the mobile base with robot name -->
     <xacro:mobile_base robot_name="${robot_name}" />
     <xacro:mobile_base_gazebo robot_name="${robot_name}" />
+    
+    <!-- Instantiate the IMU sensor -->
+    <xacro:imu_sensor robot_name="${robot_name}" />
+    <xacro:imu_gazebo robot_name="${robot_name}" />
 </robot>

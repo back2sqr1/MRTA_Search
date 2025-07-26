@@ -1,49 +1,43 @@
 # Robot 1 bridges
+
+# Remember: Change the gz topic link when the world changes
+
 - ros_topic_name: "/robot_1/cmd_vel"
   gz_topic_name: "/model/robot_1/cmd_vel"
   ros_type_name: "geometry_msgs/msg/Twist"
   gz_type_name: "gz.msgs.Twist"
   direction: ROS_TO_GZ
-
 - ros_topic_name: "/robot_1/joint_states"
-  gz_topic_name: "/world/empty/model/robot_1/joint_state"
+  gz_topic_name: "/world/world_demo/model/robot_1/joint_state"
   ros_type_name: "sensor_msgs/msg/JointState"
   gz_type_name: "gz.msgs.Model"
   direction: GZ_TO_ROS
-
+- ros_topic_name: "/robot_1/imu"
+  gz_topic_name: "/world/world_demo/model/robot_1/link/robot_1_imu_link/sensor/robot_1_imu/imu"
+  ros_type_name: "sensor_msgs/msg/Imu"
+  gz_type_name: "gz.msgs.IMU"
+  direction: GZ_TO_ROS
 - ros_topic_name: "/pose_info"
-  gz_topic_name: "/world/empty/dynamic_pose/info"
+  gz_topic_name: "/world/world_demo/dynamic_pose/info"
   ros_type_name: "geometry_msgs/msg/PoseArray"
   gz_type_name: "gz.msgs.Pose_V"
   direction: GZ_TO_ROS
-
 # Robot 2 bridges
 - ros_topic_name: "/robot_2/cmd_vel"
   gz_topic_name: "/model/robot_2/cmd_vel"
   ros_type_name: "geometry_msgs/msg/Twist"
   gz_type_name: "gz.msgs.Twist"
   direction: ROS_TO_GZ
-
 - ros_topic_name: "/robot_2/joint_states"
-  gz_topic_name: "/world/empty/model/robot_2/joint_state"
+  gz_topic_name: "/world/world_demo/model/robot_2/joint_state"
   ros_type_name: "sensor_msgs/msg/JointState"
   gz_type_name: "gz.msgs.Model"
   direction: GZ_TO_ROS
-
-# # Robot 3 bridges
-# - ros_topic_name: "/robot_3/cmd_vel"
-#   gz_topic_name: "/model/robot_3/cmd_vel"
-#   ros_type_name: "geometry_msgs/msg/Twist"
-#   gz_type_name: "gz.msgs.Twist"
-#   direction: ROS_TO_GZ
-
-# - ros_topic_name: "/robot_3/joint_states"
-#   gz_topic_name: "/world/empty/model/robot_3/joint_state"
-#   ros_type_name: "sensor_msgs/msg/JointState"
-#   gz_type_name: "gz.msgs.Model"
-#   direction: GZ_TO_ROS
-
-
+- ros_topic_name: "/robot_2/imu"
+  gz_topic_name: "/world/world_demo/model/robot_2/link/robot_2_imu_link/sensor/robot_2_imu/imu"
+  ros_type_name: "sensor_msgs/msg/Imu"
+  gz_type_name: "gz.msgs.IMU"
+  direction: GZ_TO_ROS
 # Clock bridge
 - ros_topic_name: "/clock"
   gz_topic_name: "/clock"

@@ -194,7 +194,7 @@ def generate_launch_description():
     )
     
     # Use OpaqueFunction to handle dynamic robot creation
-    robot_spawning = OpaqueFunction(function=launch_setup)
+    # robot_spawning = OpaqueFunction(function=launch_setup)
     
     markers = []
 
@@ -239,7 +239,7 @@ def generate_launch_description():
     )
     markers.append(marker_spawn)
 
-    # BDD location markers (e.g., blue cylinders)
+    # BDD location markers
     for location, pose in bdd_config['locations'].items():
         marker = Node(
             package='ros_gz_sim',
@@ -254,7 +254,6 @@ def generate_launch_description():
                 '-x', str(pose[0]),
                 '-y', str(pose[1]),
                 '-z', str(0), # Z should typically be 0 for ground level
-                '-color', 'blue' # Set color to blue for BDD locations
             ],
             output=config['output']['mode']
         )
@@ -298,11 +297,11 @@ def generate_launch_description():
         output=config['output']['mode']
     )
     final_list = [
-        num_robots_arg,
+        # num_robots_arg,
         robot_positions_arg,
         gazebo_launch,
         world_tf_publisher,
-        robot_spawning,
+        # robot_spawning,
         bridge_node,
         # rviz_node # Uncommented to include RViz
     ]
