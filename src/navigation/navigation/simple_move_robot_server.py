@@ -27,8 +27,7 @@ class SimpleMoveRobotServer(Node):
         self.declare_parameter('max_linear_velocity', 0.1)
         self.declare_parameter('max_angular_velocity', 0.3)
         self.declare_parameter('position_tolerance', 0.05)
-        self.declare_parameter('angular_tolerance', 0.05)
-
+        self.declare_parameter('angular_tolerance', 0.06)
         # Get parameters
         self.robot_name = self.get_parameter('robot_name').get_parameter_value().string_value
         self.max_linear_vel = self.get_parameter('max_linear_velocity').get_parameter_value().double_value
@@ -74,9 +73,16 @@ class SimpleMoveRobotServer(Node):
     def pose_array_callback(self, msg: PoseArray):
         try:
             if self.robot_name == 'robot_1':
-                self.current_pose = msg.poses[1]
-            elif self.robot_name == 'robot_2':
+                # Empty world
+                # self.current_pose = msg.poses[1]
+                # With tugbot world
+                # self.current_pose = msg.poses[6]
+                # Just tugbot
                 self.current_pose = msg.poses[0]
+            elif self.robot_name == 'robot_2':
+                # self.current_pose = msg.poses[0]
+                # self.current_pose = msg.poses[5]
+                self.current_pose = msg.poses[1]
         except IndexError:
             self.get_logger().warn('PoseArray message does not contain enough poses.')
 
