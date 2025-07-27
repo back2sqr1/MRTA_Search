@@ -27,6 +27,8 @@ setup(
             'simple_move_robot_server = navigation.simple_move_robot_server:main',
             'simple_move_robot_client = navigation.simple_move_robot_client:main',
             'central_server_node = navigation.central_server_node:main',
+            'nav2_move_robot_client = navigation.nav2_move_robot_client:main',
+            'nav2_move_robot_wrapper = navigation.nav2_move_robot_wrapper:main',
         ],
     },
 )

@@ -2,11 +2,14 @@
 <sdf version="1.6" xmlns:xacro="http://ros.org/wiki/xacro">
 
 
-  <model name="marker_model">
+  <model name="marker_green">
     <pose>0 0 1 0 0 0</pose>
     <static>true</static>
+    
     <link name="marker_link">
+      <!-- Visual representation (visible to cameras and human eyes) -->
       <visual name="marker_visual">
+        <visibility_flags>1</visibility_flags>
         <geometry>
           <cylinder>
             <radius>0.1</radius>

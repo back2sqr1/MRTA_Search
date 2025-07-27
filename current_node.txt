@@ -6218,3 +6218,948 @@ Next:
 TimeStepNode(query=false, type=robot_assignment, resolved_questions={'p': 'F', 'p**': 'T', 'p*': 'F', 'p***': 'T'}, robot_map={'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=d, cost=1.41, time=11.49), 'robot_2': Robot(id=robot_2, position=(8, 10), assigned_loc=, cost=10.07, time=11.49)}, visited_locations={'a', 'd', 'e'})
 Next:
 
+TimeStepNode(query=p, type=query, resolved_questions={}, robot_map={'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=0.0), 'robot_2': Robot(id=robot_2, position=(2.0, 2.0), assigned_loc=, cost=0.0, time=0.0)}, visited_locations=set())
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=0.0), 'robot_2': Robot(id=robot_2, position=(2.0, 2.0), assigned_loc=, cost=0.0, time=0.0)}, COST: 0.0), RESOLVED: {}
+
+TimeStepNode(query=p, type=robot_assignment, resolved_questions={}, robot_map={'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=0.0), 'robot_2': Robot(id=robot_2, position=(2.0, 2.0), assigned_loc=, cost=0.0, time=0.0)}, visited_locations=set())
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=4.24), 'robot_2': Robot(id=robot_2, position=(5, 5), assigned_loc=a, cost=4.24, time=4.24)}, COST: 4.242640687119285), RESOLVED: {}
+  - {'robot_1': Robot(id=robot_1, position=(5, 5), assigned_loc=a, cost=5.66, time=5.66), 'robot_2': Robot(id=robot_2, position=(2.0, 2.0), assigned_loc=, cost=0.0, time=5.66)}, COST: 5.656854249492381), RESOLVED: {}
+  - {'robot_1': Robot(id=robot_1, position=(5, 5), assigned_loc=, cost=5.66, time=28.44), 'robot_2': Robot(id=robot_2, position=(30, 7), assigned_loc=b, cost=28.44, time=28.44)}, COST: 34.099779556148164), RESOLVED: {}
+  - {'robot_1': Robot(id=robot_1, position=(5, 5), assigned_loc=a, cost=5.66, time=5.66), 'robot_2': Robot(id=robot_2, position=(0, 0), assigned_loc=, cost=2.83, time=5.66)}, COST: 8.485281374238571), RESOLVED: {}
+  - {'robot_1': Robot(id=robot_1, position=(5, 5), assigned_loc=, cost=5.66, time=10.0), 'robot_2': Robot(id=robot_2, position=(8, 10), assigned_loc=e, cost=10.0, time=10.0)}, COST: 15.65685424949238), RESOLVED: {}
+  - {'robot_1': Robot(id=robot_1, position=(30, 7), assigned_loc=b, cost=29.61, time=29.61), 'robot_2': Robot(id=robot_2, position=(5, 5), assigned_loc=, cost=4.24, time=29.61)}, COST: 33.856826477040975), RESOLVED: {}
+  - {'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=, cost=1.41, time=4.24), 'robot_2': Robot(id=robot_2, position=(5, 5), assigned_loc=a, cost=4.24, time=4.24)}, COST: 5.656854249492381), RESOLVED: {}
+  - {'robot_1': Robot(id=robot_1, position=(8, 10), assigned_loc=e, cost=11.4, time=11.4), 'robot_2': Robot(id=robot_2, position=(5, 5), assigned_loc=, cost=4.24, time=11.4)}, COST: 15.644394938110665), RESOLVED: {}
+
+TimeStepNode(query=p, type=robot_moving, resolved_questions={}, robot_map={'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=4.24), 'robot_2': Robot(id=robot_2, position=(5, 5), assigned_loc=a, cost=4.24, time=4.24)}, visited_locations=set())
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=4.24), 'robot_2': Robot(id=robot_2, position=(5, 5), assigned_loc=a, cost=4.24, time=4.24)}, COST: 4.242640687119285), RESOLVED: {}
+
+TimeStepNode(query=p, type=query, resolved_questions={}, robot_map={'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=4.24), 'robot_2': Robot(id=robot_2, position=(5, 5), assigned_loc=a, cost=4.24, time=4.24)}, visited_locations={'a'})
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=4.24), 'robot_2': Robot(id=robot_2, position=(5, 5), assigned_loc=a, cost=4.24, time=4.24)}, COST: 4.242640687119285), RESOLVED: {'p': 'T'}
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=4.24), 'robot_2': Robot(id=robot_2, position=(5, 5), assigned_loc=a, cost=4.24, time=4.24)}, COST: 4.242640687119285), RESOLVED: {'p': 'F'}
+
+TimeStepNode(query=p*, type=robot_assignment, resolved_questions={'p': 'F'}, robot_map={'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=4.24), 'robot_2': Robot(id=robot_2, position=(5, 5), assigned_loc=a, cost=4.24, time=4.24)}, visited_locations={'a'})
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=29.32), 'robot_2': Robot(id=robot_2, position=(30, 7), assigned_loc=b, cost=29.32, time=29.32)}, COST: 29.32251309508819), RESOLVED: {'p': 'F'}
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=10.07), 'robot_2': Robot(id=robot_2, position=(8, 10), assigned_loc=e, cost=10.07, time=10.07)}, COST: 10.073592581964586), RESOLVED: {'p': 'F'}
+  - {'robot_1': Robot(id=robot_1, position=(30, 7), assigned_loc=b, cost=29.61, time=33.86), 'robot_2': Robot(id=robot_2, position=(5, 5), assigned_loc=, cost=4.24, time=33.86)}, COST: 33.85682647704098), RESOLVED: {'p': 'F'}
+  - {'robot_1': Robot(id=robot_1, position=(30, 7), assigned_loc=b, cost=29.61, time=33.86), 'robot_2': Robot(id=robot_2, position=(0, 0), assigned_loc=, cost=11.31, time=33.86)}, COST: 40.92789428890646), RESOLVED: {'p': 'F'}
+  - {'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=, cost=1.41, time=29.32), 'robot_2': Robot(id=robot_2, position=(30, 7), assigned_loc=b, cost=29.32, time=29.32)}, COST: 30.736726657461286), RESOLVED: {'p': 'F'}
+  - {'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=, cost=1.41, time=10.07), 'robot_2': Robot(id=robot_2, position=(8, 10), assigned_loc=e, cost=10.07, time=10.07)}, COST: 11.487806144337682), RESOLVED: {'p': 'F'}
+  - {'robot_1': Robot(id=robot_1, position=(8, 10), assigned_loc=e, cost=11.4, time=15.64), 'robot_2': Robot(id=robot_2, position=(5, 5), assigned_loc=, cost=4.24, time=15.64)}, COST: 15.644394938110665), RESOLVED: {'p': 'F'}
+  - {'robot_1': Robot(id=robot_1, position=(8, 10), assigned_loc=e, cost=11.4, time=15.64), 'robot_2': Robot(id=robot_2, position=(0, 0), assigned_loc=, cost=11.31, time=15.64)}, COST: 22.71546274997614), RESOLVED: {'p': 'F'}
+
+TimeStepNode(query=p*, type=robot_moving, resolved_questions={'p': 'F'}, robot_map={'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=10.07), 'robot_2': Robot(id=robot_2, position=(8, 10), assigned_loc=e, cost=10.07, time=10.07)}, visited_locations={'a'})
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=10.07), 'robot_2': Robot(id=robot_2, position=(8, 10), assigned_loc=e, cost=10.07, time=10.07)}, COST: 10.073592581964586), RESOLVED: {'p': 'F'}
+
+TimeStepNode(query=p*, type=query, resolved_questions={'p': 'F'}, robot_map={'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=10.07), 'robot_2': Robot(id=robot_2, position=(8, 10), assigned_loc=e, cost=10.07, time=10.07)}, visited_locations={'a', 'e'})
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=10.07), 'robot_2': Robot(id=robot_2, position=(8, 10), assigned_loc=e, cost=10.07, time=10.07)}, COST: 10.073592581964586), RESOLVED: {'p': 'F', 'p*': 'T', 'p**': 'T'}
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=10.07), 'robot_2': Robot(id=robot_2, position=(8, 10), assigned_loc=e, cost=10.07, time=10.07)}, COST: 10.073592581964586), RESOLVED: {'p': 'F', 'p*': 'T', 'p**': 'F'}
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=10.07), 'robot_2': Robot(id=robot_2, position=(8, 10), assigned_loc=e, cost=10.07, time=10.07)}, COST: 10.073592581964586), RESOLVED: {'p': 'F', 'p*': 'F', 'p**': 'T'}
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=10.07), 'robot_2': Robot(id=robot_2, position=(8, 10), assigned_loc=e, cost=10.07, time=10.07)}, COST: 10.073592581964586), RESOLVED: {'p': 'F', 'p*': 'F', 'p**': 'F'}
+
+TimeStepNode(query=p***, type=robot_assignment, resolved_questions={'p': 'F', 'p*': 'F', 'p**': 'T'}, robot_map={'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=10.07), 'robot_2': Robot(id=robot_2, position=(8, 10), assigned_loc=e, cost=10.07, time=10.07)}, visited_locations={'a', 'e'})
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=22.88), 'robot_2': Robot(id=robot_2, position=(0, 0), assigned_loc=d, cost=22.88, time=22.88)}, COST: 22.879841056830283), RESOLVED: {'p': 'F', 'p*': 'F', 'p**': 'T'}
+  - {'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=d, cost=1.41, time=11.49), 'robot_2': Robot(id=robot_2, position=(8, 10), assigned_loc=, cost=10.07, time=11.49)}, COST: 11.487806144337682), RESOLVED: {'p': 'F', 'p*': 'F', 'p**': 'T'}
+
+TimeStepNode(query=p***, type=robot_moving, resolved_questions={'p': 'F', 'p*': 'F', 'p**': 'T'}, robot_map={'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=d, cost=1.41, time=11.49), 'robot_2': Robot(id=robot_2, position=(8, 10), assigned_loc=, cost=10.07, time=11.49)}, visited_locations={'a', 'e'})
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=d, cost=1.41, time=11.49), 'robot_2': Robot(id=robot_2, position=(8, 10), assigned_loc=, cost=10.07, time=11.49)}, COST: 11.487806144337682), RESOLVED: {'p': 'F', 'p*': 'F', 'p**': 'T'}
+
+TimeStepNode(query=p***, type=query, resolved_questions={'p': 'F', 'p*': 'F', 'p**': 'T'}, robot_map={'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=d, cost=1.41, time=11.49), 'robot_2': Robot(id=robot_2, position=(8, 10), assigned_loc=, cost=10.07, time=11.49)}, visited_locations={'d', 'a', 'e'})
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=d, cost=1.41, time=11.49), 'robot_2': Robot(id=robot_2, position=(8, 10), assigned_loc=, cost=10.07, time=11.49)}, COST: 11.487806144337682), RESOLVED: {'p': 'F', 'p*': 'F', 'p**': 'T', 'p***': 'T'}
+  - {'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=d, cost=1.41, time=11.49), 'robot_2': Robot(id=robot_2, position=(8, 10), assigned_loc=, cost=10.07, time=11.49)}, COST: 11.487806144337682), RESOLVED: {'p': 'F', 'p*': 'F', 'p**': 'T', 'p***': 'F'}
+
+TimeStepNode(query=false, type=robot_assignment, resolved_questions={'p': 'F', 'p*': 'F', 'p**': 'T', 'p***': 'T'}, robot_map={'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=d, cost=1.41, time=11.49), 'robot_2': Robot(id=robot_2, position=(8, 10), assigned_loc=, cost=10.07, time=11.49)}, visited_locations={'d', 'a', 'e'})
+Next:
+
+TimeStepNode(query=p, type=query, resolved_questions={}, robot_map={'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=0.0), 'robot_2': Robot(id=robot_2, position=(2.0, 2.0), assigned_loc=, cost=0.0, time=0.0)}, visited_locations=set())
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=0.0), 'robot_2': Robot(id=robot_2, position=(2.0, 2.0), assigned_loc=, cost=0.0, time=0.0)}, COST: 0.0), RESOLVED: {}
+
+TimeStepNode(query=p, type=robot_assignment, resolved_questions={}, robot_map={'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=0.0), 'robot_2': Robot(id=robot_2, position=(2.0, 2.0), assigned_loc=, cost=0.0, time=0.0)}, visited_locations=set())
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=4.24), 'robot_2': Robot(id=robot_2, position=(5, 5), assigned_loc=a, cost=4.24, time=4.24)}, COST: 4.242640687119285), RESOLVED: {}
+  - {'robot_1': Robot(id=robot_1, position=(5, 5), assigned_loc=a, cost=5.66, time=5.66), 'robot_2': Robot(id=robot_2, position=(2.0, 2.0), assigned_loc=, cost=0.0, time=5.66)}, COST: 5.656854249492381), RESOLVED: {}
+  - {'robot_1': Robot(id=robot_1, position=(5, 5), assigned_loc=, cost=5.66, time=28.44), 'robot_2': Robot(id=robot_2, position=(30, 7), assigned_loc=b, cost=28.44, time=28.44)}, COST: 34.099779556148164), RESOLVED: {}
+  - {'robot_1': Robot(id=robot_1, position=(5, 5), assigned_loc=a, cost=5.66, time=5.66), 'robot_2': Robot(id=robot_2, position=(0, 0), assigned_loc=, cost=2.83, time=5.66)}, COST: 8.485281374238571), RESOLVED: {}
+  - {'robot_1': Robot(id=robot_1, position=(5, 5), assigned_loc=, cost=5.66, time=10.0), 'robot_2': Robot(id=robot_2, position=(8, 10), assigned_loc=e, cost=10.0, time=10.0)}, COST: 15.65685424949238), RESOLVED: {}
+  - {'robot_1': Robot(id=robot_1, position=(30, 7), assigned_loc=b, cost=29.61, time=29.61), 'robot_2': Robot(id=robot_2, position=(5, 5), assigned_loc=, cost=4.24, time=29.61)}, COST: 33.856826477040975), RESOLVED: {}
+  - {'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=, cost=1.41, time=4.24), 'robot_2': Robot(id=robot_2, position=(5, 5), assigned_loc=a, cost=4.24, time=4.24)}, COST: 5.656854249492381), RESOLVED: {}
+  - {'robot_1': Robot(id=robot_1, position=(8, 10), assigned_loc=e, cost=11.4, time=11.4), 'robot_2': Robot(id=robot_2, position=(5, 5), assigned_loc=, cost=4.24, time=11.4)}, COST: 15.644394938110665), RESOLVED: {}
+
+TimeStepNode(query=p, type=robot_moving, resolved_questions={}, robot_map={'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=4.24), 'robot_2': Robot(id=robot_2, position=(5, 5), assigned_loc=a, cost=4.24, time=4.24)}, visited_locations=set())
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=4.24), 'robot_2': Robot(id=robot_2, position=(5, 5), assigned_loc=a, cost=4.24, time=4.24)}, COST: 4.242640687119285), RESOLVED: {}
+
+TimeStepNode(query=p, type=query, resolved_questions={}, robot_map={'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=4.24), 'robot_2': Robot(id=robot_2, position=(5, 5), assigned_loc=a, cost=4.24, time=4.24)}, visited_locations={'a'})
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=4.24), 'robot_2': Robot(id=robot_2, position=(5, 5), assigned_loc=a, cost=4.24, time=4.24)}, COST: 4.242640687119285), RESOLVED: {'p': 'T'}
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=4.24), 'robot_2': Robot(id=robot_2, position=(5, 5), assigned_loc=a, cost=4.24, time=4.24)}, COST: 4.242640687119285), RESOLVED: {'p': 'F'}
+
+TimeStepNode(query=p*, type=robot_assignment, resolved_questions={'p': 'F'}, robot_map={'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=4.24), 'robot_2': Robot(id=robot_2, position=(5, 5), assigned_loc=a, cost=4.24, time=4.24)}, visited_locations={'a'})
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=29.32), 'robot_2': Robot(id=robot_2, position=(30, 7), assigned_loc=b, cost=29.32, time=29.32)}, COST: 29.32251309508819), RESOLVED: {'p': 'F'}
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=10.07), 'robot_2': Robot(id=robot_2, position=(8, 10), assigned_loc=e, cost=10.07, time=10.07)}, COST: 10.073592581964586), RESOLVED: {'p': 'F'}
+  - {'robot_1': Robot(id=robot_1, position=(30, 7), assigned_loc=b, cost=29.61, time=33.86), 'robot_2': Robot(id=robot_2, position=(5, 5), assigned_loc=, cost=4.24, time=33.86)}, COST: 33.85682647704098), RESOLVED: {'p': 'F'}
+  - {'robot_1': Robot(id=robot_1, position=(30, 7), assigned_loc=b, cost=29.61, time=33.86), 'robot_2': Robot(id=robot_2, position=(0, 0), assigned_loc=, cost=11.31, time=33.86)}, COST: 40.92789428890646), RESOLVED: {'p': 'F'}
+  - {'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=, cost=1.41, time=29.32), 'robot_2': Robot(id=robot_2, position=(30, 7), assigned_loc=b, cost=29.32, time=29.32)}, COST: 30.736726657461286), RESOLVED: {'p': 'F'}
+  - {'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=, cost=1.41, time=10.07), 'robot_2': Robot(id=robot_2, position=(8, 10), assigned_loc=e, cost=10.07, time=10.07)}, COST: 11.487806144337682), RESOLVED: {'p': 'F'}
+  - {'robot_1': Robot(id=robot_1, position=(8, 10), assigned_loc=e, cost=11.4, time=15.64), 'robot_2': Robot(id=robot_2, position=(5, 5), assigned_loc=, cost=4.24, time=15.64)}, COST: 15.644394938110665), RESOLVED: {'p': 'F'}
+  - {'robot_1': Robot(id=robot_1, position=(8, 10), assigned_loc=e, cost=11.4, time=15.64), 'robot_2': Robot(id=robot_2, position=(0, 0), assigned_loc=, cost=11.31, time=15.64)}, COST: 22.71546274997614), RESOLVED: {'p': 'F'}
+
+TimeStepNode(query=p*, type=robot_moving, resolved_questions={'p': 'F'}, robot_map={'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=10.07), 'robot_2': Robot(id=robot_2, position=(8, 10), assigned_loc=e, cost=10.07, time=10.07)}, visited_locations={'a'})
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=10.07), 'robot_2': Robot(id=robot_2, position=(8, 10), assigned_loc=e, cost=10.07, time=10.07)}, COST: 10.073592581964586), RESOLVED: {'p': 'F'}
+
+TimeStepNode(query=p*, type=query, resolved_questions={'p': 'F'}, robot_map={'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=10.07), 'robot_2': Robot(id=robot_2, position=(8, 10), assigned_loc=e, cost=10.07, time=10.07)}, visited_locations={'a', 'e'})
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=10.07), 'robot_2': Robot(id=robot_2, position=(8, 10), assigned_loc=e, cost=10.07, time=10.07)}, COST: 10.073592581964586), RESOLVED: {'p': 'F', 'p*': 'T', 'p**': 'T'}
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=10.07), 'robot_2': Robot(id=robot_2, position=(8, 10), assigned_loc=e, cost=10.07, time=10.07)}, COST: 10.073592581964586), RESOLVED: {'p': 'F', 'p*': 'T', 'p**': 'F'}
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=10.07), 'robot_2': Robot(id=robot_2, position=(8, 10), assigned_loc=e, cost=10.07, time=10.07)}, COST: 10.073592581964586), RESOLVED: {'p': 'F', 'p*': 'F', 'p**': 'T'}
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=10.07), 'robot_2': Robot(id=robot_2, position=(8, 10), assigned_loc=e, cost=10.07, time=10.07)}, COST: 10.073592581964586), RESOLVED: {'p': 'F', 'p*': 'F', 'p**': 'F'}
+
+TimeStepNode(query=p***, type=robot_assignment, resolved_questions={'p': 'F', 'p*': 'F', 'p**': 'T'}, robot_map={'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=10.07), 'robot_2': Robot(id=robot_2, position=(8, 10), assigned_loc=e, cost=10.07, time=10.07)}, visited_locations={'a', 'e'})
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=22.88), 'robot_2': Robot(id=robot_2, position=(0, 0), assigned_loc=d, cost=22.88, time=22.88)}, COST: 22.879841056830283), RESOLVED: {'p': 'F', 'p*': 'F', 'p**': 'T'}
+  - {'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=d, cost=1.41, time=11.49), 'robot_2': Robot(id=robot_2, position=(8, 10), assigned_loc=, cost=10.07, time=11.49)}, COST: 11.487806144337682), RESOLVED: {'p': 'F', 'p*': 'F', 'p**': 'T'}
+
+TimeStepNode(query=p***, type=robot_moving, resolved_questions={'p': 'F', 'p*': 'F', 'p**': 'T'}, robot_map={'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=d, cost=1.41, time=11.49), 'robot_2': Robot(id=robot_2, position=(8, 10), assigned_loc=, cost=10.07, time=11.49)}, visited_locations={'a', 'e'})
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=d, cost=1.41, time=11.49), 'robot_2': Robot(id=robot_2, position=(8, 10), assigned_loc=, cost=10.07, time=11.49)}, COST: 11.487806144337682), RESOLVED: {'p': 'F', 'p*': 'F', 'p**': 'T'}
+
+TimeStepNode(query=p***, type=query, resolved_questions={'p': 'F', 'p*': 'F', 'p**': 'T'}, robot_map={'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=d, cost=1.41, time=11.49), 'robot_2': Robot(id=robot_2, position=(8, 10), assigned_loc=, cost=10.07, time=11.49)}, visited_locations={'a', 'e', 'd'})
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=d, cost=1.41, time=11.49), 'robot_2': Robot(id=robot_2, position=(8, 10), assigned_loc=, cost=10.07, time=11.49)}, COST: 11.487806144337682), RESOLVED: {'p': 'F', 'p*': 'F', 'p**': 'T', 'p***': 'T'}
+  - {'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=d, cost=1.41, time=11.49), 'robot_2': Robot(id=robot_2, position=(8, 10), assigned_loc=, cost=10.07, time=11.49)}, COST: 11.487806144337682), RESOLVED: {'p': 'F', 'p*': 'F', 'p**': 'T', 'p***': 'F'}
+
+TimeStepNode(query=false, type=robot_assignment, resolved_questions={'p': 'F', 'p*': 'F', 'p**': 'T', 'p***': 'T'}, robot_map={'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=d, cost=1.41, time=11.49), 'robot_2': Robot(id=robot_2, position=(8, 10), assigned_loc=, cost=10.07, time=11.49)}, visited_locations={'a', 'e', 'd'})
+Next:
+
+TimeStepNode(query=p, type=query, resolved_questions={}, robot_map={'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=0.0), 'robot_2': Robot(id=robot_2, position=(2.0, 2.0), assigned_loc=, cost=0.0, time=0.0)}, visited_locations=set())
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=0.0), 'robot_2': Robot(id=robot_2, position=(2.0, 2.0), assigned_loc=, cost=0.0, time=0.0)}, COST: 0.0), RESOLVED: {}
+
+TimeStepNode(query=p, type=robot_assignment, resolved_questions={}, robot_map={'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=0.0), 'robot_2': Robot(id=robot_2, position=(2.0, 2.0), assigned_loc=, cost=0.0, time=0.0)}, visited_locations=set())
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=4.24), 'robot_2': Robot(id=robot_2, position=(5, 5), assigned_loc=a, cost=4.24, time=4.24)}, COST: 4.242640687119285), RESOLVED: {}
+  - {'robot_1': Robot(id=robot_1, position=(5, 5), assigned_loc=a, cost=5.66, time=5.66), 'robot_2': Robot(id=robot_2, position=(2.0, 2.0), assigned_loc=, cost=0.0, time=5.66)}, COST: 5.656854249492381), RESOLVED: {}
+  - {'robot_1': Robot(id=robot_1, position=(5, 5), assigned_loc=, cost=5.66, time=28.44), 'robot_2': Robot(id=robot_2, position=(30, 7), assigned_loc=b, cost=28.44, time=28.44)}, COST: 34.099779556148164), RESOLVED: {}
+  - {'robot_1': Robot(id=robot_1, position=(5, 5), assigned_loc=a, cost=5.66, time=5.66), 'robot_2': Robot(id=robot_2, position=(0, 0), assigned_loc=, cost=2.83, time=5.66)}, COST: 8.485281374238571), RESOLVED: {}
+  - {'robot_1': Robot(id=robot_1, position=(5, 5), assigned_loc=, cost=5.66, time=10.0), 'robot_2': Robot(id=robot_2, position=(8, 10), assigned_loc=e, cost=10.0, time=10.0)}, COST: 15.65685424949238), RESOLVED: {}
+  - {'robot_1': Robot(id=robot_1, position=(30, 7), assigned_loc=b, cost=29.61, time=29.61), 'robot_2': Robot(id=robot_2, position=(5, 5), assigned_loc=, cost=4.24, time=29.61)}, COST: 33.856826477040975), RESOLVED: {}
+  - {'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=, cost=1.41, time=4.24), 'robot_2': Robot(id=robot_2, position=(5, 5), assigned_loc=a, cost=4.24, time=4.24)}, COST: 5.656854249492381), RESOLVED: {}
+  - {'robot_1': Robot(id=robot_1, position=(8, 10), assigned_loc=e, cost=11.4, time=11.4), 'robot_2': Robot(id=robot_2, position=(5, 5), assigned_loc=, cost=4.24, time=11.4)}, COST: 15.644394938110665), RESOLVED: {}
+
+TimeStepNode(query=p, type=robot_moving, resolved_questions={}, robot_map={'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=4.24), 'robot_2': Robot(id=robot_2, position=(5, 5), assigned_loc=a, cost=4.24, time=4.24)}, visited_locations=set())
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=4.24), 'robot_2': Robot(id=robot_2, position=(5, 5), assigned_loc=a, cost=4.24, time=4.24)}, COST: 4.242640687119285), RESOLVED: {}
+
+TimeStepNode(query=p, type=query, resolved_questions={}, robot_map={'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=4.24), 'robot_2': Robot(id=robot_2, position=(5, 5), assigned_loc=a, cost=4.24, time=4.24)}, visited_locations={'a'})
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=4.24), 'robot_2': Robot(id=robot_2, position=(5, 5), assigned_loc=a, cost=4.24, time=4.24)}, COST: 4.242640687119285), RESOLVED: {'p': 'T'}
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=4.24), 'robot_2': Robot(id=robot_2, position=(5, 5), assigned_loc=a, cost=4.24, time=4.24)}, COST: 4.242640687119285), RESOLVED: {'p': 'F'}
+
+TimeStepNode(query=p*, type=robot_assignment, resolved_questions={'p': 'F'}, robot_map={'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=4.24), 'robot_2': Robot(id=robot_2, position=(5, 5), assigned_loc=a, cost=4.24, time=4.24)}, visited_locations={'a'})
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=29.32), 'robot_2': Robot(id=robot_2, position=(30, 7), assigned_loc=b, cost=29.32, time=29.32)}, COST: 29.32251309508819), RESOLVED: {'p': 'F'}
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=10.07), 'robot_2': Robot(id=robot_2, position=(8, 10), assigned_loc=e, cost=10.07, time=10.07)}, COST: 10.073592581964586), RESOLVED: {'p': 'F'}
+  - {'robot_1': Robot(id=robot_1, position=(30, 7), assigned_loc=b, cost=29.61, time=33.86), 'robot_2': Robot(id=robot_2, position=(5, 5), assigned_loc=, cost=4.24, time=33.86)}, COST: 33.85682647704098), RESOLVED: {'p': 'F'}
+  - {'robot_1': Robot(id=robot_1, position=(30, 7), assigned_loc=b, cost=29.61, time=33.86), 'robot_2': Robot(id=robot_2, position=(0, 0), assigned_loc=, cost=11.31, time=33.86)}, COST: 40.92789428890646), RESOLVED: {'p': 'F'}
+  - {'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=, cost=1.41, time=29.32), 'robot_2': Robot(id=robot_2, position=(30, 7), assigned_loc=b, cost=29.32, time=29.32)}, COST: 30.736726657461286), RESOLVED: {'p': 'F'}
+  - {'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=, cost=1.41, time=10.07), 'robot_2': Robot(id=robot_2, position=(8, 10), assigned_loc=e, cost=10.07, time=10.07)}, COST: 11.487806144337682), RESOLVED: {'p': 'F'}
+  - {'robot_1': Robot(id=robot_1, position=(8, 10), assigned_loc=e, cost=11.4, time=15.64), 'robot_2': Robot(id=robot_2, position=(5, 5), assigned_loc=, cost=4.24, time=15.64)}, COST: 15.644394938110665), RESOLVED: {'p': 'F'}
+  - {'robot_1': Robot(id=robot_1, position=(8, 10), assigned_loc=e, cost=11.4, time=15.64), 'robot_2': Robot(id=robot_2, position=(0, 0), assigned_loc=, cost=11.31, time=15.64)}, COST: 22.71546274997614), RESOLVED: {'p': 'F'}
+
+TimeStepNode(query=p*, type=robot_moving, resolved_questions={'p': 'F'}, robot_map={'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=10.07), 'robot_2': Robot(id=robot_2, position=(8, 10), assigned_loc=e, cost=10.07, time=10.07)}, visited_locations={'a'})
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=10.07), 'robot_2': Robot(id=robot_2, position=(8, 10), assigned_loc=e, cost=10.07, time=10.07)}, COST: 10.073592581964586), RESOLVED: {'p': 'F'}
+
+TimeStepNode(query=p*, type=query, resolved_questions={'p': 'F'}, robot_map={'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=10.07), 'robot_2': Robot(id=robot_2, position=(8, 10), assigned_loc=e, cost=10.07, time=10.07)}, visited_locations={'a', 'e'})
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=10.07), 'robot_2': Robot(id=robot_2, position=(8, 10), assigned_loc=e, cost=10.07, time=10.07)}, COST: 10.073592581964586), RESOLVED: {'p': 'F', 'p*': 'T', 'p**': 'T'}
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=10.07), 'robot_2': Robot(id=robot_2, position=(8, 10), assigned_loc=e, cost=10.07, time=10.07)}, COST: 10.073592581964586), RESOLVED: {'p': 'F', 'p*': 'T', 'p**': 'F'}
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=10.07), 'robot_2': Robot(id=robot_2, position=(8, 10), assigned_loc=e, cost=10.07, time=10.07)}, COST: 10.073592581964586), RESOLVED: {'p': 'F', 'p*': 'F', 'p**': 'T'}
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=10.07), 'robot_2': Robot(id=robot_2, position=(8, 10), assigned_loc=e, cost=10.07, time=10.07)}, COST: 10.073592581964586), RESOLVED: {'p': 'F', 'p*': 'F', 'p**': 'F'}
+
+TimeStepNode(query=p***, type=robot_assignment, resolved_questions={'p': 'F', 'p*': 'F', 'p**': 'T'}, robot_map={'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=10.07), 'robot_2': Robot(id=robot_2, position=(8, 10), assigned_loc=e, cost=10.07, time=10.07)}, visited_locations={'a', 'e'})
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=22.88), 'robot_2': Robot(id=robot_2, position=(0, 0), assigned_loc=d, cost=22.88, time=22.88)}, COST: 22.879841056830283), RESOLVED: {'p': 'F', 'p*': 'F', 'p**': 'T'}
+  - {'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=d, cost=1.41, time=11.49), 'robot_2': Robot(id=robot_2, position=(8, 10), assigned_loc=, cost=10.07, time=11.49)}, COST: 11.487806144337682), RESOLVED: {'p': 'F', 'p*': 'F', 'p**': 'T'}
+
+TimeStepNode(query=p***, type=robot_moving, resolved_questions={'p': 'F', 'p*': 'F', 'p**': 'T'}, robot_map={'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=d, cost=1.41, time=11.49), 'robot_2': Robot(id=robot_2, position=(8, 10), assigned_loc=, cost=10.07, time=11.49)}, visited_locations={'a', 'e'})
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=d, cost=1.41, time=11.49), 'robot_2': Robot(id=robot_2, position=(8, 10), assigned_loc=, cost=10.07, time=11.49)}, COST: 11.487806144337682), RESOLVED: {'p': 'F', 'p*': 'F', 'p**': 'T'}
+
+TimeStepNode(query=p***, type=query, resolved_questions={'p': 'F', 'p*': 'F', 'p**': 'T'}, robot_map={'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=d, cost=1.41, time=11.49), 'robot_2': Robot(id=robot_2, position=(8, 10), assigned_loc=, cost=10.07, time=11.49)}, visited_locations={'a', 'd', 'e'})
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=d, cost=1.41, time=11.49), 'robot_2': Robot(id=robot_2, position=(8, 10), assigned_loc=, cost=10.07, time=11.49)}, COST: 11.487806144337682), RESOLVED: {'p': 'F', 'p*': 'F', 'p**': 'T', 'p***': 'T'}
+  - {'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=d, cost=1.41, time=11.49), 'robot_2': Robot(id=robot_2, position=(8, 10), assigned_loc=, cost=10.07, time=11.49)}, COST: 11.487806144337682), RESOLVED: {'p': 'F', 'p*': 'F', 'p**': 'T', 'p***': 'F'}
+
+TimeStepNode(query=false, type=robot_assignment, resolved_questions={'p': 'F', 'p*': 'F', 'p**': 'T', 'p***': 'T'}, robot_map={'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=d, cost=1.41, time=11.49), 'robot_2': Robot(id=robot_2, position=(8, 10), assigned_loc=, cost=10.07, time=11.49)}, visited_locations={'e', 'd', 'a'})
+Next:
+
+TimeStepNode(query=p, type=query, resolved_questions={}, robot_map={'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=0.0), 'robot_2': Robot(id=robot_2, position=(2.0, 2.0), assigned_loc=, cost=0.0, time=0.0)}, visited_locations=set())
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=0.0), 'robot_2': Robot(id=robot_2, position=(2.0, 2.0), assigned_loc=, cost=0.0, time=0.0)}, COST: 0.0), RESOLVED: {}
+
+TimeStepNode(query=p, type=robot_assignment, resolved_questions={}, robot_map={'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=0.0), 'robot_2': Robot(id=robot_2, position=(2.0, 2.0), assigned_loc=, cost=0.0, time=0.0)}, visited_locations=set())
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=4.24), 'robot_2': Robot(id=robot_2, position=(5, 5), assigned_loc=a, cost=4.24, time=4.24)}, COST: 4.242640687119285), RESOLVED: {}
+  - {'robot_1': Robot(id=robot_1, position=(5, 5), assigned_loc=a, cost=5.66, time=5.66), 'robot_2': Robot(id=robot_2, position=(2.0, 2.0), assigned_loc=, cost=0.0, time=5.66)}, COST: 5.656854249492381), RESOLVED: {}
+  - {'robot_1': Robot(id=robot_1, position=(5, 5), assigned_loc=, cost=5.66, time=5.83), 'robot_2': Robot(id=robot_2, position=(-1, 7), assigned_loc=b, cost=5.83, time=5.83)}, COST: 11.487806144337682), RESOLVED: {}
+  - {'robot_1': Robot(id=robot_1, position=(5, 5), assigned_loc=a, cost=5.66, time=5.66), 'robot_2': Robot(id=robot_2, position=(0, 0), assigned_loc=, cost=2.83, time=5.66)}, COST: 8.485281374238571), RESOLVED: {}
+  - {'robot_1': Robot(id=robot_1, position=(5, 5), assigned_loc=a, cost=5.66, time=5.66), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=, cost=2.0, time=5.66)}, COST: 7.656854249492381), RESOLVED: {}
+  - {'robot_1': Robot(id=robot_1, position=(-1, 7), assigned_loc=b, cost=6.32, time=6.32), 'robot_2': Robot(id=robot_2, position=(5, 5), assigned_loc=, cost=4.24, time=6.32)}, COST: 10.567196007456044), RESOLVED: {}
+  - {'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=, cost=1.41, time=4.24), 'robot_2': Robot(id=robot_2, position=(5, 5), assigned_loc=a, cost=4.24, time=4.24)}, COST: 5.656854249492381), RESOLVED: {}
+  - {'robot_1': Robot(id=robot_1, position=(2, 4), assigned_loc=, cost=3.16, time=4.24), 'robot_2': Robot(id=robot_2, position=(5, 5), assigned_loc=a, cost=4.24, time=4.24)}, COST: 7.404918347287666), RESOLVED: {}
+
+TimeStepNode(query=p, type=robot_moving, resolved_questions={}, robot_map={'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=4.24), 'robot_2': Robot(id=robot_2, position=(5, 5), assigned_loc=a, cost=4.24, time=4.24)}, visited_locations=set())
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=4.24), 'robot_2': Robot(id=robot_2, position=(5, 5), assigned_loc=a, cost=4.24, time=4.24)}, COST: 4.242640687119285), RESOLVED: {}
+
+TimeStepNode(query=p, type=query, resolved_questions={}, robot_map={'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=4.24), 'robot_2': Robot(id=robot_2, position=(5, 5), assigned_loc=a, cost=4.24, time=4.24)}, visited_locations={'a'})
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=4.24), 'robot_2': Robot(id=robot_2, position=(5, 5), assigned_loc=a, cost=4.24, time=4.24)}, COST: 4.242640687119285), RESOLVED: {'p': 'T'}
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=4.24), 'robot_2': Robot(id=robot_2, position=(5, 5), assigned_loc=a, cost=4.24, time=4.24)}, COST: 4.242640687119285), RESOLVED: {'p': 'F'}
+
+TimeStepNode(query=p*, type=robot_assignment, resolved_questions={'p': 'F'}, robot_map={'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=4.24), 'robot_2': Robot(id=robot_2, position=(5, 5), assigned_loc=a, cost=4.24, time=4.24)}, visited_locations={'a'})
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=10.57), 'robot_2': Robot(id=robot_2, position=(-1, 7), assigned_loc=b, cost=10.57, time=10.57)}, COST: 10.567196007456044), RESOLVED: {'p': 'F'}
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=7.4), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=e, cost=7.4, time=7.4)}, COST: 7.404918347287664), RESOLVED: {'p': 'F'}
+  - {'robot_1': Robot(id=robot_1, position=(-1, 7), assigned_loc=b, cost=6.32, time=10.57), 'robot_2': Robot(id=robot_2, position=(5, 5), assigned_loc=, cost=4.24, time=10.57)}, COST: 10.567196007456044), RESOLVED: {'p': 'F'}
+  - {'robot_1': Robot(id=robot_1, position=(-1, 7), assigned_loc=, cost=6.32, time=11.31), 'robot_2': Robot(id=robot_2, position=(0, 0), assigned_loc=d, cost=11.31, time=11.31)}, COST: 17.63826381932152), RESOLVED: {'p': 'F'}
+  - {'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=, cost=1.41, time=10.57), 'robot_2': Robot(id=robot_2, position=(-1, 7), assigned_loc=b, cost=10.57, time=10.57)}, COST: 11.98140956982914), RESOLVED: {'p': 'F'}
+  - {'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=, cost=1.41, time=7.4), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=e, cost=7.4, time=7.4)}, COST: 8.81913190966076), RESOLVED: {'p': 'F'}
+  - {'robot_1': Robot(id=robot_1, position=(2, 4), assigned_loc=e, cost=3.16, time=7.4), 'robot_2': Robot(id=robot_2, position=(5, 5), assigned_loc=, cost=4.24, time=7.4)}, COST: 7.404918347287664), RESOLVED: {'p': 'F'}
+  - {'robot_1': Robot(id=robot_1, position=(2, 4), assigned_loc=, cost=3.16, time=11.31), 'robot_2': Robot(id=robot_2, position=(0, 0), assigned_loc=d, cost=11.31, time=11.31)}, COST: 14.47598615915314), RESOLVED: {'p': 'F'}
+
+TimeStepNode(query=p*, type=robot_moving, resolved_questions={'p': 'F'}, robot_map={'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=7.4), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=e, cost=7.4, time=7.4)}, visited_locations={'a'})
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=7.4), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=e, cost=7.4, time=7.4)}, COST: 7.404918347287664), RESOLVED: {'p': 'F'}
+
+TimeStepNode(query=p*, type=query, resolved_questions={'p': 'F'}, robot_map={'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=7.4), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=e, cost=7.4, time=7.4)}, visited_locations={'e', 'a'})
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=7.4), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=e, cost=7.4, time=7.4)}, COST: 7.404918347287664), RESOLVED: {'p': 'F', 'p*': 'T', 'p**': 'T'}
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=7.4), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=e, cost=7.4, time=7.4)}, COST: 7.404918347287664), RESOLVED: {'p': 'F', 'p*': 'T', 'p**': 'F'}
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=7.4), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=e, cost=7.4, time=7.4)}, COST: 7.404918347287664), RESOLVED: {'p': 'F', 'p*': 'F', 'p**': 'T'}
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=7.4), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=e, cost=7.4, time=7.4)}, COST: 7.404918347287664), RESOLVED: {'p': 'F', 'p*': 'F', 'p**': 'F'}
+
+TimeStepNode(query=p***, type=robot_assignment, resolved_questions={'p': 'F', 'p*': 'F', 'p**': 'T'}, robot_map={'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=7.4), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=e, cost=7.4, time=7.4)}, visited_locations={'e', 'a'})
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=11.88), 'robot_2': Robot(id=robot_2, position=(0, 0), assigned_loc=d, cost=11.88, time=11.88)}, COST: 11.877054302287243), RESOLVED: {'p': 'F', 'p*': 'F', 'p**': 'T'}
+  - {'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=d, cost=1.41, time=8.82), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=, cost=7.4, time=8.82)}, COST: 8.81913190966076), RESOLVED: {'p': 'F', 'p*': 'F', 'p**': 'T'}
+
+TimeStepNode(query=p***, type=robot_moving, resolved_questions={'p': 'F', 'p*': 'F', 'p**': 'T'}, robot_map={'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=d, cost=1.41, time=8.82), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=, cost=7.4, time=8.82)}, visited_locations={'e', 'a'})
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=d, cost=1.41, time=8.82), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=, cost=7.4, time=8.82)}, COST: 8.81913190966076), RESOLVED: {'p': 'F', 'p*': 'F', 'p**': 'T'}
+
+TimeStepNode(query=p***, type=query, resolved_questions={'p': 'F', 'p*': 'F', 'p**': 'T'}, robot_map={'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=d, cost=1.41, time=8.82), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=, cost=7.4, time=8.82)}, visited_locations={'e', 'a', 'd'})
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=d, cost=1.41, time=8.82), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=, cost=7.4, time=8.82)}, COST: 8.81913190966076), RESOLVED: {'p': 'F', 'p*': 'F', 'p**': 'T', 'p***': 'T'}
+  - {'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=d, cost=1.41, time=8.82), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=, cost=7.4, time=8.82)}, COST: 8.81913190966076), RESOLVED: {'p': 'F', 'p*': 'F', 'p**': 'T', 'p***': 'F'}
+
+TimeStepNode(query=false, type=robot_assignment, resolved_questions={'p': 'F', 'p*': 'F', 'p**': 'T', 'p***': 'T'}, robot_map={'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=d, cost=1.41, time=8.82), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=, cost=7.4, time=8.82)}, visited_locations={'e', 'a', 'd'})
+Next:
+
+TimeStepNode(query=p, type=query, resolved_questions={}, robot_map={'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=0.0), 'robot_2': Robot(id=robot_2, position=(2.0, 2.0), assigned_loc=, cost=0.0, time=0.0)}, visited_locations=set())
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=0.0), 'robot_2': Robot(id=robot_2, position=(2.0, 2.0), assigned_loc=, cost=0.0, time=0.0)}, COST: 0.0), RESOLVED: {}
+
+TimeStepNode(query=p, type=robot_assignment, resolved_questions={}, robot_map={'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=0.0), 'robot_2': Robot(id=robot_2, position=(2.0, 2.0), assigned_loc=, cost=0.0, time=0.0)}, visited_locations=set())
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=2.83), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=a, cost=2.83, time=2.83)}, COST: 2.8284271247461903), RESOLVED: {}
+  - {'robot_1': Robot(id=robot_1, position=(4, 4), assigned_loc=a, cost=4.24, time=4.24), 'robot_2': Robot(id=robot_2, position=(2.0, 2.0), assigned_loc=, cost=0.0, time=4.24)}, COST: 4.242640687119285), RESOLVED: {}
+  - {'robot_1': Robot(id=robot_1, position=(4, 4), assigned_loc=, cost=4.24, time=5.83), 'robot_2': Robot(id=robot_2, position=(-1, 7), assigned_loc=b, cost=5.83, time=5.83)}, COST: 10.073592581964586), RESOLVED: {}
+  - {'robot_1': Robot(id=robot_1, position=(4, 4), assigned_loc=a, cost=4.24, time=4.24), 'robot_2': Robot(id=robot_2, position=(0, 0), assigned_loc=, cost=2.83, time=4.24)}, COST: 7.0710678118654755), RESOLVED: {}
+  - {'robot_1': Robot(id=robot_1, position=(4, 4), assigned_loc=a, cost=4.24, time=4.24), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=, cost=2.0, time=4.24)}, COST: 6.242640687119286), RESOLVED: {}
+  - {'robot_1': Robot(id=robot_1, position=(-1, 7), assigned_loc=b, cost=6.32, time=6.32), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=, cost=2.83, time=6.32)}, COST: 9.15298244508295), RESOLVED: {}
+  - {'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=, cost=1.41, time=2.83), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=a, cost=2.83, time=2.83)}, COST: 4.242640687119286), RESOLVED: {}
+  - {'robot_1': Robot(id=robot_1, position=(2, 4), assigned_loc=e, cost=3.16, time=3.16), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=, cost=2.83, time=3.16)}, COST: 5.99070478491457), RESOLVED: {}
+
+TimeStepNode(query=p, type=robot_moving, resolved_questions={}, robot_map={'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=2.83), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=a, cost=2.83, time=2.83)}, visited_locations=set())
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=2.83), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=a, cost=2.83, time=2.83)}, COST: 2.8284271247461903), RESOLVED: {}
+
+TimeStepNode(query=p, type=query, resolved_questions={}, robot_map={'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=2.83), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=a, cost=2.83, time=2.83)}, visited_locations={'a'})
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=2.83), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=a, cost=2.83, time=2.83)}, COST: 2.8284271247461903), RESOLVED: {'p': 'T'}
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=2.83), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=a, cost=2.83, time=2.83)}, COST: 2.8284271247461903), RESOLVED: {'p': 'F'}
+
+TimeStepNode(query=p*, type=robot_assignment, resolved_questions={'p': 'F'}, robot_map={'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=2.83), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=a, cost=2.83, time=2.83)}, visited_locations={'a'})
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=8.66), 'robot_2': Robot(id=robot_2, position=(-1, 7), assigned_loc=b, cost=8.66, time=8.66)}, COST: 8.65937901959149), RESOLVED: {'p': 'F'}
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=4.83), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=e, cost=4.83, time=4.83)}, COST: 4.82842712474619), RESOLVED: {'p': 'F'}
+  - {'robot_1': Robot(id=robot_1, position=(-1, 7), assigned_loc=b, cost=6.32, time=9.15), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=, cost=2.83, time=9.15)}, COST: 9.15298244508295), RESOLVED: {'p': 'F'}
+  - {'robot_1': Robot(id=robot_1, position=(-1, 7), assigned_loc=b, cost=6.32, time=9.15), 'robot_2': Robot(id=robot_2, position=(0, 0), assigned_loc=, cost=8.49, time=9.15)}, COST: 14.809836694575331), RESOLVED: {'p': 'F'}
+  - {'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=, cost=1.41, time=8.66), 'robot_2': Robot(id=robot_2, position=(-1, 7), assigned_loc=b, cost=8.66, time=8.66)}, COST: 10.073592581964586), RESOLVED: {'p': 'F'}
+  - {'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=, cost=1.41, time=4.83), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=e, cost=4.83, time=4.83)}, COST: 6.242640687119285), RESOLVED: {'p': 'F'}
+  - {'robot_1': Robot(id=robot_1, position=(2, 4), assigned_loc=e, cost=3.16, time=5.99), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=, cost=2.83, time=5.99)}, COST: 5.99070478491457), RESOLVED: {'p': 'F'}
+  - {'robot_1': Robot(id=robot_1, position=(2, 4), assigned_loc=, cost=3.16, time=8.49), 'robot_2': Robot(id=robot_2, position=(0, 0), assigned_loc=d, cost=8.49, time=8.49)}, COST: 11.647559034406951), RESOLVED: {'p': 'F'}
+
+TimeStepNode(query=p*, type=robot_moving, resolved_questions={'p': 'F'}, robot_map={'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=4.83), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=e, cost=4.83, time=4.83)}, visited_locations={'a'})
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=4.83), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=e, cost=4.83, time=4.83)}, COST: 4.82842712474619), RESOLVED: {'p': 'F'}
+
+TimeStepNode(query=p*, type=query, resolved_questions={'p': 'F'}, robot_map={'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=4.83), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=e, cost=4.83, time=4.83)}, visited_locations={'e', 'a'})
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=4.83), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=e, cost=4.83, time=4.83)}, COST: 4.82842712474619), RESOLVED: {'p': 'F', 'p**': 'T', 'p*': 'T'}
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=4.83), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=e, cost=4.83, time=4.83)}, COST: 4.82842712474619), RESOLVED: {'p': 'F', 'p**': 'T', 'p*': 'F'}
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=4.83), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=e, cost=4.83, time=4.83)}, COST: 4.82842712474619), RESOLVED: {'p': 'F', 'p**': 'F', 'p*': 'T'}
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=4.83), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=e, cost=4.83, time=4.83)}, COST: 4.82842712474619), RESOLVED: {'p': 'F', 'p**': 'F', 'p*': 'F'}
+
+TimeStepNode(query=p***, type=robot_assignment, resolved_questions={'p': 'F', 'p**': 'T', 'p*': 'F'}, robot_map={'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=4.83), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=e, cost=4.83, time=4.83)}, visited_locations={'e', 'a'})
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=9.3), 'robot_2': Robot(id=robot_2, position=(0, 0), assigned_loc=d, cost=9.3, time=9.3)}, COST: 9.30056307974577), RESOLVED: {'p': 'F', 'p**': 'T', 'p*': 'F'}
+  - {'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=d, cost=1.41, time=6.24), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=, cost=4.83, time=6.24)}, COST: 6.242640687119285), RESOLVED: {'p': 'F', 'p**': 'T', 'p*': 'F'}
+
+TimeStepNode(query=p***, type=robot_moving, resolved_questions={'p': 'F', 'p**': 'T', 'p*': 'F'}, robot_map={'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=d, cost=1.41, time=6.24), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=, cost=4.83, time=6.24)}, visited_locations={'e', 'a'})
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=d, cost=1.41, time=6.24), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=, cost=4.83, time=6.24)}, COST: 6.242640687119285), RESOLVED: {'p': 'F', 'p**': 'T', 'p*': 'F'}
+
+TimeStepNode(query=p***, type=query, resolved_questions={'p': 'F', 'p**': 'T', 'p*': 'F'}, robot_map={'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=d, cost=1.41, time=6.24), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=, cost=4.83, time=6.24)}, visited_locations={'e', 'd', 'a'})
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=d, cost=1.41, time=6.24), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=, cost=4.83, time=6.24)}, COST: 6.242640687119285), RESOLVED: {'p': 'F', 'p**': 'T', 'p*': 'F', 'p***': 'T'}
+  - {'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=d, cost=1.41, time=6.24), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=, cost=4.83, time=6.24)}, COST: 6.242640687119285), RESOLVED: {'p': 'F', 'p**': 'T', 'p*': 'F', 'p***': 'F'}
+
+TimeStepNode(query=false, type=robot_assignment, resolved_questions={'p': 'F', 'p**': 'T', 'p*': 'F', 'p***': 'T'}, robot_map={'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=d, cost=1.41, time=6.24), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=, cost=4.83, time=6.24)}, visited_locations={'e', 'd', 'a'})
+Next:
+
+TimeStepNode(query=p, type=query, resolved_questions={}, robot_map={'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=0.0), 'robot_2': Robot(id=robot_2, position=(2.0, 2.0), assigned_loc=, cost=0.0, time=0.0)}, visited_locations=set())
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=0.0), 'robot_2': Robot(id=robot_2, position=(2.0, 2.0), assigned_loc=, cost=0.0, time=0.0)}, COST: 0.0), RESOLVED: {}
+
+TimeStepNode(query=p, type=robot_assignment, resolved_questions={}, robot_map={'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=0.0), 'robot_2': Robot(id=robot_2, position=(2.0, 2.0), assigned_loc=, cost=0.0, time=0.0)}, visited_locations=set())
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=2.83), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=a, cost=2.83, time=2.83)}, COST: 2.8284271247461903), RESOLVED: {}
+  - {'robot_1': Robot(id=robot_1, position=(4, 4), assigned_loc=a, cost=4.24, time=4.24), 'robot_2': Robot(id=robot_2, position=(2.0, 2.0), assigned_loc=, cost=0.0, time=4.24)}, COST: 4.242640687119285), RESOLVED: {}
+  - {'robot_1': Robot(id=robot_1, position=(4, 4), assigned_loc=, cost=4.24, time=5.83), 'robot_2': Robot(id=robot_2, position=(-1, 7), assigned_loc=b, cost=5.83, time=5.83)}, COST: 10.073592581964586), RESOLVED: {}
+  - {'robot_1': Robot(id=robot_1, position=(4, 4), assigned_loc=a, cost=4.24, time=4.24), 'robot_2': Robot(id=robot_2, position=(0, 0), assigned_loc=, cost=2.83, time=4.24)}, COST: 7.0710678118654755), RESOLVED: {}
+  - {'robot_1': Robot(id=robot_1, position=(4, 4), assigned_loc=a, cost=4.24, time=4.24), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=, cost=2.0, time=4.24)}, COST: 6.242640687119286), RESOLVED: {}
+  - {'robot_1': Robot(id=robot_1, position=(-1, 7), assigned_loc=b, cost=6.32, time=6.32), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=, cost=2.83, time=6.32)}, COST: 9.15298244508295), RESOLVED: {}
+  - {'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=, cost=1.41, time=2.83), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=a, cost=2.83, time=2.83)}, COST: 4.242640687119286), RESOLVED: {}
+  - {'robot_1': Robot(id=robot_1, position=(2, 4), assigned_loc=e, cost=3.16, time=3.16), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=, cost=2.83, time=3.16)}, COST: 5.99070478491457), RESOLVED: {}
+
+TimeStepNode(query=p, type=robot_moving, resolved_questions={}, robot_map={'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=2.83), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=a, cost=2.83, time=2.83)}, visited_locations=set())
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=2.83), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=a, cost=2.83, time=2.83)}, COST: 2.8284271247461903), RESOLVED: {}
+
+TimeStepNode(query=p, type=query, resolved_questions={}, robot_map={'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=2.83), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=a, cost=2.83, time=2.83)}, visited_locations={'a'})
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=2.83), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=a, cost=2.83, time=2.83)}, COST: 2.8284271247461903), RESOLVED: {'p': 'T'}
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=2.83), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=a, cost=2.83, time=2.83)}, COST: 2.8284271247461903), RESOLVED: {'p': 'F'}
+
+TimeStepNode(query=p*, type=robot_assignment, resolved_questions={'p': 'F'}, robot_map={'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=2.83), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=a, cost=2.83, time=2.83)}, visited_locations={'a'})
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=8.66), 'robot_2': Robot(id=robot_2, position=(-1, 7), assigned_loc=b, cost=8.66, time=8.66)}, COST: 8.65937901959149), RESOLVED: {'p': 'F'}
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=4.83), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=e, cost=4.83, time=4.83)}, COST: 4.82842712474619), RESOLVED: {'p': 'F'}
+  - {'robot_1': Robot(id=robot_1, position=(-1, 7), assigned_loc=b, cost=6.32, time=9.15), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=, cost=2.83, time=9.15)}, COST: 9.15298244508295), RESOLVED: {'p': 'F'}
+  - {'robot_1': Robot(id=robot_1, position=(-1, 7), assigned_loc=b, cost=6.32, time=9.15), 'robot_2': Robot(id=robot_2, position=(0, 0), assigned_loc=, cost=8.49, time=9.15)}, COST: 14.809836694575331), RESOLVED: {'p': 'F'}
+  - {'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=, cost=1.41, time=8.66), 'robot_2': Robot(id=robot_2, position=(-1, 7), assigned_loc=b, cost=8.66, time=8.66)}, COST: 10.073592581964586), RESOLVED: {'p': 'F'}
+  - {'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=, cost=1.41, time=4.83), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=e, cost=4.83, time=4.83)}, COST: 6.242640687119285), RESOLVED: {'p': 'F'}
+  - {'robot_1': Robot(id=robot_1, position=(2, 4), assigned_loc=e, cost=3.16, time=5.99), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=, cost=2.83, time=5.99)}, COST: 5.99070478491457), RESOLVED: {'p': 'F'}
+  - {'robot_1': Robot(id=robot_1, position=(2, 4), assigned_loc=, cost=3.16, time=8.49), 'robot_2': Robot(id=robot_2, position=(0, 0), assigned_loc=d, cost=8.49, time=8.49)}, COST: 11.647559034406951), RESOLVED: {'p': 'F'}
+
+TimeStepNode(query=p*, type=robot_moving, resolved_questions={'p': 'F'}, robot_map={'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=4.83), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=e, cost=4.83, time=4.83)}, visited_locations={'a'})
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=4.83), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=e, cost=4.83, time=4.83)}, COST: 4.82842712474619), RESOLVED: {'p': 'F'}
+
+TimeStepNode(query=p*, type=query, resolved_questions={'p': 'F'}, robot_map={'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=4.83), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=e, cost=4.83, time=4.83)}, visited_locations={'e', 'a'})
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=4.83), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=e, cost=4.83, time=4.83)}, COST: 4.82842712474619), RESOLVED: {'p': 'F', 'p*': 'T', 'p**': 'T'}
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=4.83), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=e, cost=4.83, time=4.83)}, COST: 4.82842712474619), RESOLVED: {'p': 'F', 'p*': 'T', 'p**': 'F'}
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=4.83), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=e, cost=4.83, time=4.83)}, COST: 4.82842712474619), RESOLVED: {'p': 'F', 'p*': 'F', 'p**': 'T'}
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=4.83), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=e, cost=4.83, time=4.83)}, COST: 4.82842712474619), RESOLVED: {'p': 'F', 'p*': 'F', 'p**': 'F'}
+
+TimeStepNode(query=p***, type=robot_assignment, resolved_questions={'p': 'F', 'p*': 'F', 'p**': 'T'}, robot_map={'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=4.83), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=e, cost=4.83, time=4.83)}, visited_locations={'e', 'a'})
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=9.3), 'robot_2': Robot(id=robot_2, position=(0, 0), assigned_loc=d, cost=9.3, time=9.3)}, COST: 9.30056307974577), RESOLVED: {'p': 'F', 'p*': 'F', 'p**': 'T'}
+  - {'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=d, cost=1.41, time=6.24), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=, cost=4.83, time=6.24)}, COST: 6.242640687119285), RESOLVED: {'p': 'F', 'p*': 'F', 'p**': 'T'}
+
+TimeStepNode(query=p***, type=robot_moving, resolved_questions={'p': 'F', 'p*': 'F', 'p**': 'T'}, robot_map={'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=d, cost=1.41, time=6.24), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=, cost=4.83, time=6.24)}, visited_locations={'e', 'a'})
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=d, cost=1.41, time=6.24), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=, cost=4.83, time=6.24)}, COST: 6.242640687119285), RESOLVED: {'p': 'F', 'p*': 'F', 'p**': 'T'}
+
+TimeStepNode(query=p***, type=query, resolved_questions={'p': 'F', 'p*': 'F', 'p**': 'T'}, robot_map={'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=d, cost=1.41, time=6.24), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=, cost=4.83, time=6.24)}, visited_locations={'e', 'a', 'd'})
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=d, cost=1.41, time=6.24), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=, cost=4.83, time=6.24)}, COST: 6.242640687119285), RESOLVED: {'p': 'F', 'p*': 'F', 'p**': 'T', 'p***': 'T'}
+  - {'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=d, cost=1.41, time=6.24), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=, cost=4.83, time=6.24)}, COST: 6.242640687119285), RESOLVED: {'p': 'F', 'p*': 'F', 'p**': 'T', 'p***': 'F'}
+
+TimeStepNode(query=false, type=robot_assignment, resolved_questions={'p': 'F', 'p*': 'F', 'p**': 'T', 'p***': 'T'}, robot_map={'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=d, cost=1.41, time=6.24), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=, cost=4.83, time=6.24)}, visited_locations={'e', 'a', 'd'})
+Next:
+
+TimeStepNode(query=p, type=query, resolved_questions={}, robot_map={'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=0.0), 'robot_2': Robot(id=robot_2, position=(2.0, 2.0), assigned_loc=, cost=0.0, time=0.0)}, visited_locations=set())
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=0.0), 'robot_2': Robot(id=robot_2, position=(2.0, 2.0), assigned_loc=, cost=0.0, time=0.0)}, COST: 0.0), RESOLVED: {}
+
+TimeStepNode(query=p, type=robot_assignment, resolved_questions={}, robot_map={'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=0.0), 'robot_2': Robot(id=robot_2, position=(2.0, 2.0), assigned_loc=, cost=0.0, time=0.0)}, visited_locations=set())
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=2.83), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=a, cost=2.83, time=2.83)}, COST: 2.8284271247461903), RESOLVED: {}
+  - {'robot_1': Robot(id=robot_1, position=(4, 4), assigned_loc=a, cost=4.24, time=4.24), 'robot_2': Robot(id=robot_2, position=(2.0, 2.0), assigned_loc=, cost=0.0, time=4.24)}, COST: 4.242640687119285), RESOLVED: {}
+  - {'robot_1': Robot(id=robot_1, position=(4, 4), assigned_loc=, cost=4.24, time=5.83), 'robot_2': Robot(id=robot_2, position=(-1, 7), assigned_loc=b, cost=5.83, time=5.83)}, COST: 10.073592581964586), RESOLVED: {}
+  - {'robot_1': Robot(id=robot_1, position=(4, 4), assigned_loc=a, cost=4.24, time=4.24), 'robot_2': Robot(id=robot_2, position=(0, 0), assigned_loc=, cost=2.83, time=4.24)}, COST: 7.0710678118654755), RESOLVED: {}
+  - {'robot_1': Robot(id=robot_1, position=(4, 4), assigned_loc=a, cost=4.24, time=4.24), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=, cost=2.0, time=4.24)}, COST: 6.242640687119286), RESOLVED: {}
+  - {'robot_1': Robot(id=robot_1, position=(-1, 7), assigned_loc=b, cost=6.32, time=6.32), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=, cost=2.83, time=6.32)}, COST: 9.15298244508295), RESOLVED: {}
+  - {'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=, cost=1.41, time=2.83), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=a, cost=2.83, time=2.83)}, COST: 4.242640687119286), RESOLVED: {}
+  - {'robot_1': Robot(id=robot_1, position=(2, 4), assigned_loc=e, cost=3.16, time=3.16), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=, cost=2.83, time=3.16)}, COST: 5.99070478491457), RESOLVED: {}
+
+TimeStepNode(query=p, type=robot_moving, resolved_questions={}, robot_map={'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=2.83), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=a, cost=2.83, time=2.83)}, visited_locations=set())
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=2.83), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=a, cost=2.83, time=2.83)}, COST: 2.8284271247461903), RESOLVED: {}
+
+TimeStepNode(query=p, type=query, resolved_questions={}, robot_map={'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=2.83), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=a, cost=2.83, time=2.83)}, visited_locations={'a'})
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=2.83), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=a, cost=2.83, time=2.83)}, COST: 2.8284271247461903), RESOLVED: {'p': 'T'}
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=2.83), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=a, cost=2.83, time=2.83)}, COST: 2.8284271247461903), RESOLVED: {'p': 'F'}
+
+TimeStepNode(query=p*, type=robot_assignment, resolved_questions={'p': 'F'}, robot_map={'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=2.83), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=a, cost=2.83, time=2.83)}, visited_locations={'a'})
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=8.66), 'robot_2': Robot(id=robot_2, position=(-1, 7), assigned_loc=b, cost=8.66, time=8.66)}, COST: 8.65937901959149), RESOLVED: {'p': 'F'}
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=4.83), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=e, cost=4.83, time=4.83)}, COST: 4.82842712474619), RESOLVED: {'p': 'F'}
+  - {'robot_1': Robot(id=robot_1, position=(-1, 7), assigned_loc=b, cost=6.32, time=9.15), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=, cost=2.83, time=9.15)}, COST: 9.15298244508295), RESOLVED: {'p': 'F'}
+  - {'robot_1': Robot(id=robot_1, position=(-1, 7), assigned_loc=b, cost=6.32, time=9.15), 'robot_2': Robot(id=robot_2, position=(0, 0), assigned_loc=, cost=8.49, time=9.15)}, COST: 14.809836694575331), RESOLVED: {'p': 'F'}
+  - {'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=, cost=1.41, time=8.66), 'robot_2': Robot(id=robot_2, position=(-1, 7), assigned_loc=b, cost=8.66, time=8.66)}, COST: 10.073592581964586), RESOLVED: {'p': 'F'}
+  - {'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=, cost=1.41, time=4.83), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=e, cost=4.83, time=4.83)}, COST: 6.242640687119285), RESOLVED: {'p': 'F'}
+  - {'robot_1': Robot(id=robot_1, position=(2, 4), assigned_loc=e, cost=3.16, time=5.99), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=, cost=2.83, time=5.99)}, COST: 5.99070478491457), RESOLVED: {'p': 'F'}
+  - {'robot_1': Robot(id=robot_1, position=(2, 4), assigned_loc=, cost=3.16, time=8.49), 'robot_2': Robot(id=robot_2, position=(0, 0), assigned_loc=d, cost=8.49, time=8.49)}, COST: 11.647559034406951), RESOLVED: {'p': 'F'}
+
+TimeStepNode(query=p*, type=robot_moving, resolved_questions={'p': 'F'}, robot_map={'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=4.83), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=e, cost=4.83, time=4.83)}, visited_locations={'a'})
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=4.83), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=e, cost=4.83, time=4.83)}, COST: 4.82842712474619), RESOLVED: {'p': 'F'}
+
+TimeStepNode(query=p*, type=query, resolved_questions={'p': 'F'}, robot_map={'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=4.83), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=e, cost=4.83, time=4.83)}, visited_locations={'e', 'a'})
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=4.83), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=e, cost=4.83, time=4.83)}, COST: 4.82842712474619), RESOLVED: {'p': 'F', 'p**': 'T', 'p*': 'T'}
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=4.83), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=e, cost=4.83, time=4.83)}, COST: 4.82842712474619), RESOLVED: {'p': 'F', 'p**': 'T', 'p*': 'F'}
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=4.83), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=e, cost=4.83, time=4.83)}, COST: 4.82842712474619), RESOLVED: {'p': 'F', 'p**': 'F', 'p*': 'T'}
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=4.83), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=e, cost=4.83, time=4.83)}, COST: 4.82842712474619), RESOLVED: {'p': 'F', 'p**': 'F', 'p*': 'F'}
+
+TimeStepNode(query=p***, type=robot_assignment, resolved_questions={'p': 'F', 'p**': 'T', 'p*': 'F'}, robot_map={'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=4.83), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=e, cost=4.83, time=4.83)}, visited_locations={'e', 'a'})
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=9.3), 'robot_2': Robot(id=robot_2, position=(0, 0), assigned_loc=d, cost=9.3, time=9.3)}, COST: 9.30056307974577), RESOLVED: {'p': 'F', 'p**': 'T', 'p*': 'F'}
+  - {'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=d, cost=1.41, time=6.24), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=, cost=4.83, time=6.24)}, COST: 6.242640687119285), RESOLVED: {'p': 'F', 'p**': 'T', 'p*': 'F'}
+
+TimeStepNode(query=p***, type=robot_moving, resolved_questions={'p': 'F', 'p**': 'T', 'p*': 'F'}, robot_map={'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=d, cost=1.41, time=6.24), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=, cost=4.83, time=6.24)}, visited_locations={'e', 'a'})
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=d, cost=1.41, time=6.24), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=, cost=4.83, time=6.24)}, COST: 6.242640687119285), RESOLVED: {'p': 'F', 'p**': 'T', 'p*': 'F'}
+
+TimeStepNode(query=p***, type=query, resolved_questions={'p': 'F', 'p**': 'T', 'p*': 'F'}, robot_map={'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=d, cost=1.41, time=6.24), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=, cost=4.83, time=6.24)}, visited_locations={'e', 'a', 'd'})
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=d, cost=1.41, time=6.24), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=, cost=4.83, time=6.24)}, COST: 6.242640687119285), RESOLVED: {'p': 'F', 'p**': 'T', 'p*': 'F', 'p***': 'T'}
+  - {'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=d, cost=1.41, time=6.24), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=, cost=4.83, time=6.24)}, COST: 6.242640687119285), RESOLVED: {'p': 'F', 'p**': 'T', 'p*': 'F', 'p***': 'F'}
+
+TimeStepNode(query=false, type=robot_assignment, resolved_questions={'p': 'F', 'p**': 'T', 'p*': 'F', 'p***': 'T'}, robot_map={'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=d, cost=1.41, time=6.24), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=, cost=4.83, time=6.24)}, visited_locations={'e', 'a', 'd'})
+Next:
+
+TimeStepNode(query=p, type=query, resolved_questions={}, robot_map={'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=0.0), 'robot_2': Robot(id=robot_2, position=(2.0, 2.0), assigned_loc=, cost=0.0, time=0.0)}, visited_locations=set())
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=0.0), 'robot_2': Robot(id=robot_2, position=(2.0, 2.0), assigned_loc=, cost=0.0, time=0.0)}, COST: 0.0), RESOLVED: {}
+
+TimeStepNode(query=p, type=robot_assignment, resolved_questions={}, robot_map={'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=0.0), 'robot_2': Robot(id=robot_2, position=(2.0, 2.0), assigned_loc=, cost=0.0, time=0.0)}, visited_locations=set())
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=2.83), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=a, cost=2.83, time=2.83)}, COST: 2.8284271247461903), RESOLVED: {}
+  - {'robot_1': Robot(id=robot_1, position=(4, 4), assigned_loc=a, cost=4.24, time=4.24), 'robot_2': Robot(id=robot_2, position=(2.0, 2.0), assigned_loc=, cost=0.0, time=4.24)}, COST: 4.242640687119285), RESOLVED: {}
+  - {'robot_1': Robot(id=robot_1, position=(4, 4), assigned_loc=, cost=4.24, time=5.83), 'robot_2': Robot(id=robot_2, position=(-1, 7), assigned_loc=b, cost=5.83, time=5.83)}, COST: 10.073592581964586), RESOLVED: {}
+  - {'robot_1': Robot(id=robot_1, position=(4, 4), assigned_loc=a, cost=4.24, time=4.24), 'robot_2': Robot(id=robot_2, position=(0, 0), assigned_loc=, cost=2.83, time=4.24)}, COST: 7.0710678118654755), RESOLVED: {}
+  - {'robot_1': Robot(id=robot_1, position=(4, 4), assigned_loc=a, cost=4.24, time=4.24), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=, cost=2.0, time=4.24)}, COST: 6.242640687119286), RESOLVED: {}
+  - {'robot_1': Robot(id=robot_1, position=(-1, 7), assigned_loc=b, cost=6.32, time=6.32), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=, cost=2.83, time=6.32)}, COST: 9.15298244508295), RESOLVED: {}
+  - {'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=, cost=1.41, time=2.83), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=a, cost=2.83, time=2.83)}, COST: 4.242640687119286), RESOLVED: {}
+  - {'robot_1': Robot(id=robot_1, position=(2, 4), assigned_loc=e, cost=3.16, time=3.16), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=, cost=2.83, time=3.16)}, COST: 5.99070478491457), RESOLVED: {}
+
+TimeStepNode(query=p, type=robot_moving, resolved_questions={}, robot_map={'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=2.83), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=a, cost=2.83, time=2.83)}, visited_locations=set())
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=2.83), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=a, cost=2.83, time=2.83)}, COST: 2.8284271247461903), RESOLVED: {}
+
+TimeStepNode(query=p, type=query, resolved_questions={}, robot_map={'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=2.83), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=a, cost=2.83, time=2.83)}, visited_locations={'a'})
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=2.83), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=a, cost=2.83, time=2.83)}, COST: 2.8284271247461903), RESOLVED: {'p': 'T'}
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=2.83), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=a, cost=2.83, time=2.83)}, COST: 2.8284271247461903), RESOLVED: {'p': 'F'}
+
+TimeStepNode(query=p*, type=robot_assignment, resolved_questions={'p': 'F'}, robot_map={'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=2.83), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=a, cost=2.83, time=2.83)}, visited_locations={'a'})
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=8.66), 'robot_2': Robot(id=robot_2, position=(-1, 7), assigned_loc=b, cost=8.66, time=8.66)}, COST: 8.65937901959149), RESOLVED: {'p': 'F'}
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=4.83), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=e, cost=4.83, time=4.83)}, COST: 4.82842712474619), RESOLVED: {'p': 'F'}
+  - {'robot_1': Robot(id=robot_1, position=(-1, 7), assigned_loc=b, cost=6.32, time=9.15), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=, cost=2.83, time=9.15)}, COST: 9.15298244508295), RESOLVED: {'p': 'F'}
+  - {'robot_1': Robot(id=robot_1, position=(-1, 7), assigned_loc=b, cost=6.32, time=9.15), 'robot_2': Robot(id=robot_2, position=(0, 0), assigned_loc=, cost=8.49, time=9.15)}, COST: 14.809836694575331), RESOLVED: {'p': 'F'}
+  - {'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=, cost=1.41, time=8.66), 'robot_2': Robot(id=robot_2, position=(-1, 7), assigned_loc=b, cost=8.66, time=8.66)}, COST: 10.073592581964586), RESOLVED: {'p': 'F'}
+  - {'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=, cost=1.41, time=4.83), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=e, cost=4.83, time=4.83)}, COST: 6.242640687119285), RESOLVED: {'p': 'F'}
+  - {'robot_1': Robot(id=robot_1, position=(2, 4), assigned_loc=e, cost=3.16, time=5.99), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=, cost=2.83, time=5.99)}, COST: 5.99070478491457), RESOLVED: {'p': 'F'}
+  - {'robot_1': Robot(id=robot_1, position=(2, 4), assigned_loc=, cost=3.16, time=8.49), 'robot_2': Robot(id=robot_2, position=(0, 0), assigned_loc=d, cost=8.49, time=8.49)}, COST: 11.647559034406951), RESOLVED: {'p': 'F'}
+
+TimeStepNode(query=p*, type=robot_moving, resolved_questions={'p': 'F'}, robot_map={'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=4.83), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=e, cost=4.83, time=4.83)}, visited_locations={'a'})
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=4.83), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=e, cost=4.83, time=4.83)}, COST: 4.82842712474619), RESOLVED: {'p': 'F'}
+
+TimeStepNode(query=p*, type=query, resolved_questions={'p': 'F'}, robot_map={'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=4.83), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=e, cost=4.83, time=4.83)}, visited_locations={'e', 'a'})
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=4.83), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=e, cost=4.83, time=4.83)}, COST: 4.82842712474619), RESOLVED: {'p': 'F', 'p**': 'T', 'p*': 'T'}
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=4.83), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=e, cost=4.83, time=4.83)}, COST: 4.82842712474619), RESOLVED: {'p': 'F', 'p**': 'T', 'p*': 'F'}
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=4.83), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=e, cost=4.83, time=4.83)}, COST: 4.82842712474619), RESOLVED: {'p': 'F', 'p**': 'F', 'p*': 'T'}
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=4.83), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=e, cost=4.83, time=4.83)}, COST: 4.82842712474619), RESOLVED: {'p': 'F', 'p**': 'F', 'p*': 'F'}
+
+TimeStepNode(query=p***, type=robot_assignment, resolved_questions={'p': 'F', 'p**': 'T', 'p*': 'F'}, robot_map={'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=4.83), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=e, cost=4.83, time=4.83)}, visited_locations={'e', 'a'})
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=9.3), 'robot_2': Robot(id=robot_2, position=(0, 0), assigned_loc=d, cost=9.3, time=9.3)}, COST: 9.30056307974577), RESOLVED: {'p': 'F', 'p**': 'T', 'p*': 'F'}
+  - {'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=d, cost=1.41, time=6.24), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=, cost=4.83, time=6.24)}, COST: 6.242640687119285), RESOLVED: {'p': 'F', 'p**': 'T', 'p*': 'F'}
+
+TimeStepNode(query=p***, type=robot_moving, resolved_questions={'p': 'F', 'p**': 'T', 'p*': 'F'}, robot_map={'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=d, cost=1.41, time=6.24), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=, cost=4.83, time=6.24)}, visited_locations={'e', 'a'})
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=d, cost=1.41, time=6.24), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=, cost=4.83, time=6.24)}, COST: 6.242640687119285), RESOLVED: {'p': 'F', 'p**': 'T', 'p*': 'F'}
+
+TimeStepNode(query=p***, type=query, resolved_questions={'p': 'F', 'p**': 'T', 'p*': 'F'}, robot_map={'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=d, cost=1.41, time=6.24), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=, cost=4.83, time=6.24)}, visited_locations={'d', 'e', 'a'})
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=d, cost=1.41, time=6.24), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=, cost=4.83, time=6.24)}, COST: 6.242640687119285), RESOLVED: {'p': 'F', 'p**': 'T', 'p*': 'F', 'p***': 'T'}
+  - {'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=d, cost=1.41, time=6.24), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=, cost=4.83, time=6.24)}, COST: 6.242640687119285), RESOLVED: {'p': 'F', 'p**': 'T', 'p*': 'F', 'p***': 'F'}
+
+TimeStepNode(query=false, type=robot_assignment, resolved_questions={'p': 'F', 'p**': 'T', 'p*': 'F', 'p***': 'T'}, robot_map={'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=d, cost=1.41, time=6.24), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=, cost=4.83, time=6.24)}, visited_locations={'d', 'e', 'a'})
+Next:
+
+TimeStepNode(query=p, type=query, resolved_questions={}, robot_map={'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=0.0), 'robot_2': Robot(id=robot_2, position=(2.0, 2.0), assigned_loc=, cost=0.0, time=0.0)}, visited_locations=set())
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=0.0), 'robot_2': Robot(id=robot_2, position=(2.0, 2.0), assigned_loc=, cost=0.0, time=0.0)}, COST: 0.0), RESOLVED: {}
+
+TimeStepNode(query=p, type=robot_assignment, resolved_questions={}, robot_map={'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=0.0), 'robot_2': Robot(id=robot_2, position=(2.0, 2.0), assigned_loc=, cost=0.0, time=0.0)}, visited_locations=set())
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=2.83), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=a, cost=2.83, time=2.83)}, COST: 2.8284271247461903), RESOLVED: {}
+  - {'robot_1': Robot(id=robot_1, position=(4, 4), assigned_loc=a, cost=4.24, time=4.24), 'robot_2': Robot(id=robot_2, position=(2.0, 2.0), assigned_loc=, cost=0.0, time=4.24)}, COST: 4.242640687119285), RESOLVED: {}
+  - {'robot_1': Robot(id=robot_1, position=(4, 4), assigned_loc=, cost=4.24, time=5.83), 'robot_2': Robot(id=robot_2, position=(-1, 7), assigned_loc=b, cost=5.83, time=5.83)}, COST: 10.073592581964586), RESOLVED: {}
+  - {'robot_1': Robot(id=robot_1, position=(4, 4), assigned_loc=a, cost=4.24, time=4.24), 'robot_2': Robot(id=robot_2, position=(0, 0), assigned_loc=, cost=2.83, time=4.24)}, COST: 7.0710678118654755), RESOLVED: {}
+  - {'robot_1': Robot(id=robot_1, position=(4, 4), assigned_loc=a, cost=4.24, time=4.24), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=, cost=2.0, time=4.24)}, COST: 6.242640687119286), RESOLVED: {}
+  - {'robot_1': Robot(id=robot_1, position=(-1, 7), assigned_loc=b, cost=6.32, time=6.32), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=, cost=2.83, time=6.32)}, COST: 9.15298244508295), RESOLVED: {}
+  - {'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=, cost=1.41, time=2.83), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=a, cost=2.83, time=2.83)}, COST: 4.242640687119286), RESOLVED: {}
+  - {'robot_1': Robot(id=robot_1, position=(2, 4), assigned_loc=e, cost=3.16, time=3.16), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=, cost=2.83, time=3.16)}, COST: 5.99070478491457), RESOLVED: {}
+
+TimeStepNode(query=p, type=robot_moving, resolved_questions={}, robot_map={'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=2.83), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=a, cost=2.83, time=2.83)}, visited_locations=set())
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=2.83), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=a, cost=2.83, time=2.83)}, COST: 2.8284271247461903), RESOLVED: {}
+
+TimeStepNode(query=p, type=query, resolved_questions={}, robot_map={'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=2.83), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=a, cost=2.83, time=2.83)}, visited_locations={'a'})
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=2.83), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=a, cost=2.83, time=2.83)}, COST: 2.8284271247461903), RESOLVED: {'p': 'T'}
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=2.83), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=a, cost=2.83, time=2.83)}, COST: 2.8284271247461903), RESOLVED: {'p': 'F'}
+
+TimeStepNode(query=p*, type=robot_assignment, resolved_questions={'p': 'F'}, robot_map={'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=2.83), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=a, cost=2.83, time=2.83)}, visited_locations={'a'})
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=8.66), 'robot_2': Robot(id=robot_2, position=(-1, 7), assigned_loc=b, cost=8.66, time=8.66)}, COST: 8.65937901959149), RESOLVED: {'p': 'F'}
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=4.83), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=e, cost=4.83, time=4.83)}, COST: 4.82842712474619), RESOLVED: {'p': 'F'}
+  - {'robot_1': Robot(id=robot_1, position=(-1, 7), assigned_loc=b, cost=6.32, time=9.15), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=, cost=2.83, time=9.15)}, COST: 9.15298244508295), RESOLVED: {'p': 'F'}
+  - {'robot_1': Robot(id=robot_1, position=(-1, 7), assigned_loc=b, cost=6.32, time=9.15), 'robot_2': Robot(id=robot_2, position=(0, 0), assigned_loc=, cost=8.49, time=9.15)}, COST: 14.809836694575331), RESOLVED: {'p': 'F'}
+  - {'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=, cost=1.41, time=8.66), 'robot_2': Robot(id=robot_2, position=(-1, 7), assigned_loc=b, cost=8.66, time=8.66)}, COST: 10.073592581964586), RESOLVED: {'p': 'F'}
+  - {'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=, cost=1.41, time=4.83), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=e, cost=4.83, time=4.83)}, COST: 6.242640687119285), RESOLVED: {'p': 'F'}
+  - {'robot_1': Robot(id=robot_1, position=(2, 4), assigned_loc=e, cost=3.16, time=5.99), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=, cost=2.83, time=5.99)}, COST: 5.99070478491457), RESOLVED: {'p': 'F'}
+  - {'robot_1': Robot(id=robot_1, position=(2, 4), assigned_loc=, cost=3.16, time=8.49), 'robot_2': Robot(id=robot_2, position=(0, 0), assigned_loc=d, cost=8.49, time=8.49)}, COST: 11.647559034406951), RESOLVED: {'p': 'F'}
+
+TimeStepNode(query=p*, type=robot_moving, resolved_questions={'p': 'F'}, robot_map={'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=4.83), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=e, cost=4.83, time=4.83)}, visited_locations={'a'})
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=4.83), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=e, cost=4.83, time=4.83)}, COST: 4.82842712474619), RESOLVED: {'p': 'F'}
+
+TimeStepNode(query=p*, type=query, resolved_questions={'p': 'F'}, robot_map={'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=4.83), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=e, cost=4.83, time=4.83)}, visited_locations={'e', 'a'})
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=4.83), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=e, cost=4.83, time=4.83)}, COST: 4.82842712474619), RESOLVED: {'p': 'F', 'p*': 'T', 'p**': 'T'}
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=4.83), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=e, cost=4.83, time=4.83)}, COST: 4.82842712474619), RESOLVED: {'p': 'F', 'p*': 'T', 'p**': 'F'}
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=4.83), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=e, cost=4.83, time=4.83)}, COST: 4.82842712474619), RESOLVED: {'p': 'F', 'p*': 'F', 'p**': 'T'}
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=4.83), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=e, cost=4.83, time=4.83)}, COST: 4.82842712474619), RESOLVED: {'p': 'F', 'p*': 'F', 'p**': 'F'}
+
+TimeStepNode(query=p***, type=robot_assignment, resolved_questions={'p': 'F', 'p*': 'F', 'p**': 'T'}, robot_map={'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=4.83), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=e, cost=4.83, time=4.83)}, visited_locations={'e', 'a'})
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=9.3), 'robot_2': Robot(id=robot_2, position=(0, 0), assigned_loc=d, cost=9.3, time=9.3)}, COST: 9.30056307974577), RESOLVED: {'p': 'F', 'p*': 'F', 'p**': 'T'}
+  - {'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=d, cost=1.41, time=6.24), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=, cost=4.83, time=6.24)}, COST: 6.242640687119285), RESOLVED: {'p': 'F', 'p*': 'F', 'p**': 'T'}
+
+TimeStepNode(query=p***, type=robot_moving, resolved_questions={'p': 'F', 'p*': 'F', 'p**': 'T'}, robot_map={'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=d, cost=1.41, time=6.24), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=, cost=4.83, time=6.24)}, visited_locations={'e', 'a'})
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=d, cost=1.41, time=6.24), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=, cost=4.83, time=6.24)}, COST: 6.242640687119285), RESOLVED: {'p': 'F', 'p*': 'F', 'p**': 'T'}
+
+TimeStepNode(query=p***, type=query, resolved_questions={'p': 'F', 'p*': 'F', 'p**': 'T'}, robot_map={'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=d, cost=1.41, time=6.24), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=, cost=4.83, time=6.24)}, visited_locations={'e', 'd', 'a'})
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=d, cost=1.41, time=6.24), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=, cost=4.83, time=6.24)}, COST: 6.242640687119285), RESOLVED: {'p': 'F', 'p*': 'F', 'p**': 'T', 'p***': 'T'}
+  - {'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=d, cost=1.41, time=6.24), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=, cost=4.83, time=6.24)}, COST: 6.242640687119285), RESOLVED: {'p': 'F', 'p*': 'F', 'p**': 'T', 'p***': 'F'}
+
+TimeStepNode(query=false, type=robot_assignment, resolved_questions={'p': 'F', 'p*': 'F', 'p**': 'T', 'p***': 'T'}, robot_map={'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=d, cost=1.41, time=6.24), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=, cost=4.83, time=6.24)}, visited_locations={'e', 'd', 'a'})
+Next:
+
+TimeStepNode(query=p, type=query, resolved_questions={}, robot_map={'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=0.0), 'robot_2': Robot(id=robot_2, position=(2.0, 2.0), assigned_loc=, cost=0.0, time=0.0)}, visited_locations=set())
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=0.0), 'robot_2': Robot(id=robot_2, position=(2.0, 2.0), assigned_loc=, cost=0.0, time=0.0)}, COST: 0.0), RESOLVED: {}
+
+TimeStepNode(query=p, type=robot_assignment, resolved_questions={}, robot_map={'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=0.0), 'robot_2': Robot(id=robot_2, position=(2.0, 2.0), assigned_loc=, cost=0.0, time=0.0)}, visited_locations=set())
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=2.83), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=a, cost=2.83, time=2.83)}, COST: 2.8284271247461903), RESOLVED: {}
+  - {'robot_1': Robot(id=robot_1, position=(4, 4), assigned_loc=a, cost=4.24, time=4.24), 'robot_2': Robot(id=robot_2, position=(2.0, 2.0), assigned_loc=, cost=0.0, time=4.24)}, COST: 4.242640687119285), RESOLVED: {}
+  - {'robot_1': Robot(id=robot_1, position=(4, 4), assigned_loc=, cost=4.24, time=5.83), 'robot_2': Robot(id=robot_2, position=(-1, 7), assigned_loc=b, cost=5.83, time=5.83)}, COST: 10.073592581964586), RESOLVED: {}
+  - {'robot_1': Robot(id=robot_1, position=(4, 4), assigned_loc=a, cost=4.24, time=4.24), 'robot_2': Robot(id=robot_2, position=(0, 0), assigned_loc=, cost=2.83, time=4.24)}, COST: 7.0710678118654755), RESOLVED: {}
+  - {'robot_1': Robot(id=robot_1, position=(4, 4), assigned_loc=a, cost=4.24, time=4.24), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=, cost=2.0, time=4.24)}, COST: 6.242640687119286), RESOLVED: {}
+  - {'robot_1': Robot(id=robot_1, position=(-1, 7), assigned_loc=b, cost=6.32, time=6.32), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=, cost=2.83, time=6.32)}, COST: 9.15298244508295), RESOLVED: {}
+  - {'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=, cost=1.41, time=2.83), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=a, cost=2.83, time=2.83)}, COST: 4.242640687119286), RESOLVED: {}
+  - {'robot_1': Robot(id=robot_1, position=(2, 4), assigned_loc=e, cost=3.16, time=3.16), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=, cost=2.83, time=3.16)}, COST: 5.99070478491457), RESOLVED: {}
+
+TimeStepNode(query=p, type=robot_moving, resolved_questions={}, robot_map={'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=2.83), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=a, cost=2.83, time=2.83)}, visited_locations=set())
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=2.83), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=a, cost=2.83, time=2.83)}, COST: 2.8284271247461903), RESOLVED: {}
+
+TimeStepNode(query=p, type=query, resolved_questions={}, robot_map={'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=2.83), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=a, cost=2.83, time=2.83)}, visited_locations={'a'})
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=2.83), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=a, cost=2.83, time=2.83)}, COST: 2.8284271247461903), RESOLVED: {'p': 'T'}
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=2.83), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=a, cost=2.83, time=2.83)}, COST: 2.8284271247461903), RESOLVED: {'p': 'F'}
+
+TimeStepNode(query=p*, type=robot_assignment, resolved_questions={'p': 'F'}, robot_map={'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=2.83), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=a, cost=2.83, time=2.83)}, visited_locations={'a'})
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=8.66), 'robot_2': Robot(id=robot_2, position=(-1, 7), assigned_loc=b, cost=8.66, time=8.66)}, COST: 8.65937901959149), RESOLVED: {'p': 'F'}
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=4.83), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=e, cost=4.83, time=4.83)}, COST: 4.82842712474619), RESOLVED: {'p': 'F'}
+  - {'robot_1': Robot(id=robot_1, position=(-1, 7), assigned_loc=b, cost=6.32, time=9.15), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=, cost=2.83, time=9.15)}, COST: 9.15298244508295), RESOLVED: {'p': 'F'}
+  - {'robot_1': Robot(id=robot_1, position=(-1, 7), assigned_loc=b, cost=6.32, time=9.15), 'robot_2': Robot(id=robot_2, position=(0, 0), assigned_loc=, cost=8.49, time=9.15)}, COST: 14.809836694575331), RESOLVED: {'p': 'F'}
+  - {'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=, cost=1.41, time=8.66), 'robot_2': Robot(id=robot_2, position=(-1, 7), assigned_loc=b, cost=8.66, time=8.66)}, COST: 10.073592581964586), RESOLVED: {'p': 'F'}
+  - {'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=, cost=1.41, time=4.83), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=e, cost=4.83, time=4.83)}, COST: 6.242640687119285), RESOLVED: {'p': 'F'}
+  - {'robot_1': Robot(id=robot_1, position=(2, 4), assigned_loc=e, cost=3.16, time=5.99), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=, cost=2.83, time=5.99)}, COST: 5.99070478491457), RESOLVED: {'p': 'F'}
+  - {'robot_1': Robot(id=robot_1, position=(2, 4), assigned_loc=, cost=3.16, time=8.49), 'robot_2': Robot(id=robot_2, position=(0, 0), assigned_loc=d, cost=8.49, time=8.49)}, COST: 11.647559034406951), RESOLVED: {'p': 'F'}
+
+TimeStepNode(query=p*, type=robot_moving, resolved_questions={'p': 'F'}, robot_map={'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=4.83), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=e, cost=4.83, time=4.83)}, visited_locations={'a'})
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=4.83), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=e, cost=4.83, time=4.83)}, COST: 4.82842712474619), RESOLVED: {'p': 'F'}
+
+TimeStepNode(query=p*, type=query, resolved_questions={'p': 'F'}, robot_map={'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=4.83), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=e, cost=4.83, time=4.83)}, visited_locations={'a', 'e'})
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=4.83), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=e, cost=4.83, time=4.83)}, COST: 4.82842712474619), RESOLVED: {'p': 'F', 'p**': 'T', 'p*': 'T'}
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=4.83), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=e, cost=4.83, time=4.83)}, COST: 4.82842712474619), RESOLVED: {'p': 'F', 'p**': 'T', 'p*': 'F'}
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=4.83), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=e, cost=4.83, time=4.83)}, COST: 4.82842712474619), RESOLVED: {'p': 'F', 'p**': 'F', 'p*': 'T'}
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=4.83), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=e, cost=4.83, time=4.83)}, COST: 4.82842712474619), RESOLVED: {'p': 'F', 'p**': 'F', 'p*': 'F'}
+
+TimeStepNode(query=p***, type=robot_assignment, resolved_questions={'p': 'F', 'p**': 'T', 'p*': 'F'}, robot_map={'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=4.83), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=e, cost=4.83, time=4.83)}, visited_locations={'a', 'e'})
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=9.3), 'robot_2': Robot(id=robot_2, position=(0, 0), assigned_loc=d, cost=9.3, time=9.3)}, COST: 9.30056307974577), RESOLVED: {'p': 'F', 'p**': 'T', 'p*': 'F'}
+  - {'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=d, cost=1.41, time=6.24), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=, cost=4.83, time=6.24)}, COST: 6.242640687119285), RESOLVED: {'p': 'F', 'p**': 'T', 'p*': 'F'}
+
+TimeStepNode(query=p***, type=robot_moving, resolved_questions={'p': 'F', 'p**': 'T', 'p*': 'F'}, robot_map={'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=d, cost=1.41, time=6.24), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=, cost=4.83, time=6.24)}, visited_locations={'a', 'e'})
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=d, cost=1.41, time=6.24), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=, cost=4.83, time=6.24)}, COST: 6.242640687119285), RESOLVED: {'p': 'F', 'p**': 'T', 'p*': 'F'}
+
+TimeStepNode(query=p***, type=query, resolved_questions={'p': 'F', 'p**': 'T', 'p*': 'F'}, robot_map={'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=d, cost=1.41, time=6.24), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=, cost=4.83, time=6.24)}, visited_locations={'a', 'd', 'e'})
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=d, cost=1.41, time=6.24), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=, cost=4.83, time=6.24)}, COST: 6.242640687119285), RESOLVED: {'p': 'F', 'p**': 'T', 'p*': 'F', 'p***': 'T'}
+  - {'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=d, cost=1.41, time=6.24), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=, cost=4.83, time=6.24)}, COST: 6.242640687119285), RESOLVED: {'p': 'F', 'p**': 'T', 'p*': 'F', 'p***': 'F'}
+
+TimeStepNode(query=false, type=robot_assignment, resolved_questions={'p': 'F', 'p**': 'T', 'p*': 'F', 'p***': 'T'}, robot_map={'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=d, cost=1.41, time=6.24), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=, cost=4.83, time=6.24)}, visited_locations={'a', 'd', 'e'})
+Next:
+
+TimeStepNode(query=p, type=query, resolved_questions={}, robot_map={'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=0.0), 'robot_2': Robot(id=robot_2, position=(2.0, 2.0), assigned_loc=, cost=0.0, time=0.0)}, visited_locations=set())
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=0.0), 'robot_2': Robot(id=robot_2, position=(2.0, 2.0), assigned_loc=, cost=0.0, time=0.0)}, COST: 0.0), RESOLVED: {}
+
+TimeStepNode(query=p, type=robot_assignment, resolved_questions={}, robot_map={'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=0.0), 'robot_2': Robot(id=robot_2, position=(2.0, 2.0), assigned_loc=, cost=0.0, time=0.0)}, visited_locations=set())
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=2.83), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=a, cost=2.83, time=2.83)}, COST: 2.8284271247461903), RESOLVED: {}
+  - {'robot_1': Robot(id=robot_1, position=(4, 4), assigned_loc=a, cost=4.24, time=4.24), 'robot_2': Robot(id=robot_2, position=(2.0, 2.0), assigned_loc=, cost=0.0, time=4.24)}, COST: 4.242640687119285), RESOLVED: {}
+  - {'robot_1': Robot(id=robot_1, position=(4, 4), assigned_loc=, cost=4.24, time=5.83), 'robot_2': Robot(id=robot_2, position=(-1, 7), assigned_loc=b, cost=5.83, time=5.83)}, COST: 10.073592581964586), RESOLVED: {}
+  - {'robot_1': Robot(id=robot_1, position=(4, 4), assigned_loc=a, cost=4.24, time=4.24), 'robot_2': Robot(id=robot_2, position=(0, 0), assigned_loc=, cost=2.83, time=4.24)}, COST: 7.0710678118654755), RESOLVED: {}
+  - {'robot_1': Robot(id=robot_1, position=(4, 4), assigned_loc=a, cost=4.24, time=4.24), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=, cost=2.0, time=4.24)}, COST: 6.242640687119286), RESOLVED: {}
+  - {'robot_1': Robot(id=robot_1, position=(-1, 7), assigned_loc=b, cost=6.32, time=6.32), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=, cost=2.83, time=6.32)}, COST: 9.15298244508295), RESOLVED: {}
+  - {'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=, cost=1.41, time=2.83), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=a, cost=2.83, time=2.83)}, COST: 4.242640687119286), RESOLVED: {}
+  - {'robot_1': Robot(id=robot_1, position=(2, 4), assigned_loc=e, cost=3.16, time=3.16), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=, cost=2.83, time=3.16)}, COST: 5.99070478491457), RESOLVED: {}
+
+TimeStepNode(query=p, type=robot_moving, resolved_questions={}, robot_map={'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=2.83), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=a, cost=2.83, time=2.83)}, visited_locations=set())
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=2.83), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=a, cost=2.83, time=2.83)}, COST: 2.8284271247461903), RESOLVED: {}
+
+TimeStepNode(query=p, type=query, resolved_questions={}, robot_map={'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=2.83), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=a, cost=2.83, time=2.83)}, visited_locations={'a'})
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=2.83), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=a, cost=2.83, time=2.83)}, COST: 2.8284271247461903), RESOLVED: {'p': 'T'}
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=2.83), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=a, cost=2.83, time=2.83)}, COST: 2.8284271247461903), RESOLVED: {'p': 'F'}
+
+TimeStepNode(query=p*, type=robot_assignment, resolved_questions={'p': 'F'}, robot_map={'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=2.83), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=a, cost=2.83, time=2.83)}, visited_locations={'a'})
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=8.66), 'robot_2': Robot(id=robot_2, position=(-1, 7), assigned_loc=b, cost=8.66, time=8.66)}, COST: 8.65937901959149), RESOLVED: {'p': 'F'}
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=4.83), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=e, cost=4.83, time=4.83)}, COST: 4.82842712474619), RESOLVED: {'p': 'F'}
+  - {'robot_1': Robot(id=robot_1, position=(-1, 7), assigned_loc=b, cost=6.32, time=9.15), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=, cost=2.83, time=9.15)}, COST: 9.15298244508295), RESOLVED: {'p': 'F'}
+  - {'robot_1': Robot(id=robot_1, position=(-1, 7), assigned_loc=b, cost=6.32, time=9.15), 'robot_2': Robot(id=robot_2, position=(0, 0), assigned_loc=, cost=8.49, time=9.15)}, COST: 14.809836694575331), RESOLVED: {'p': 'F'}
+  - {'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=, cost=1.41, time=8.66), 'robot_2': Robot(id=robot_2, position=(-1, 7), assigned_loc=b, cost=8.66, time=8.66)}, COST: 10.073592581964586), RESOLVED: {'p': 'F'}
+  - {'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=, cost=1.41, time=4.83), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=e, cost=4.83, time=4.83)}, COST: 6.242640687119285), RESOLVED: {'p': 'F'}
+  - {'robot_1': Robot(id=robot_1, position=(2, 4), assigned_loc=e, cost=3.16, time=5.99), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=, cost=2.83, time=5.99)}, COST: 5.99070478491457), RESOLVED: {'p': 'F'}
+  - {'robot_1': Robot(id=robot_1, position=(2, 4), assigned_loc=, cost=3.16, time=8.49), 'robot_2': Robot(id=robot_2, position=(0, 0), assigned_loc=d, cost=8.49, time=8.49)}, COST: 11.647559034406951), RESOLVED: {'p': 'F'}
+
+TimeStepNode(query=p*, type=robot_moving, resolved_questions={'p': 'F'}, robot_map={'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=4.83), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=e, cost=4.83, time=4.83)}, visited_locations={'a'})
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=4.83), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=e, cost=4.83, time=4.83)}, COST: 4.82842712474619), RESOLVED: {'p': 'F'}
+
+TimeStepNode(query=p*, type=query, resolved_questions={'p': 'F'}, robot_map={'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=4.83), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=e, cost=4.83, time=4.83)}, visited_locations={'a', 'e'})
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=4.83), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=e, cost=4.83, time=4.83)}, COST: 4.82842712474619), RESOLVED: {'p': 'F', 'p**': 'T', 'p*': 'T'}
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=4.83), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=e, cost=4.83, time=4.83)}, COST: 4.82842712474619), RESOLVED: {'p': 'F', 'p**': 'T', 'p*': 'F'}
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=4.83), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=e, cost=4.83, time=4.83)}, COST: 4.82842712474619), RESOLVED: {'p': 'F', 'p**': 'F', 'p*': 'T'}
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=4.83), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=e, cost=4.83, time=4.83)}, COST: 4.82842712474619), RESOLVED: {'p': 'F', 'p**': 'F', 'p*': 'F'}
+
+TimeStepNode(query=p***, type=robot_assignment, resolved_questions={'p': 'F', 'p**': 'T', 'p*': 'F'}, robot_map={'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=4.83), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=e, cost=4.83, time=4.83)}, visited_locations={'a', 'e'})
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=9.3), 'robot_2': Robot(id=robot_2, position=(0, 0), assigned_loc=d, cost=9.3, time=9.3)}, COST: 9.30056307974577), RESOLVED: {'p': 'F', 'p**': 'T', 'p*': 'F'}
+  - {'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=d, cost=1.41, time=6.24), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=, cost=4.83, time=6.24)}, COST: 6.242640687119285), RESOLVED: {'p': 'F', 'p**': 'T', 'p*': 'F'}
+
+TimeStepNode(query=p***, type=robot_moving, resolved_questions={'p': 'F', 'p**': 'T', 'p*': 'F'}, robot_map={'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=d, cost=1.41, time=6.24), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=, cost=4.83, time=6.24)}, visited_locations={'a', 'e'})
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=d, cost=1.41, time=6.24), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=, cost=4.83, time=6.24)}, COST: 6.242640687119285), RESOLVED: {'p': 'F', 'p**': 'T', 'p*': 'F'}
+
+TimeStepNode(query=p***, type=query, resolved_questions={'p': 'F', 'p**': 'T', 'p*': 'F'}, robot_map={'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=d, cost=1.41, time=6.24), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=, cost=4.83, time=6.24)}, visited_locations={'d', 'a', 'e'})
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=d, cost=1.41, time=6.24), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=, cost=4.83, time=6.24)}, COST: 6.242640687119285), RESOLVED: {'p': 'F', 'p**': 'T', 'p*': 'F', 'p***': 'T'}
+  - {'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=d, cost=1.41, time=6.24), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=, cost=4.83, time=6.24)}, COST: 6.242640687119285), RESOLVED: {'p': 'F', 'p**': 'T', 'p*': 'F', 'p***': 'F'}
+
+TimeStepNode(query=false, type=robot_assignment, resolved_questions={'p': 'F', 'p**': 'T', 'p*': 'F', 'p***': 'T'}, robot_map={'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=d, cost=1.41, time=6.24), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=, cost=4.83, time=6.24)}, visited_locations={'d', 'a', 'e'})
+Next:
+
+TimeStepNode(query=p, type=query, resolved_questions={}, robot_map={'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=0.0), 'robot_2': Robot(id=robot_2, position=(2.0, 2.0), assigned_loc=, cost=0.0, time=0.0)}, visited_locations=set())
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=0.0), 'robot_2': Robot(id=robot_2, position=(2.0, 2.0), assigned_loc=, cost=0.0, time=0.0)}, COST: 0.0), RESOLVED: {}
+
+TimeStepNode(query=p, type=robot_assignment, resolved_questions={}, robot_map={'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=0.0), 'robot_2': Robot(id=robot_2, position=(2.0, 2.0), assigned_loc=, cost=0.0, time=0.0)}, visited_locations=set())
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=2.83), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=a, cost=2.83, time=2.83)}, COST: 2.8284271247461903), RESOLVED: {}
+  - {'robot_1': Robot(id=robot_1, position=(4, 4), assigned_loc=a, cost=4.24, time=4.24), 'robot_2': Robot(id=robot_2, position=(2.0, 2.0), assigned_loc=, cost=0.0, time=4.24)}, COST: 4.242640687119285), RESOLVED: {}
+  - {'robot_1': Robot(id=robot_1, position=(4, 4), assigned_loc=, cost=4.24, time=5.83), 'robot_2': Robot(id=robot_2, position=(-1, 7), assigned_loc=b, cost=5.83, time=5.83)}, COST: 10.073592581964586), RESOLVED: {}
+  - {'robot_1': Robot(id=robot_1, position=(4, 4), assigned_loc=a, cost=4.24, time=4.24), 'robot_2': Robot(id=robot_2, position=(0, 0), assigned_loc=, cost=2.83, time=4.24)}, COST: 7.0710678118654755), RESOLVED: {}
+  - {'robot_1': Robot(id=robot_1, position=(4, 4), assigned_loc=a, cost=4.24, time=4.24), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=, cost=2.0, time=4.24)}, COST: 6.242640687119286), RESOLVED: {}
+  - {'robot_1': Robot(id=robot_1, position=(-1, 7), assigned_loc=b, cost=6.32, time=6.32), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=, cost=2.83, time=6.32)}, COST: 9.15298244508295), RESOLVED: {}
+  - {'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=, cost=1.41, time=2.83), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=a, cost=2.83, time=2.83)}, COST: 4.242640687119286), RESOLVED: {}
+  - {'robot_1': Robot(id=robot_1, position=(2, 4), assigned_loc=e, cost=3.16, time=3.16), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=, cost=2.83, time=3.16)}, COST: 5.99070478491457), RESOLVED: {}
+
+TimeStepNode(query=p, type=robot_moving, resolved_questions={}, robot_map={'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=2.83), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=a, cost=2.83, time=2.83)}, visited_locations=set())
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=2.83), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=a, cost=2.83, time=2.83)}, COST: 2.8284271247461903), RESOLVED: {}
+
+TimeStepNode(query=p, type=query, resolved_questions={}, robot_map={'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=2.83), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=a, cost=2.83, time=2.83)}, visited_locations={'a'})
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=2.83), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=a, cost=2.83, time=2.83)}, COST: 2.8284271247461903), RESOLVED: {'p': 'T'}
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=2.83), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=a, cost=2.83, time=2.83)}, COST: 2.8284271247461903), RESOLVED: {'p': 'F'}
+
+TimeStepNode(query=p*, type=robot_assignment, resolved_questions={'p': 'F'}, robot_map={'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=2.83), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=a, cost=2.83, time=2.83)}, visited_locations={'a'})
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=8.66), 'robot_2': Robot(id=robot_2, position=(-1, 7), assigned_loc=b, cost=8.66, time=8.66)}, COST: 8.65937901959149), RESOLVED: {'p': 'F'}
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=4.83), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=e, cost=4.83, time=4.83)}, COST: 4.82842712474619), RESOLVED: {'p': 'F'}
+  - {'robot_1': Robot(id=robot_1, position=(-1, 7), assigned_loc=b, cost=6.32, time=9.15), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=, cost=2.83, time=9.15)}, COST: 9.15298244508295), RESOLVED: {'p': 'F'}
+  - {'robot_1': Robot(id=robot_1, position=(-1, 7), assigned_loc=b, cost=6.32, time=9.15), 'robot_2': Robot(id=robot_2, position=(0, 0), assigned_loc=, cost=8.49, time=9.15)}, COST: 14.809836694575331), RESOLVED: {'p': 'F'}
+  - {'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=, cost=1.41, time=8.66), 'robot_2': Robot(id=robot_2, position=(-1, 7), assigned_loc=b, cost=8.66, time=8.66)}, COST: 10.073592581964586), RESOLVED: {'p': 'F'}
+  - {'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=, cost=1.41, time=4.83), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=e, cost=4.83, time=4.83)}, COST: 6.242640687119285), RESOLVED: {'p': 'F'}
+  - {'robot_1': Robot(id=robot_1, position=(2, 4), assigned_loc=e, cost=3.16, time=5.99), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=, cost=2.83, time=5.99)}, COST: 5.99070478491457), RESOLVED: {'p': 'F'}
+  - {'robot_1': Robot(id=robot_1, position=(2, 4), assigned_loc=, cost=3.16, time=8.49), 'robot_2': Robot(id=robot_2, position=(0, 0), assigned_loc=d, cost=8.49, time=8.49)}, COST: 11.647559034406951), RESOLVED: {'p': 'F'}
+
+TimeStepNode(query=p*, type=robot_moving, resolved_questions={'p': 'F'}, robot_map={'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=4.83), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=e, cost=4.83, time=4.83)}, visited_locations={'a'})
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=4.83), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=e, cost=4.83, time=4.83)}, COST: 4.82842712474619), RESOLVED: {'p': 'F'}
+
+TimeStepNode(query=p*, type=query, resolved_questions={'p': 'F'}, robot_map={'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=4.83), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=e, cost=4.83, time=4.83)}, visited_locations={'e', 'a'})
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=4.83), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=e, cost=4.83, time=4.83)}, COST: 4.82842712474619), RESOLVED: {'p': 'F', 'p**': 'T', 'p*': 'T'}
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=4.83), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=e, cost=4.83, time=4.83)}, COST: 4.82842712474619), RESOLVED: {'p': 'F', 'p**': 'T', 'p*': 'F'}
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=4.83), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=e, cost=4.83, time=4.83)}, COST: 4.82842712474619), RESOLVED: {'p': 'F', 'p**': 'F', 'p*': 'T'}
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=4.83), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=e, cost=4.83, time=4.83)}, COST: 4.82842712474619), RESOLVED: {'p': 'F', 'p**': 'F', 'p*': 'F'}
+
+TimeStepNode(query=p***, type=robot_assignment, resolved_questions={'p': 'F', 'p**': 'T', 'p*': 'F'}, robot_map={'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=4.83), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=e, cost=4.83, time=4.83)}, visited_locations={'e', 'a'})
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=9.3), 'robot_2': Robot(id=robot_2, position=(0, 0), assigned_loc=d, cost=9.3, time=9.3)}, COST: 9.30056307974577), RESOLVED: {'p': 'F', 'p**': 'T', 'p*': 'F'}
+  - {'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=d, cost=1.41, time=6.24), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=, cost=4.83, time=6.24)}, COST: 6.242640687119285), RESOLVED: {'p': 'F', 'p**': 'T', 'p*': 'F'}
+
+TimeStepNode(query=p***, type=robot_moving, resolved_questions={'p': 'F', 'p**': 'T', 'p*': 'F'}, robot_map={'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=d, cost=1.41, time=6.24), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=, cost=4.83, time=6.24)}, visited_locations={'e', 'a'})
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=d, cost=1.41, time=6.24), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=, cost=4.83, time=6.24)}, COST: 6.242640687119285), RESOLVED: {'p': 'F', 'p**': 'T', 'p*': 'F'}
+
+TimeStepNode(query=p***, type=query, resolved_questions={'p': 'F', 'p**': 'T', 'p*': 'F'}, robot_map={'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=d, cost=1.41, time=6.24), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=, cost=4.83, time=6.24)}, visited_locations={'d', 'e', 'a'})
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=d, cost=1.41, time=6.24), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=, cost=4.83, time=6.24)}, COST: 6.242640687119285), RESOLVED: {'p': 'F', 'p**': 'T', 'p*': 'F', 'p***': 'T'}
+  - {'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=d, cost=1.41, time=6.24), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=, cost=4.83, time=6.24)}, COST: 6.242640687119285), RESOLVED: {'p': 'F', 'p**': 'T', 'p*': 'F', 'p***': 'F'}
+
+TimeStepNode(query=false, type=robot_assignment, resolved_questions={'p': 'F', 'p**': 'T', 'p*': 'F', 'p***': 'T'}, robot_map={'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=d, cost=1.41, time=6.24), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=, cost=4.83, time=6.24)}, visited_locations={'d', 'e', 'a'})
+Next:
+
+TimeStepNode(query=p, type=query, resolved_questions={}, robot_map={'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=0.0), 'robot_2': Robot(id=robot_2, position=(2.0, 2.0), assigned_loc=, cost=0.0, time=0.0)}, visited_locations=set())
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=0.0), 'robot_2': Robot(id=robot_2, position=(2.0, 2.0), assigned_loc=, cost=0.0, time=0.0)}, COST: 0.0), RESOLVED: {}
+
+TimeStepNode(query=p, type=robot_assignment, resolved_questions={}, robot_map={'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=0.0), 'robot_2': Robot(id=robot_2, position=(2.0, 2.0), assigned_loc=, cost=0.0, time=0.0)}, visited_locations=set())
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=2.83), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=a, cost=2.83, time=2.83)}, COST: 2.8284271247461903), RESOLVED: {}
+  - {'robot_1': Robot(id=robot_1, position=(4, 4), assigned_loc=a, cost=4.24, time=4.24), 'robot_2': Robot(id=robot_2, position=(2.0, 2.0), assigned_loc=, cost=0.0, time=4.24)}, COST: 4.242640687119285), RESOLVED: {}
+  - {'robot_1': Robot(id=robot_1, position=(4, 4), assigned_loc=, cost=4.24, time=5.83), 'robot_2': Robot(id=robot_2, position=(-1, 7), assigned_loc=b, cost=5.83, time=5.83)}, COST: 10.073592581964586), RESOLVED: {}
+  - {'robot_1': Robot(id=robot_1, position=(4, 4), assigned_loc=a, cost=4.24, time=4.24), 'robot_2': Robot(id=robot_2, position=(0, 0), assigned_loc=, cost=2.83, time=4.24)}, COST: 7.0710678118654755), RESOLVED: {}
+  - {'robot_1': Robot(id=robot_1, position=(4, 4), assigned_loc=a, cost=4.24, time=4.24), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=, cost=2.0, time=4.24)}, COST: 6.242640687119286), RESOLVED: {}
+  - {'robot_1': Robot(id=robot_1, position=(-1, 7), assigned_loc=b, cost=6.32, time=6.32), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=, cost=2.83, time=6.32)}, COST: 9.15298244508295), RESOLVED: {}
+  - {'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=, cost=1.41, time=2.83), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=a, cost=2.83, time=2.83)}, COST: 4.242640687119286), RESOLVED: {}
+  - {'robot_1': Robot(id=robot_1, position=(2, 4), assigned_loc=e, cost=3.16, time=3.16), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=, cost=2.83, time=3.16)}, COST: 5.99070478491457), RESOLVED: {}
+
+TimeStepNode(query=p, type=robot_moving, resolved_questions={}, robot_map={'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=2.83), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=a, cost=2.83, time=2.83)}, visited_locations=set())
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=2.83), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=a, cost=2.83, time=2.83)}, COST: 2.8284271247461903), RESOLVED: {}
+
+TimeStepNode(query=p, type=query, resolved_questions={}, robot_map={'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=2.83), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=a, cost=2.83, time=2.83)}, visited_locations={'a'})
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=2.83), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=a, cost=2.83, time=2.83)}, COST: 2.8284271247461903), RESOLVED: {'p': 'T'}
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=2.83), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=a, cost=2.83, time=2.83)}, COST: 2.8284271247461903), RESOLVED: {'p': 'F'}
+
+TimeStepNode(query=p*, type=robot_assignment, resolved_questions={'p': 'F'}, robot_map={'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=2.83), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=a, cost=2.83, time=2.83)}, visited_locations={'a'})
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=8.66), 'robot_2': Robot(id=robot_2, position=(-1, 7), assigned_loc=b, cost=8.66, time=8.66)}, COST: 8.65937901959149), RESOLVED: {'p': 'F'}
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=4.83), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=e, cost=4.83, time=4.83)}, COST: 4.82842712474619), RESOLVED: {'p': 'F'}
+  - {'robot_1': Robot(id=robot_1, position=(-1, 7), assigned_loc=b, cost=6.32, time=9.15), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=, cost=2.83, time=9.15)}, COST: 9.15298244508295), RESOLVED: {'p': 'F'}
+  - {'robot_1': Robot(id=robot_1, position=(-1, 7), assigned_loc=b, cost=6.32, time=9.15), 'robot_2': Robot(id=robot_2, position=(0, 0), assigned_loc=, cost=8.49, time=9.15)}, COST: 14.809836694575331), RESOLVED: {'p': 'F'}
+  - {'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=, cost=1.41, time=8.66), 'robot_2': Robot(id=robot_2, position=(-1, 7), assigned_loc=b, cost=8.66, time=8.66)}, COST: 10.073592581964586), RESOLVED: {'p': 'F'}
+  - {'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=, cost=1.41, time=4.83), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=e, cost=4.83, time=4.83)}, COST: 6.242640687119285), RESOLVED: {'p': 'F'}
+  - {'robot_1': Robot(id=robot_1, position=(2, 4), assigned_loc=e, cost=3.16, time=5.99), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=, cost=2.83, time=5.99)}, COST: 5.99070478491457), RESOLVED: {'p': 'F'}
+  - {'robot_1': Robot(id=robot_1, position=(2, 4), assigned_loc=, cost=3.16, time=8.49), 'robot_2': Robot(id=robot_2, position=(0, 0), assigned_loc=d, cost=8.49, time=8.49)}, COST: 11.647559034406951), RESOLVED: {'p': 'F'}
+
+TimeStepNode(query=p*, type=robot_moving, resolved_questions={'p': 'F'}, robot_map={'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=4.83), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=e, cost=4.83, time=4.83)}, visited_locations={'a'})
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=4.83), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=e, cost=4.83, time=4.83)}, COST: 4.82842712474619), RESOLVED: {'p': 'F'}
+
+TimeStepNode(query=p*, type=query, resolved_questions={'p': 'F'}, robot_map={'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=4.83), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=e, cost=4.83, time=4.83)}, visited_locations={'a', 'e'})
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=4.83), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=e, cost=4.83, time=4.83)}, COST: 4.82842712474619), RESOLVED: {'p': 'F', 'p**': 'T', 'p*': 'T'}
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=4.83), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=e, cost=4.83, time=4.83)}, COST: 4.82842712474619), RESOLVED: {'p': 'F', 'p**': 'T', 'p*': 'F'}
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=4.83), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=e, cost=4.83, time=4.83)}, COST: 4.82842712474619), RESOLVED: {'p': 'F', 'p**': 'F', 'p*': 'T'}
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=4.83), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=e, cost=4.83, time=4.83)}, COST: 4.82842712474619), RESOLVED: {'p': 'F', 'p**': 'F', 'p*': 'F'}
+
+TimeStepNode(query=p***, type=robot_assignment, resolved_questions={'p': 'F', 'p**': 'T', 'p*': 'F'}, robot_map={'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=4.83), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=e, cost=4.83, time=4.83)}, visited_locations={'a', 'e'})
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=9.3), 'robot_2': Robot(id=robot_2, position=(0, 0), assigned_loc=d, cost=9.3, time=9.3)}, COST: 9.30056307974577), RESOLVED: {'p': 'F', 'p**': 'T', 'p*': 'F'}
+  - {'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=d, cost=1.41, time=6.24), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=, cost=4.83, time=6.24)}, COST: 6.242640687119285), RESOLVED: {'p': 'F', 'p**': 'T', 'p*': 'F'}
+
+TimeStepNode(query=p***, type=robot_moving, resolved_questions={'p': 'F', 'p**': 'T', 'p*': 'F'}, robot_map={'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=d, cost=1.41, time=6.24), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=, cost=4.83, time=6.24)}, visited_locations={'a', 'e'})
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=d, cost=1.41, time=6.24), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=, cost=4.83, time=6.24)}, COST: 6.242640687119285), RESOLVED: {'p': 'F', 'p**': 'T', 'p*': 'F'}
+
+TimeStepNode(query=p***, type=query, resolved_questions={'p': 'F', 'p**': 'T', 'p*': 'F'}, robot_map={'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=d, cost=1.41, time=6.24), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=, cost=4.83, time=6.24)}, visited_locations={'a', 'e', 'd'})
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=d, cost=1.41, time=6.24), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=, cost=4.83, time=6.24)}, COST: 6.242640687119285), RESOLVED: {'p': 'F', 'p**': 'T', 'p*': 'F', 'p***': 'T'}
+  - {'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=d, cost=1.41, time=6.24), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=, cost=4.83, time=6.24)}, COST: 6.242640687119285), RESOLVED: {'p': 'F', 'p**': 'T', 'p*': 'F', 'p***': 'F'}
+
+TimeStepNode(query=false, type=robot_assignment, resolved_questions={'p': 'F', 'p**': 'T', 'p*': 'F', 'p***': 'T'}, robot_map={'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=d, cost=1.41, time=6.24), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=, cost=4.83, time=6.24)}, visited_locations={'a', 'e', 'd'})
+Next:
+
+TimeStepNode(query=p, type=query, resolved_questions={}, robot_map={'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=0.0), 'robot_2': Robot(id=robot_2, position=(2.0, 2.0), assigned_loc=, cost=0.0, time=0.0)}, visited_locations=set())
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=0.0), 'robot_2': Robot(id=robot_2, position=(2.0, 2.0), assigned_loc=, cost=0.0, time=0.0)}, COST: 0.0), RESOLVED: {}
+
+TimeStepNode(query=p, type=robot_assignment, resolved_questions={}, robot_map={'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=0.0), 'robot_2': Robot(id=robot_2, position=(2.0, 2.0), assigned_loc=, cost=0.0, time=0.0)}, visited_locations=set())
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=2.83), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=a, cost=2.83, time=2.83)}, COST: 2.8284271247461903), RESOLVED: {}
+  - {'robot_1': Robot(id=robot_1, position=(4, 4), assigned_loc=a, cost=4.24, time=4.24), 'robot_2': Robot(id=robot_2, position=(2.0, 2.0), assigned_loc=, cost=0.0, time=4.24)}, COST: 4.242640687119285), RESOLVED: {}
+  - {'robot_1': Robot(id=robot_1, position=(4, 4), assigned_loc=, cost=4.24, time=5.83), 'robot_2': Robot(id=robot_2, position=(-1, 7), assigned_loc=b, cost=5.83, time=5.83)}, COST: 10.073592581964586), RESOLVED: {}
+  - {'robot_1': Robot(id=robot_1, position=(4, 4), assigned_loc=a, cost=4.24, time=4.24), 'robot_2': Robot(id=robot_2, position=(0, 0), assigned_loc=, cost=2.83, time=4.24)}, COST: 7.0710678118654755), RESOLVED: {}
+  - {'robot_1': Robot(id=robot_1, position=(4, 4), assigned_loc=a, cost=4.24, time=4.24), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=, cost=2.0, time=4.24)}, COST: 6.242640687119286), RESOLVED: {}
+  - {'robot_1': Robot(id=robot_1, position=(-1, 7), assigned_loc=b, cost=6.32, time=6.32), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=, cost=2.83, time=6.32)}, COST: 9.15298244508295), RESOLVED: {}
+  - {'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=, cost=1.41, time=2.83), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=a, cost=2.83, time=2.83)}, COST: 4.242640687119286), RESOLVED: {}
+  - {'robot_1': Robot(id=robot_1, position=(2, 4), assigned_loc=e, cost=3.16, time=3.16), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=, cost=2.83, time=3.16)}, COST: 5.99070478491457), RESOLVED: {}
+
+TimeStepNode(query=p, type=robot_moving, resolved_questions={}, robot_map={'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=2.83), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=a, cost=2.83, time=2.83)}, visited_locations=set())
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=2.83), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=a, cost=2.83, time=2.83)}, COST: 2.8284271247461903), RESOLVED: {}
+
+TimeStepNode(query=p, type=query, resolved_questions={}, robot_map={'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=2.83), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=a, cost=2.83, time=2.83)}, visited_locations={'a'})
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=2.83), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=a, cost=2.83, time=2.83)}, COST: 2.8284271247461903), RESOLVED: {'p': 'T'}
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=2.83), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=a, cost=2.83, time=2.83)}, COST: 2.8284271247461903), RESOLVED: {'p': 'F'}
+
+TimeStepNode(query=p*, type=robot_assignment, resolved_questions={'p': 'F'}, robot_map={'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=2.83), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=a, cost=2.83, time=2.83)}, visited_locations={'a'})
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=8.66), 'robot_2': Robot(id=robot_2, position=(-1, 7), assigned_loc=b, cost=8.66, time=8.66)}, COST: 8.65937901959149), RESOLVED: {'p': 'F'}
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=4.83), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=e, cost=4.83, time=4.83)}, COST: 4.82842712474619), RESOLVED: {'p': 'F'}
+  - {'robot_1': Robot(id=robot_1, position=(-1, 7), assigned_loc=b, cost=6.32, time=9.15), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=, cost=2.83, time=9.15)}, COST: 9.15298244508295), RESOLVED: {'p': 'F'}
+  - {'robot_1': Robot(id=robot_1, position=(-1, 7), assigned_loc=b, cost=6.32, time=9.15), 'robot_2': Robot(id=robot_2, position=(0, 0), assigned_loc=, cost=8.49, time=9.15)}, COST: 14.809836694575331), RESOLVED: {'p': 'F'}
+  - {'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=, cost=1.41, time=8.66), 'robot_2': Robot(id=robot_2, position=(-1, 7), assigned_loc=b, cost=8.66, time=8.66)}, COST: 10.073592581964586), RESOLVED: {'p': 'F'}
+  - {'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=, cost=1.41, time=4.83), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=e, cost=4.83, time=4.83)}, COST: 6.242640687119285), RESOLVED: {'p': 'F'}
+  - {'robot_1': Robot(id=robot_1, position=(2, 4), assigned_loc=e, cost=3.16, time=5.99), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=, cost=2.83, time=5.99)}, COST: 5.99070478491457), RESOLVED: {'p': 'F'}
+  - {'robot_1': Robot(id=robot_1, position=(2, 4), assigned_loc=, cost=3.16, time=8.49), 'robot_2': Robot(id=robot_2, position=(0, 0), assigned_loc=d, cost=8.49, time=8.49)}, COST: 11.647559034406951), RESOLVED: {'p': 'F'}
+
+TimeStepNode(query=p*, type=robot_moving, resolved_questions={'p': 'F'}, robot_map={'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=4.83), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=e, cost=4.83, time=4.83)}, visited_locations={'a'})
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=4.83), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=e, cost=4.83, time=4.83)}, COST: 4.82842712474619), RESOLVED: {'p': 'F'}
+
+TimeStepNode(query=p*, type=query, resolved_questions={'p': 'F'}, robot_map={'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=4.83), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=e, cost=4.83, time=4.83)}, visited_locations={'a', 'e'})
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=4.83), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=e, cost=4.83, time=4.83)}, COST: 4.82842712474619), RESOLVED: {'p': 'F', 'p**': 'T', 'p*': 'T'}
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=4.83), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=e, cost=4.83, time=4.83)}, COST: 4.82842712474619), RESOLVED: {'p': 'F', 'p**': 'T', 'p*': 'F'}
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=4.83), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=e, cost=4.83, time=4.83)}, COST: 4.82842712474619), RESOLVED: {'p': 'F', 'p**': 'F', 'p*': 'T'}
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=4.83), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=e, cost=4.83, time=4.83)}, COST: 4.82842712474619), RESOLVED: {'p': 'F', 'p**': 'F', 'p*': 'F'}
+
+TimeStepNode(query=p***, type=robot_assignment, resolved_questions={'p': 'F', 'p**': 'T', 'p*': 'F'}, robot_map={'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=4.83), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=e, cost=4.83, time=4.83)}, visited_locations={'a', 'e'})
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=9.3), 'robot_2': Robot(id=robot_2, position=(0, 0), assigned_loc=d, cost=9.3, time=9.3)}, COST: 9.30056307974577), RESOLVED: {'p': 'F', 'p**': 'T', 'p*': 'F'}
+  - {'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=d, cost=1.41, time=6.24), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=, cost=4.83, time=6.24)}, COST: 6.242640687119285), RESOLVED: {'p': 'F', 'p**': 'T', 'p*': 'F'}
+
+TimeStepNode(query=p***, type=robot_moving, resolved_questions={'p': 'F', 'p**': 'T', 'p*': 'F'}, robot_map={'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=d, cost=1.41, time=6.24), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=, cost=4.83, time=6.24)}, visited_locations={'a', 'e'})
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=d, cost=1.41, time=6.24), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=, cost=4.83, time=6.24)}, COST: 6.242640687119285), RESOLVED: {'p': 'F', 'p**': 'T', 'p*': 'F'}
+
+TimeStepNode(query=p***, type=query, resolved_questions={'p': 'F', 'p**': 'T', 'p*': 'F'}, robot_map={'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=d, cost=1.41, time=6.24), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=, cost=4.83, time=6.24)}, visited_locations={'a', 'd', 'e'})
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=d, cost=1.41, time=6.24), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=, cost=4.83, time=6.24)}, COST: 6.242640687119285), RESOLVED: {'p': 'F', 'p**': 'T', 'p*': 'F', 'p***': 'T'}
+  - {'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=d, cost=1.41, time=6.24), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=, cost=4.83, time=6.24)}, COST: 6.242640687119285), RESOLVED: {'p': 'F', 'p**': 'T', 'p*': 'F', 'p***': 'F'}
+
+TimeStepNode(query=false, type=robot_assignment, resolved_questions={'p': 'F', 'p**': 'T', 'p*': 'F', 'p***': 'T'}, robot_map={'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=d, cost=1.41, time=6.24), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=, cost=4.83, time=6.24)}, visited_locations={'d', 'a', 'e'})
+Next:
+
+TimeStepNode(query=p, type=query, resolved_questions={}, robot_map={'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=0.0), 'robot_2': Robot(id=robot_2, position=(2.0, 2.0), assigned_loc=, cost=0.0, time=0.0)}, visited_locations=set())
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=0.0), 'robot_2': Robot(id=robot_2, position=(2.0, 2.0), assigned_loc=, cost=0.0, time=0.0)}, COST: 0.0), RESOLVED: {}
+
+TimeStepNode(query=p, type=robot_assignment, resolved_questions={}, robot_map={'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=0.0), 'robot_2': Robot(id=robot_2, position=(2.0, 2.0), assigned_loc=, cost=0.0, time=0.0)}, visited_locations=set())
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=2.83), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=a, cost=2.83, time=2.83)}, COST: 2.8284271247461903), RESOLVED: {}
+  - {'robot_1': Robot(id=robot_1, position=(4, 4), assigned_loc=a, cost=4.24, time=4.24), 'robot_2': Robot(id=robot_2, position=(2.0, 2.0), assigned_loc=, cost=0.0, time=4.24)}, COST: 4.242640687119285), RESOLVED: {}
+  - {'robot_1': Robot(id=robot_1, position=(4, 4), assigned_loc=, cost=4.24, time=5.83), 'robot_2': Robot(id=robot_2, position=(-1, 7), assigned_loc=b, cost=5.83, time=5.83)}, COST: 10.073592581964586), RESOLVED: {}
+  - {'robot_1': Robot(id=robot_1, position=(4, 4), assigned_loc=a, cost=4.24, time=4.24), 'robot_2': Robot(id=robot_2, position=(0, 0), assigned_loc=, cost=2.83, time=4.24)}, COST: 7.0710678118654755), RESOLVED: {}
+  - {'robot_1': Robot(id=robot_1, position=(4, 4), assigned_loc=a, cost=4.24, time=4.24), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=, cost=2.0, time=4.24)}, COST: 6.242640687119286), RESOLVED: {}
+  - {'robot_1': Robot(id=robot_1, position=(-1, 7), assigned_loc=b, cost=6.32, time=6.32), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=, cost=2.83, time=6.32)}, COST: 9.15298244508295), RESOLVED: {}
+  - {'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=, cost=1.41, time=2.83), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=a, cost=2.83, time=2.83)}, COST: 4.242640687119286), RESOLVED: {}
+  - {'robot_1': Robot(id=robot_1, position=(2, 4), assigned_loc=e, cost=3.16, time=3.16), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=, cost=2.83, time=3.16)}, COST: 5.99070478491457), RESOLVED: {}
+
+TimeStepNode(query=p, type=robot_moving, resolved_questions={}, robot_map={'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=2.83), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=a, cost=2.83, time=2.83)}, visited_locations=set())
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=2.83), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=a, cost=2.83, time=2.83)}, COST: 2.8284271247461903), RESOLVED: {}
+
+TimeStepNode(query=p, type=query, resolved_questions={}, robot_map={'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=2.83), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=a, cost=2.83, time=2.83)}, visited_locations={'a'})
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=2.83), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=a, cost=2.83, time=2.83)}, COST: 2.8284271247461903), RESOLVED: {'p': 'T'}
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=2.83), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=a, cost=2.83, time=2.83)}, COST: 2.8284271247461903), RESOLVED: {'p': 'F'}
+
+TimeStepNode(query=p*, type=robot_assignment, resolved_questions={'p': 'F'}, robot_map={'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=2.83), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=a, cost=2.83, time=2.83)}, visited_locations={'a'})
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=8.66), 'robot_2': Robot(id=robot_2, position=(-1, 7), assigned_loc=b, cost=8.66, time=8.66)}, COST: 8.65937901959149), RESOLVED: {'p': 'F'}
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=4.83), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=e, cost=4.83, time=4.83)}, COST: 4.82842712474619), RESOLVED: {'p': 'F'}
+  - {'robot_1': Robot(id=robot_1, position=(-1, 7), assigned_loc=b, cost=6.32, time=9.15), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=, cost=2.83, time=9.15)}, COST: 9.15298244508295), RESOLVED: {'p': 'F'}
+  - {'robot_1': Robot(id=robot_1, position=(-1, 7), assigned_loc=b, cost=6.32, time=9.15), 'robot_2': Robot(id=robot_2, position=(0, 0), assigned_loc=, cost=8.49, time=9.15)}, COST: 14.809836694575331), RESOLVED: {'p': 'F'}
+  - {'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=, cost=1.41, time=8.66), 'robot_2': Robot(id=robot_2, position=(-1, 7), assigned_loc=b, cost=8.66, time=8.66)}, COST: 10.073592581964586), RESOLVED: {'p': 'F'}
+  - {'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=, cost=1.41, time=4.83), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=e, cost=4.83, time=4.83)}, COST: 6.242640687119285), RESOLVED: {'p': 'F'}
+  - {'robot_1': Robot(id=robot_1, position=(2, 4), assigned_loc=e, cost=3.16, time=5.99), 'robot_2': Robot(id=robot_2, position=(4, 4), assigned_loc=, cost=2.83, time=5.99)}, COST: 5.99070478491457), RESOLVED: {'p': 'F'}
+  - {'robot_1': Robot(id=robot_1, position=(2, 4), assigned_loc=, cost=3.16, time=8.49), 'robot_2': Robot(id=robot_2, position=(0, 0), assigned_loc=d, cost=8.49, time=8.49)}, COST: 11.647559034406951), RESOLVED: {'p': 'F'}
+
+TimeStepNode(query=p*, type=robot_moving, resolved_questions={'p': 'F'}, robot_map={'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=4.83), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=e, cost=4.83, time=4.83)}, visited_locations={'a'})
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=4.83), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=e, cost=4.83, time=4.83)}, COST: 4.82842712474619), RESOLVED: {'p': 'F'}
+
+TimeStepNode(query=p*, type=query, resolved_questions={'p': 'F'}, robot_map={'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=4.83), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=e, cost=4.83, time=4.83)}, visited_locations={'a', 'e'})
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=4.83), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=e, cost=4.83, time=4.83)}, COST: 4.82842712474619), RESOLVED: {'p': 'F', 'p*': 'T', 'p**': 'T'}
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=4.83), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=e, cost=4.83, time=4.83)}, COST: 4.82842712474619), RESOLVED: {'p': 'F', 'p*': 'T', 'p**': 'F'}
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=4.83), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=e, cost=4.83, time=4.83)}, COST: 4.82842712474619), RESOLVED: {'p': 'F', 'p*': 'F', 'p**': 'T'}
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=4.83), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=e, cost=4.83, time=4.83)}, COST: 4.82842712474619), RESOLVED: {'p': 'F', 'p*': 'F', 'p**': 'F'}
+
+TimeStepNode(query=p***, type=robot_assignment, resolved_questions={'p': 'F', 'p*': 'F', 'p**': 'T'}, robot_map={'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=4.83), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=e, cost=4.83, time=4.83)}, visited_locations={'a', 'e'})
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(1.0, 1.0), assigned_loc=, cost=0.0, time=9.3), 'robot_2': Robot(id=robot_2, position=(0, 0), assigned_loc=d, cost=9.3, time=9.3)}, COST: 9.30056307974577), RESOLVED: {'p': 'F', 'p*': 'F', 'p**': 'T'}
+  - {'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=d, cost=1.41, time=6.24), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=, cost=4.83, time=6.24)}, COST: 6.242640687119285), RESOLVED: {'p': 'F', 'p*': 'F', 'p**': 'T'}
+
+TimeStepNode(query=p***, type=robot_moving, resolved_questions={'p': 'F', 'p*': 'F', 'p**': 'T'}, robot_map={'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=d, cost=1.41, time=6.24), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=, cost=4.83, time=6.24)}, visited_locations={'a', 'e'})
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=d, cost=1.41, time=6.24), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=, cost=4.83, time=6.24)}, COST: 6.242640687119285), RESOLVED: {'p': 'F', 'p*': 'F', 'p**': 'T'}
+
+TimeStepNode(query=p***, type=query, resolved_questions={'p': 'F', 'p*': 'F', 'p**': 'T'}, robot_map={'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=d, cost=1.41, time=6.24), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=, cost=4.83, time=6.24)}, visited_locations={'d', 'a', 'e'})
+Next:
+  - {'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=d, cost=1.41, time=6.24), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=, cost=4.83, time=6.24)}, COST: 6.242640687119285), RESOLVED: {'p': 'F', 'p*': 'F', 'p**': 'T', 'p***': 'T'}
+  - {'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=d, cost=1.41, time=6.24), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=, cost=4.83, time=6.24)}, COST: 6.242640687119285), RESOLVED: {'p': 'F', 'p*': 'F', 'p**': 'T', 'p***': 'F'}
+
+TimeStepNode(query=false, type=robot_assignment, resolved_questions={'p': 'F', 'p*': 'F', 'p**': 'T', 'p***': 'T'}, robot_map={'robot_1': Robot(id=robot_1, position=(0, 0), assigned_loc=d, cost=1.41, time=6.24), 'robot_2': Robot(id=robot_2, position=(2, 4), assigned_loc=, cost=4.83, time=6.24)}, visited_locations={'e', 'a', 'd'})
+Next:
+
