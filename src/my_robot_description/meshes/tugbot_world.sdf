@@ -532,7 +532,7 @@
             <save enabled='false'>
               <path>__default__</path>
             </save>
-            <visibility_mask>4294967295</visibility_mask>
+            <visibility_mask>4294967294</visibility_mask>
             <noise>
               <type>none</type>
               <mean>0</mean>
@@ -579,7 +579,7 @@
             <save enabled='false'>
               <path>__default__</path>
             </save>
-            <visibility_mask>4294967295</visibility_mask>
+            <visibility_mask>4294967294</visibility_mask>
             <noise>
               <type>none</type>
               <mean>0</mean>
@@ -647,7 +647,7 @@
             <save enabled='false'>
               <path>__default__</path>
             </save>
-            <visibility_mask>4294967295</visibility_mask>
+            <visibility_mask>4294967294</visibility_mask>
             <noise>
               <type>none</type>
               <mean>0</mean>
@@ -694,7 +694,7 @@
             <save enabled='false'>
               <path>__default__</path>
             </save>
-            <visibility_mask>4294967295</visibility_mask>
+            <visibility_mask>4294967294</visibility_mask>
             <noise>
               <type>none</type>
               <mean>0</mean>
@@ -768,7 +768,7 @@
               <mean>0</mean>
               <stddev>0</stddev>
             </noise>
-            <visibility_mask>4294967295</visibility_mask>
+            <visibility_mask>4294967294</visibility_mask>
           </lidar>
         </sensor>
         <inertial>
@@ -822,7 +822,7 @@
               <mean>0</mean>
               <stddev>0</stddev>
             </noise>
-            <visibility_mask>4294967295</visibility_mask>
+            <visibility_mask>4294967294</visibility_mask>
           </lidar>
         </sensor>
         <inertial>
@@ -939,7 +939,7 @@
               <mean>0</mean>
               <stddev>0</stddev>
             </noise>
-            <visibility_mask>4294967295</visibility_mask>
+            <visibility_mask>4294967294</visibility_mask>
           </lidar>
         </sensor>
         <inertial>
@@ -1040,7 +1040,7 @@
               <mean>0</mean>
               <stddev>0</stddev>
             </noise>
-            <visibility_mask>4294967295</visibility_mask>
+            <visibility_mask>4294967294</visibility_mask>
           </lidar>
         </sensor>
         <enable_wind>false</enable_wind>
@@ -1838,7 +1838,7 @@
             <save enabled='false'>
               <path>__default__</path>
             </save>
-            <visibility_mask>4294967295</visibility_mask>
+            <visibility_mask>4294967294</visibility_mask>
             <noise>
               <type>none</type>
               <mean>0</mean>
@@ -1885,7 +1885,7 @@
             <save enabled='false'>
               <path>__default__</path>
             </save>
-            <visibility_mask>4294967295</visibility_mask>
+            <visibility_mask>4294967294</visibility_mask>
             <noise>
               <type>none</type>
               <mean>0</mean>
@@ -1953,7 +1953,7 @@
             <save enabled='false'>
               <path>__default__</path>
             </save>
-            <visibility_mask>4294967295</visibility_mask>
+            <visibility_mask>4294967294</visibility_mask>
             <noise>
               <type>none</type>
               <mean>0</mean>
@@ -2000,7 +2000,7 @@
             <save enabled='false'>
               <path>__default__</path>
             </save>
-            <visibility_mask>4294967295</visibility_mask>
+            <visibility_mask>4294967294</visibility_mask>
             <noise>
               <type>none</type>
               <mean>0</mean>
@@ -2074,7 +2074,7 @@
               <mean>0</mean>
               <stddev>0</stddev>
             </noise>
-            <visibility_mask>4294967295</visibility_mask>
+            <visibility_mask>4294967294</visibility_mask>
           </lidar>
         </sensor>
         <inertial>
@@ -2128,7 +2128,7 @@
               <mean>0</mean>
               <stddev>0</stddev>
             </noise>
-            <visibility_mask>4294967295</visibility_mask>
+            <visibility_mask>4294967294</visibility_mask>
           </lidar>
         </sensor>
         <inertial>
@@ -2245,7 +2245,7 @@
               <mean>0</mean>
               <stddev>0</stddev>
             </noise>
-            <visibility_mask>4294967295</visibility_mask>
+            <visibility_mask>4294967294</visibility_mask>
           </lidar>
         </sensor>
         <inertial>
@@ -2346,7 +2346,7 @@
               <mean>0</mean>
               <stddev>0</stddev>
             </noise>
-            <visibility_mask>4294967295</visibility_mask>
+            <visibility_mask>4294967294</visibility_mask>
           </lidar>
         </sensor>
         <enable_wind>false</enable_wind>
