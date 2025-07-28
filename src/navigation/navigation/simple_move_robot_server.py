@@ -10,7 +10,8 @@ from action_msgs.msg import GoalStatus
 
 from geometry_msgs.msg import Twist, Pose, PoseArray, Quaternion
 from my_robot_interfaces.action import MoveRobot
-
+# Add this near the top with other imports
+from sensor_msgs.msg import LaserScan
 
 class SimpleMoveRobotServer(Node):
     """
@@ -56,6 +57,15 @@ class SimpleMoveRobotServer(Node):
             f'/{self.robot_name}/cmd_vel',
             10
         )
+        # Add this in the __init__ method, e.g., after the pose_sub
+        self.scan_sub = self.create_subscription(
+            LaserScan,
+            f'/{self.robot_name}/scan', # Assumes topic is namespaced like cmd_vel
+            self.scan_callback,
+            10 # QoS profile, 10 is usually fine for sensors
+        )
+        # Add a variable to store the latest scan data
+        self.latest_scan = None
 
         self.action_server = ActionServer(
             self,
@@ -85,6 +95,13 @@ class SimpleMoveRobotServer(Node):
                 self.current_pose = msg.poses[1]
         except IndexError:
             self.get_logger().warn('PoseArray message does not contain enough poses.')
+
+    # Add this method to the class
+    def scan_callback(self, msg: LaserScan):
+        """Callback to store the latest laser scan data."""
+        self.latest_scan = msg
+        # Optional: Add basic processing here if needed immediately,
+        # but often it's done in the control loop where decisions are made.
 
     def goal_callback(self, goal_request):
         self.get_logger().info(f'✅ Received move goal for {self.robot_name}')

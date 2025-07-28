@@ -20,48 +20,28 @@ def generate_launch_description():
     )
     
     # Robot 1: Move server
-    # robot_1_move_server = Node(
-    #     package='navigation',
-    #     executable='simple_move_robot_server',
-    #     name='robot_1_simple_move_server',
-    #     output='screen',
-    #     parameters=[{
-    #         'robot_name': 'robot_1',
-    #         'max_linear_velocity': 0.5,
-    #         'max_angular_velocity': 0.5,
-    #     }]
-    # )
-    
-    # # Robot 2: Move server
-    # robot_2_move_server = Node(
-    #     package='navigation',
-    #     executable='simple_move_robot_server',
-    #     name='robot_2_simple_move_server',
-    #     output='screen',
-    #     parameters=[{
-    #         'robot_name': 'robot_2',
-    #         'max_linear_velocity': 0.5,
-    #         'max_angular_velocity': 0.5,
-    #     }]
-    # )
     robot_1_move_server = Node(
         package='navigation',
-        executable='nav2_move_robot_wrapper',
-        name='robot_1_nav2_move_wrapper',
+        executable='simple_move_robot_server',
+        name='robot_1_simple_move_server',
         output='screen',
         parameters=[{
             'robot_name': 'robot_1',
-            'global_frame': 'map'
+            'max_linear_velocity': 0.5,
+            'max_angular_velocity': 0.5,
         }]
     )
+    
+    # Robot 2: Move server
     robot_2_move_server = Node(
         package='navigation',
-        executable='nav2_move_robot_wrapper',
-        name='robot_2_nav2_move_wrapper',
+        executable='simple_move_robot_server',
+        name='robot_2_simple_move_server',
         output='screen',
         parameters=[{
             'robot_name': 'robot_2',
-            'global_frame': 'map'
+            'max_linear_velocity': 0.5,
+            'max_angular_velocity': 0.5,
         }]
     )
     
