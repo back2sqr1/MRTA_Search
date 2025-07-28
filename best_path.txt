@@ -1,6 +1,0 @@
-Robot Assignments: robot_2 -> (5, 5)
-{'p': 'T'}
-robot_2 -> a
-Robot Assignments: robot_1 -> (0, 0)
-{'p': 'T'}
-robot_1 -> d
