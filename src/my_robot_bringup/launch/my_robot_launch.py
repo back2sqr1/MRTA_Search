@@ -179,11 +179,6 @@ def generate_launch_description():
         config['paths']['gazebo_bridge_config']
     ])
     
-    rviz_config_path = PathJoinSubstitution([
-        FindPackageShare('my_robot_description'),
-        config['paths']['rviz_config']
-    ])
-    
     # Launch Gazebo with config
     gazebo_launch = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([
@@ -257,26 +252,7 @@ def generate_launch_description():
             ],
             output=config['output']['mode']
         )
-        markers.append(marker)
-
-    # Static transform publisher for world base footprint from config
-    transform_config = config['transforms']['map_to_world']
-    world_tf_publisher = Node(
-        package='tf2_ros',
-        executable='static_transform_publisher',
-        arguments=[
-            '--x', str(transform_config['translation'][0]),
-            '--y', str(transform_config['translation'][1]),
-            '--z', str(transform_config['translation'][2]),
-            '--roll', str(transform_config['rotation'][0]),
-            '--pitch', str(transform_config['rotation'][1]),
-            '--yaw', str(transform_config['rotation'][2]),
-            '--frame-id', transform_config['parent_frame'],
-            '--child-frame-id', transform_config['child_frame']
-        ],
-        output=config['output']['mode']
-    )
-    
+        markers.append(marker)    
     # Bridge and RViz with config
     bridge_remappings = config['remappings']['bridge']
     bridge_node = Node(
@@ -290,20 +266,20 @@ def generate_launch_description():
         output=config['output']['mode']
     )
     
-    rviz_node = Node(
-        package='rviz2',
-        executable='rviz2',
-        arguments=['-d', rviz_config_path],
-        output=config['output']['mode']
-    )
+    # rviz_node = Node(
+    #     package='rviz2',
+    #     executable='rviz2',
+    #     name='rviz2',
+    #     output='screen',
+    #     # arguments=['-d', default_rviz_config_path],
+    # )
     final_list = [
         # num_robots_arg,
         robot_positions_arg,
         gazebo_launch,
-        world_tf_publisher,
         # robot_spawning,
         bridge_node,
-        # rviz_node # Uncommented to include RViz
+        # rviz_node # /Uncommented to include RViz
     ]
     final_list.extend(markers)
 
