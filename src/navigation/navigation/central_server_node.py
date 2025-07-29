@@ -14,6 +14,53 @@ from navigation.planning.robot_class import Robot, RobotMap
 from navigation.planning.create_plan import SearchTree
 import threading
 import time
+def get_precomputed_path(start_coords: tuple, end_coords: tuple) -> list[tuple] | None:
+    """
+    Returns the precomputed path as a list of waypoints (tuples)
+    given start and end coordinates, including reversed paths.
+
+    Args:
+        start_coords (tuple): The (x, y) tuple for the start of the journey.
+        end_coords (tuple): The (x, y) tuple for the end of the journey.
+
+    Returns:
+        list[tuple]: A list of (x, y) tuples representing the path,
+                     or None if no precomputed path is found for the given
+                     start and end coordinates.
+    """
+    # Original precomputed paths
+    original_paths = {
+        ((1, 1), (3, -10)): [(1, 1), (-3, -4), (3, -10)],
+        ((1, 1), (4, 4)): [(1, 1), (4, 4)],
+        ((1, 1), (0, 0)): [(1, 1), (0, 0)],
+        ((1, 1), (-6, 7)): [(1, 1), (-2.5, 7), (-6, 7)],
+        ((1, 1), (-13, 0)): [(1, 1), (-8, 1), (-13, 0)],
+        ((2, 2), (4, 4)): [(2, 2), (4, 4)],
+        ((2, 2), (-6, 7)): [(2, 2), (-3, 7), (-6, 7)],
+        ((2, 2), (3, -10)): [(2, 2), (3, -10)],
+        ((2, 2), (-13, 0)): [(2, 2), (-8, 1), (-13, 0)],
+        ((2, 2), (-3, -10)): [(2, 2), (-3, -6), (-3, -10)],
+        ((4, 4), (-6, 7)): [(4, 4), (-3, 7), (-6, 7)],
+        ((4, 4), (3, -10)): [(4, 4), (2, 2), (3, -10)],
+        ((4, 4), (-13, 0)): [(4, 4), (-13, 4), (-13, 0)],
+        ((4, 4), (-3, -10)): [(4, 4), (2, 2), (-3, -6), (-3, -10)],
+        ((-6, 7), (-13, 0)): [(-6, 7), (-13, 0)],
+        ((-6, 7), (3, -10)): [(-6, 7), (-3, 7), (0, 0), (3, -4), (3, -10)],
+        ((-6, 7), (-3, -10)): [(-6, 7), (-3, 7), (0, 0), (-3, -4), (-3, -10)],
+        ((3, -10), (-3, -10)): [(3, -10), (2, -2), (-3, -4), (-3, -10)],
+        ((3, -10), (-13, 0)): [(3, -10), (2, -2), (13, -2), (-13, 0)],
+        ((-3, -10), (-13, 0)): [(-3, -10), (-4, -2), (13, -2), (-13, 0)]
+    }
+
+    # Create a new dictionary to store all paths, including reversed ones
+    all_paths = dict(original_paths) # Start with all original paths
+
+    # Add reversed paths
+    for (start, end), path in original_paths.items():
+        reversed_path = list(reversed(path)) # Create a new reversed list
+        all_paths[(end, start)] = reversed_path # Add to the dictionary with (end, start) key
+
+    return all_paths.get((start_coords, end_coords))
 
 class CentralServerNode(Node):
     def __init__(self):
@@ -37,7 +84,7 @@ class CentralServerNode(Node):
         self.load_config_and_plan()
         
         # Start execution after a short delay using a one-shot timer
-        self.execution_timer = self.create_timer(2.0, self.start_execution)
+        self.execution_timer = self.create_timer(40, self.start_execution)
     
     def load_config_and_plan(self):
         """Load robot configuration and generate movement plan"""
@@ -61,20 +108,28 @@ class CentralServerNode(Node):
             
             initial_resolutions = robot_config.get('initial_resolutions')
             best_plan, *_ = search_tree.get_best_plan(initial_robot_map, initial_resolutions)
-            
+            self.get_logger().info(f'Best plan found: {best_plan}')
+
+            current_positions = {
+                'robot_1': robot_config['robots']['default_positions'][0][:2],
+                'robot_2': robot_config['robots']['default_positions'][1][:2]
+            }
             with self.plan_lock:
                 # Convert plan to sequential format
-                if isinstance(best_plan, dict):
-                    # Convert dict format to sequential list
-                    for robot_id, positions in best_plan.items():
-                        for position in positions:
-                            self.sequential_plan.append((robot_id, position))
-                else:
-                    self.sequential_plan = best_plan
-            
+                self.get_logger().info('Generating sequential plan...')
+                self.sequential_plan = []
+                for robot_id, target_pose in best_plan:
+                    path = get_precomputed_path(tuple(current_positions[robot_id]), target_pose)[1:]
+                    current_positions[robot_id] = target_pose
+                    for position in path:
+                        self.sequential_plan.append((robot_id, position))
+                # self.sequential_plan = best_plan
+                                
                 self.get_logger().info(f'✅ Generated plan with {len(self.sequential_plan)} steps')
                 for i, (robot_id, position) in enumerate(self.sequential_plan):
                     self.get_logger().info(f'   Step {i}: {robot_id} -> {position}')
+                
+                
                 
         except Exception as e:
             self.get_logger().error(f'Failed to load config and generate plan: {e}')
