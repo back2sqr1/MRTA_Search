@@ -1,0 +1,6 @@
+Robot Assignments: robot_2 -> (4, 4)
+{'p': 'T'}
+robot_2 -> a
+Robot Assignments: robot_1 -> (-13, 0)
+{'p': 'T'}
+robot_1 -> d
