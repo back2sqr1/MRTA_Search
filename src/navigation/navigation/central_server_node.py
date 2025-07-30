@@ -30,6 +30,7 @@ def get_precomputed_path(start_coords: tuple, end_coords: tuple) -> list[tuple] 
     """
     # Original precomputed paths
     original_paths = {
+        # we know that these subpaths work, can we use subpaths to create more complex paths?
         ((1, 1), (3, -10)): [(1, 1), (-3, -4), (3, -10)],
         ((1, 1), (4, 4)): [(1, 1), (4, 4)],
         ((1, 1), (0, 0)): [(1, 1), (0, 0)],
