@@ -3,4 +3,4 @@ build
 install
 log
 .venv
-src/bdd_generation/
+# src/bdd_generation/
