@@ -1,0 +1,165 @@
+# Define the map:
+location m00
+location m01
+location w01
+location w02
+location w03
+location w04
+location w05
+location w06
+location w07
+location w08
+location w09
+location w10
+location w11
+location w12
+location w13
+location w14
+location w15
+
+# Define actions:
+transition m00 w01 47.63
+transition w01 m00 47.63
+transition m00 w03 38.10
+transition w03 m00 38.10
+transition m01 w03 39.27
+transition w03 m01 39.27
+transition w01 w02 42.57
+transition w02 w01 42.57
+transition w01 w03 29.19
+transition w03 w01 29.19
+transition w03 w04 26.76
+transition w04 w03 26.76
+transition w02 w07 28.05
+transition w07 w02 28.05
+transition w04 w06 32.28
+transition w06 w04 32.28
+transition w06 w08 56.34
+transition w08 w06 56.34
+transition w06 w05 29.65
+transition w05 w06 29.65
+transition w05 w08 43.55
+transition w08 w05 43.55
+transition w07 w08 43.77
+transition w08 w07 43.77
+transition w07 w09 34.40
+transition w09 w07 34.40
+transition w09 w10 19.58
+transition w10 w09 19.58
+transition w10 w11 23.81
+transition w11 w10 23.81
+transition w12 w10 24.80
+transition w10 w12 24.80
+transition w12 w14 23.94
+transition w14 w12 23.94
+transition w11 w15 42.33
+transition w15 w11 42.33
+transition w14 w15 19.66
+transition w15 w14 19.66
+transition w13 w08 30.47
+transition w08 w13 30.47
+transition w13 w08 30.47
+transition w08 w13 30.47
+transition w14 w08 48.30
+transition w08 w14 48.30
+
+observation-cost m00 1.0
+observation-cost m01 10.0
+observation-cost w01 1.0
+observation-cost w02 3.0
+observation-cost w03 3.0
+observation-cost w04 10.0
+observation-cost w05 20.0
+observation-cost w06 3.0
+observation-cost w07 3.0
+observation-cost w08 5.0
+observation-cost w09 20.0
+observation-cost w10 10.0
+observation-cost w11 5.0
+observation-cost w12 20.0
+observation-cost w13 20.0
+observation-cost w14 10.0
+observation-cost w15 20.0
+
+recognizable-property marilyn-diptych 
+recognizable-property painting
+recognizable-property sculpture
+recognizable-property corner
+recognizable-property l-shaped
+
+starting-location m00
+
+
+# Constant facts have no braces:
+!corner(m00) 
+!corner(m01)
+!corner(w01)
+!corner(w02)
+!corner(w03)
+!corner(w04)
+!corner(w05)
+!corner(w06)
+!corner(w07)
+!corner(w08)
+!corner(w09)
+!corner(w10)
+corner(w11)
+!corner(w12)
+!corner(w13)
+!corner(w14)
+corner(w15)
+
+!l-shaped(m00)
+!l-shaped(m01)
+!l-shaped(w01)
+!l-shaped(w02)
+!l-shaped(w03)
+!l-shaped(w04)
+!l-shaped(w05)
+!l-shaped(w06)
+l-shaped(w07)
+l-shaped(w08)
+!l-shaped(w09)
+!l-shaped(w10)
+!l-shaped(w11)
+!l-shaped(w12)
+!l-shaped(w13)
+!l-shaped(w14)
+!l-shaped(w15)
+
+# This can only be in one of the big rooms w15, w08, w07, w06
+{ 
+  (marilyn-diptych(w15) & !(marilyn-diptych(w06) | marilyn-diptych(w07) | marilyn-diptych(w08))) | 
+  (marilyn-diptych(w06) & !(marilyn-diptych(w07) | marilyn-diptych(w08) | marilyn-diptych(w15))) | 
+  (marilyn-diptych(w07) & !(marilyn-diptych(w08) | marilyn-diptych(w15) | marilyn-diptych(w06))) | 
+  (marilyn-diptych(w08) & !(marilyn-diptych(w15) | marilyn-diptych(w06) | marilyn-diptych(w07)))   
+}
+
+# But the preceeding didn't say that there are no other marilyns
+[?u, ?v | ?u != ?v]{
+marilyn-diptych(?u) -> !marilyn-diptych(?v)
+}
+
+
+[?x]{ 
+ marilyn-diptych(?x) -> painting(?x)
+}
+
+
+# A piece comes from exactly one form
+[?x]{ 
+    ( painting(?x)  & !sculpture(?x)) |
+    ( sculpture(?x)     & !painting(?x)) 
+}
+
+# There is at least one painting
+[E?x]{ 
+    painting(?x)  
+}
+# There is at least one sculpture
+[E?x]{ 
+    sculpture(?x)  
+}
+
+Query: {  (marilyn-diptych(w15)) }  # Go to the corner, vs. 6, 7, 8
+

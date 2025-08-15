@@ -1,0 +1,45 @@
+# Define the universe.
+location s0 
+location s1 
+location s2
+location s3
+location s4
+
+# These "ground" to actions
+transition s0 s1 1.0
+transition s1 s2 1.0
+transition s2 s3 1.0
+transition s3 s4 1.0
+transition s4 s0 1.0
+
+# Things that your sensor will tell you
+recognizable-property a
+recognizable-property b
+recognizable-property q
+
+# Still TODO: define custom
+# aggregate-properties: 
+#     mona-lisa => italian AND masterpiece AND portrait AND smirk
+
+
+# Formulas describing the world. 
+
+# Constant facts have no braces:
+!q(s0)
+
+# Quantifed constraints
+[?x]{ 
+    a(?x) | b(?x) 
+}
+
+# There is only 1 state with q, or none at all
+
+[?u, ?v | ?u != ?v]{
+q(?u) -> !q(?v)
+}
+
+
+Query: {  q(s2) }
+
+ 
+

@@ -1,0 +1,1123 @@
+Created by PLY version 3.10 (http://www.dabeaz.com/ply)
+
+Grammar
+
+Rule 0     S' -> spec
+Rule 1     spec -> locations transitions obscosts properties startloc worldconstrs query
+Rule 2     spec -> locations transitions obscosts properties startloc worldconstrs
+Rule 3     blanks -> NEWLINE blanks
+Rule 4     blanks -> <empty>
+Rule 5     locations -> blanks loc locations
+Rule 6     locations -> blanks loc
+Rule 7     locations -> blanks
+Rule 8     loc -> LOC ID NEWLINE
+Rule 9     transitions -> blanks trx transitions
+Rule 10    transitions -> blanks trx
+Rule 11    transitions -> blanks
+Rule 12    trx -> TRX ID ID num NEWLINE
+Rule 13    num -> FLOAT
+Rule 14    num -> INT
+Rule 15    obscosts -> blanks ocost obscosts
+Rule 16    obscosts -> blanks ocost
+Rule 17    obscosts -> blanks
+Rule 18    ocost -> OCS ID num NEWLINE
+Rule 19    properties -> blanks prop properties
+Rule 20    properties -> blanks prop
+Rule 21    properties -> blanks
+Rule 22    prop -> PRP ID NEWLINE
+Rule 23    startloc -> STL ID NEWLINE
+Rule 24    worldconstrs -> blanks formula worldconstrs
+Rule 25    worldconstrs -> blanks formula
+Rule 26    worldconstrs -> blanks
+Rule 27    formula -> passthruformula
+Rule 28    formula -> flatfactformula
+Rule 29    flatfactformula -> ID LPAREN ID RPAREN
+Rule 30    flatfactformula -> neg ID LPAREN ID RPAREN
+Rule 31    passthruformula -> quantifier promelaformula
+Rule 32    passthruformula -> promelaformula
+Rule 33    quantifier -> LBRAC RBRAC
+Rule 34    quantifier -> LBRAC qlist RBRAC
+Rule 35    quantifier -> LBRAC qlist BAR qdifflist RBRAC
+Rule 36    qlist -> VAR COMMA qlist
+Rule 37    qlist -> VAR
+Rule 38    qlist -> EVAR
+Rule 39    qdifflist -> diff COMMA qdifflist
+Rule 40    qdifflist -> diff
+Rule 41    diff -> VAR NEQ VAR
+Rule 42    promelaformula -> OPAQUEFORMULA
+Rule 43    neg -> NOT
+Rule 44    neg -> NEG
+Rule 45    query -> QRY COLON passthruformula blanks
+
+Terminals, with rules where they appear
+
+BAR                  : 35
+COLON                : 45
+COMMA                : 36 39
+EVAR                 : 38
+FLOAT                : 13
+ID                   : 8 12 12 18 22 23 29 29 30 30
+INT                  : 14
+LBRAC                : 33 34 35
+LOC                  : 8
+LPAREN               : 29 30
+NEG                  : 44
+NEQ                  : 41
+NEWLINE              : 3 8 12 18 22 23
+NOT                  : 43
+OCS                  : 18
+OPAQUEFORMULA        : 42
+PRP                  : 22
+QRY                  : 45
+RBRAC                : 33 34 35
+RPAREN               : 29 30
+STL                  : 23
+TRX                  : 12
+VAR                  : 36 37 41 41
+error                : 
+
+Nonterminals, with rules where they appear
+
+blanks               : 3 5 6 7 9 10 11 15 16 17 19 20 21 24 25 26 45
+diff                 : 39 40
+flatfactformula      : 28
+formula              : 24 25
+loc                  : 5 6
+locations            : 1 2 5
+neg                  : 30
+num                  : 12 18
+obscosts             : 1 2 15
+ocost                : 15 16
+passthruformula      : 27 45
+promelaformula       : 31 32
+prop                 : 19 20
+properties           : 1 2 19
+qdifflist            : 35 39
+qlist                : 34 35 36
+quantifier           : 31
+query                : 1
+spec                 : 0
+startloc             : 1 2
+transitions          : 1 2 9
+trx                  : 9 10
+worldconstrs         : 1 2 24
+
+Parsing method: LALR
+
+state 0
+
+    (0) S' -> . spec
+    (1) spec -> . locations transitions obscosts properties startloc worldconstrs query
+    (2) spec -> . locations transitions obscosts properties startloc worldconstrs
+    (5) locations -> . blanks loc locations
+    (6) locations -> . blanks loc
+    (7) locations -> . blanks
+    (3) blanks -> . NEWLINE blanks
+    (4) blanks -> .
+
+  ! shift/reduce conflict for NEWLINE resolved as shift
+    NEWLINE         shift and go to state 4
+    LOC             reduce using rule 4 (blanks -> .)
+    STL             reduce using rule 4 (blanks -> .)
+    PRP             reduce using rule 4 (blanks -> .)
+    OCS             reduce using rule 4 (blanks -> .)
+    TRX             reduce using rule 4 (blanks -> .)
+
+  ! NEWLINE         [ reduce using rule 4 (blanks -> .) ]
+
+    spec                           shift and go to state 1
+    locations                      shift and go to state 2
+    blanks                         shift and go to state 3
+
+state 1
+
+    (0) S' -> spec .
+
+
+
+state 2
+
+    (1) spec -> locations . transitions obscosts properties startloc worldconstrs query
+    (2) spec -> locations . transitions obscosts properties startloc worldconstrs
+    (9) transitions -> . blanks trx transitions
+    (10) transitions -> . blanks trx
+    (11) transitions -> . blanks
+    (3) blanks -> . NEWLINE blanks
+    (4) blanks -> .
+
+  ! shift/reduce conflict for NEWLINE resolved as shift
+    NEWLINE         shift and go to state 4
+    TRX             reduce using rule 4 (blanks -> .)
+    STL             reduce using rule 4 (blanks -> .)
+    PRP             reduce using rule 4 (blanks -> .)
+    OCS             reduce using rule 4 (blanks -> .)
+
+  ! NEWLINE         [ reduce using rule 4 (blanks -> .) ]
+
+    transitions                    shift and go to state 5
+    blanks                         shift and go to state 6
+
+state 3
+
+    (5) locations -> blanks . loc locations
+    (6) locations -> blanks . loc
+    (7) locations -> blanks .
+    (8) loc -> . LOC ID NEWLINE
+
+    NEWLINE         reduce using rule 7 (locations -> blanks .)
+    STL             reduce using rule 7 (locations -> blanks .)
+    PRP             reduce using rule 7 (locations -> blanks .)
+    OCS             reduce using rule 7 (locations -> blanks .)
+    TRX             reduce using rule 7 (locations -> blanks .)
+    LOC             shift and go to state 8
+
+    loc                            shift and go to state 7
+
+state 4
+
+    (3) blanks -> NEWLINE . blanks
+    (3) blanks -> . NEWLINE blanks
+    (4) blanks -> .
+
+  ! shift/reduce conflict for NEWLINE resolved as shift
+    NEWLINE         shift and go to state 4
+    LOC             reduce using rule 4 (blanks -> .)
+    STL             reduce using rule 4 (blanks -> .)
+    PRP             reduce using rule 4 (blanks -> .)
+    OCS             reduce using rule 4 (blanks -> .)
+    TRX             reduce using rule 4 (blanks -> .)
+    ID              reduce using rule 4 (blanks -> .)
+    LBRAC           reduce using rule 4 (blanks -> .)
+    OPAQUEFORMULA   reduce using rule 4 (blanks -> .)
+    NOT             reduce using rule 4 (blanks -> .)
+    NEG             reduce using rule 4 (blanks -> .)
+    QRY             reduce using rule 4 (blanks -> .)
+    $end            reduce using rule 4 (blanks -> .)
+
+  ! NEWLINE         [ reduce using rule 4 (blanks -> .) ]
+
+    blanks                         shift and go to state 9
+
+state 5
+
+    (1) spec -> locations transitions . obscosts properties startloc worldconstrs query
+    (2) spec -> locations transitions . obscosts properties startloc worldconstrs
+    (15) obscosts -> . blanks ocost obscosts
+    (16) obscosts -> . blanks ocost
+    (17) obscosts -> . blanks
+    (3) blanks -> . NEWLINE blanks
+    (4) blanks -> .
+
+  ! shift/reduce conflict for NEWLINE resolved as shift
+    NEWLINE         shift and go to state 4
+    OCS             reduce using rule 4 (blanks -> .)
+    STL             reduce using rule 4 (blanks -> .)
+    PRP             reduce using rule 4 (blanks -> .)
+
+  ! NEWLINE         [ reduce using rule 4 (blanks -> .) ]
+
+    obscosts                       shift and go to state 10
+    blanks                         shift and go to state 11
+
+state 6
+
+    (9) transitions -> blanks . trx transitions
+    (10) transitions -> blanks . trx
+    (11) transitions -> blanks .
+    (12) trx -> . TRX ID ID num NEWLINE
+
+    NEWLINE         reduce using rule 11 (transitions -> blanks .)
+    STL             reduce using rule 11 (transitions -> blanks .)
+    PRP             reduce using rule 11 (transitions -> blanks .)
+    OCS             reduce using rule 11 (transitions -> blanks .)
+    TRX             shift and go to state 13
+
+    trx                            shift and go to state 12
+
+state 7
+
+    (5) locations -> blanks loc . locations
+    (6) locations -> blanks loc .
+    (5) locations -> . blanks loc locations
+    (6) locations -> . blanks loc
+    (7) locations -> . blanks
+    (3) blanks -> . NEWLINE blanks
+    (4) blanks -> .
+
+  ! shift/reduce conflict for NEWLINE resolved as shift
+  ! shift/reduce conflict for NEWLINE resolved as shift
+  ! reduce/reduce conflict for STL resolved using rule 4 (blanks -> .)
+  ! reduce/reduce conflict for PRP resolved using rule 4 (blanks -> .)
+  ! reduce/reduce conflict for OCS resolved using rule 4 (blanks -> .)
+  ! reduce/reduce conflict for TRX resolved using rule 4 (blanks -> .)
+    NEWLINE         shift and go to state 4
+    LOC             reduce using rule 4 (blanks -> .)
+    STL             reduce using rule 4 (blanks -> .)
+    PRP             reduce using rule 4 (blanks -> .)
+    OCS             reduce using rule 4 (blanks -> .)
+    TRX             reduce using rule 4 (blanks -> .)
+
+  ! NEWLINE         [ reduce using rule 6 (locations -> blanks loc .) ]
+  ! STL             [ reduce using rule 6 (locations -> blanks loc .) ]
+  ! PRP             [ reduce using rule 6 (locations -> blanks loc .) ]
+  ! OCS             [ reduce using rule 6 (locations -> blanks loc .) ]
+  ! TRX             [ reduce using rule 6 (locations -> blanks loc .) ]
+  ! NEWLINE         [ reduce using rule 4 (blanks -> .) ]
+
+    blanks                         shift and go to state 3
+    locations                      shift and go to state 14
+
+state 8
+
+    (8) loc -> LOC . ID NEWLINE
+
+    ID              shift and go to state 15
+
+
+state 9
+
+    (3) blanks -> NEWLINE blanks .
+
+    LOC             reduce using rule 3 (blanks -> NEWLINE blanks .)
+    NEWLINE         reduce using rule 3 (blanks -> NEWLINE blanks .)
+    STL             reduce using rule 3 (blanks -> NEWLINE blanks .)
+    PRP             reduce using rule 3 (blanks -> NEWLINE blanks .)
+    OCS             reduce using rule 3 (blanks -> NEWLINE blanks .)
+    TRX             reduce using rule 3 (blanks -> NEWLINE blanks .)
+    ID              reduce using rule 3 (blanks -> NEWLINE blanks .)
+    LBRAC           reduce using rule 3 (blanks -> NEWLINE blanks .)
+    OPAQUEFORMULA   reduce using rule 3 (blanks -> NEWLINE blanks .)
+    NOT             reduce using rule 3 (blanks -> NEWLINE blanks .)
+    NEG             reduce using rule 3 (blanks -> NEWLINE blanks .)
+    QRY             reduce using rule 3 (blanks -> NEWLINE blanks .)
+    $end            reduce using rule 3 (blanks -> NEWLINE blanks .)
+
+
+state 10
+
+    (1) spec -> locations transitions obscosts . properties startloc worldconstrs query
+    (2) spec -> locations transitions obscosts . properties startloc worldconstrs
+    (19) properties -> . blanks prop properties
+    (20) properties -> . blanks prop
+    (21) properties -> . blanks
+    (3) blanks -> . NEWLINE blanks
+    (4) blanks -> .
+
+    NEWLINE         shift and go to state 4
+    PRP             reduce using rule 4 (blanks -> .)
+    STL             reduce using rule 4 (blanks -> .)
+
+    properties                     shift and go to state 16
+    blanks                         shift and go to state 17
+
+state 11
+
+    (15) obscosts -> blanks . ocost obscosts
+    (16) obscosts -> blanks . ocost
+    (17) obscosts -> blanks .
+    (18) ocost -> . OCS ID num NEWLINE
+
+    NEWLINE         reduce using rule 17 (obscosts -> blanks .)
+    STL             reduce using rule 17 (obscosts -> blanks .)
+    PRP             reduce using rule 17 (obscosts -> blanks .)
+    OCS             shift and go to state 19
+
+    ocost                          shift and go to state 18
+
+state 12
+
+    (9) transitions -> blanks trx . transitions
+    (10) transitions -> blanks trx .
+    (9) transitions -> . blanks trx transitions
+    (10) transitions -> . blanks trx
+    (11) transitions -> . blanks
+    (3) blanks -> . NEWLINE blanks
+    (4) blanks -> .
+
+  ! shift/reduce conflict for NEWLINE resolved as shift
+  ! shift/reduce conflict for NEWLINE resolved as shift
+  ! reduce/reduce conflict for STL resolved using rule 4 (blanks -> .)
+  ! reduce/reduce conflict for PRP resolved using rule 4 (blanks -> .)
+  ! reduce/reduce conflict for OCS resolved using rule 4 (blanks -> .)
+    NEWLINE         shift and go to state 4
+    TRX             reduce using rule 4 (blanks -> .)
+    STL             reduce using rule 4 (blanks -> .)
+    PRP             reduce using rule 4 (blanks -> .)
+    OCS             reduce using rule 4 (blanks -> .)
+
+  ! NEWLINE         [ reduce using rule 10 (transitions -> blanks trx .) ]
+  ! STL             [ reduce using rule 10 (transitions -> blanks trx .) ]
+  ! PRP             [ reduce using rule 10 (transitions -> blanks trx .) ]
+  ! OCS             [ reduce using rule 10 (transitions -> blanks trx .) ]
+  ! NEWLINE         [ reduce using rule 4 (blanks -> .) ]
+
+    blanks                         shift and go to state 6
+    transitions                    shift and go to state 20
+
+state 13
+
+    (12) trx -> TRX . ID ID num NEWLINE
+
+    ID              shift and go to state 21
+
+
+state 14
+
+    (5) locations -> blanks loc locations .
+
+    NEWLINE         reduce using rule 5 (locations -> blanks loc locations .)
+    STL             reduce using rule 5 (locations -> blanks loc locations .)
+    PRP             reduce using rule 5 (locations -> blanks loc locations .)
+    OCS             reduce using rule 5 (locations -> blanks loc locations .)
+    TRX             reduce using rule 5 (locations -> blanks loc locations .)
+
+
+state 15
+
+    (8) loc -> LOC ID . NEWLINE
+
+    NEWLINE         shift and go to state 22
+
+
+state 16
+
+    (1) spec -> locations transitions obscosts properties . startloc worldconstrs query
+    (2) spec -> locations transitions obscosts properties . startloc worldconstrs
+    (23) startloc -> . STL ID NEWLINE
+
+    STL             shift and go to state 24
+
+    startloc                       shift and go to state 23
+
+state 17
+
+    (19) properties -> blanks . prop properties
+    (20) properties -> blanks . prop
+    (21) properties -> blanks .
+    (22) prop -> . PRP ID NEWLINE
+
+    STL             reduce using rule 21 (properties -> blanks .)
+    PRP             shift and go to state 26
+
+    prop                           shift and go to state 25
+
+state 18
+
+    (15) obscosts -> blanks ocost . obscosts
+    (16) obscosts -> blanks ocost .
+    (15) obscosts -> . blanks ocost obscosts
+    (16) obscosts -> . blanks ocost
+    (17) obscosts -> . blanks
+    (3) blanks -> . NEWLINE blanks
+    (4) blanks -> .
+
+  ! shift/reduce conflict for NEWLINE resolved as shift
+  ! shift/reduce conflict for NEWLINE resolved as shift
+  ! reduce/reduce conflict for STL resolved using rule 4 (blanks -> .)
+  ! reduce/reduce conflict for PRP resolved using rule 4 (blanks -> .)
+    NEWLINE         shift and go to state 4
+    OCS             reduce using rule 4 (blanks -> .)
+    STL             reduce using rule 4 (blanks -> .)
+    PRP             reduce using rule 4 (blanks -> .)
+
+  ! NEWLINE         [ reduce using rule 16 (obscosts -> blanks ocost .) ]
+  ! STL             [ reduce using rule 16 (obscosts -> blanks ocost .) ]
+  ! PRP             [ reduce using rule 16 (obscosts -> blanks ocost .) ]
+  ! NEWLINE         [ reduce using rule 4 (blanks -> .) ]
+
+    blanks                         shift and go to state 11
+    obscosts                       shift and go to state 27
+
+state 19
+
+    (18) ocost -> OCS . ID num NEWLINE
+
+    ID              shift and go to state 28
+
+
+state 20
+
+    (9) transitions -> blanks trx transitions .
+
+    NEWLINE         reduce using rule 9 (transitions -> blanks trx transitions .)
+    STL             reduce using rule 9 (transitions -> blanks trx transitions .)
+    PRP             reduce using rule 9 (transitions -> blanks trx transitions .)
+    OCS             reduce using rule 9 (transitions -> blanks trx transitions .)
+
+
+state 21
+
+    (12) trx -> TRX ID . ID num NEWLINE
+
+    ID              shift and go to state 29
+
+
+state 22
+
+    (8) loc -> LOC ID NEWLINE .
+
+    NEWLINE         reduce using rule 8 (loc -> LOC ID NEWLINE .)
+    LOC             reduce using rule 8 (loc -> LOC ID NEWLINE .)
+    STL             reduce using rule 8 (loc -> LOC ID NEWLINE .)
+    PRP             reduce using rule 8 (loc -> LOC ID NEWLINE .)
+    OCS             reduce using rule 8 (loc -> LOC ID NEWLINE .)
+    TRX             reduce using rule 8 (loc -> LOC ID NEWLINE .)
+
+
+state 23
+
+    (1) spec -> locations transitions obscosts properties startloc . worldconstrs query
+    (2) spec -> locations transitions obscosts properties startloc . worldconstrs
+    (24) worldconstrs -> . blanks formula worldconstrs
+    (25) worldconstrs -> . blanks formula
+    (26) worldconstrs -> . blanks
+    (3) blanks -> . NEWLINE blanks
+    (4) blanks -> .
+
+    NEWLINE         shift and go to state 4
+    ID              reduce using rule 4 (blanks -> .)
+    LBRAC           reduce using rule 4 (blanks -> .)
+    OPAQUEFORMULA   reduce using rule 4 (blanks -> .)
+    NOT             reduce using rule 4 (blanks -> .)
+    NEG             reduce using rule 4 (blanks -> .)
+    QRY             reduce using rule 4 (blanks -> .)
+    $end            reduce using rule 4 (blanks -> .)
+
+    worldconstrs                   shift and go to state 30
+    blanks                         shift and go to state 31
+
+state 24
+
+    (23) startloc -> STL . ID NEWLINE
+
+    ID              shift and go to state 32
+
+
+state 25
+
+    (19) properties -> blanks prop . properties
+    (20) properties -> blanks prop .
+    (19) properties -> . blanks prop properties
+    (20) properties -> . blanks prop
+    (21) properties -> . blanks
+    (3) blanks -> . NEWLINE blanks
+    (4) blanks -> .
+
+  ! reduce/reduce conflict for STL resolved using rule 4 (blanks -> .)
+    NEWLINE         shift and go to state 4
+    PRP             reduce using rule 4 (blanks -> .)
+    STL             reduce using rule 4 (blanks -> .)
+
+  ! STL             [ reduce using rule 20 (properties -> blanks prop .) ]
+
+    blanks                         shift and go to state 17
+    properties                     shift and go to state 33
+
+state 26
+
+    (22) prop -> PRP . ID NEWLINE
+
+    ID              shift and go to state 34
+
+
+state 27
+
+    (15) obscosts -> blanks ocost obscosts .
+
+    NEWLINE         reduce using rule 15 (obscosts -> blanks ocost obscosts .)
+    STL             reduce using rule 15 (obscosts -> blanks ocost obscosts .)
+    PRP             reduce using rule 15 (obscosts -> blanks ocost obscosts .)
+
+
+state 28
+
+    (18) ocost -> OCS ID . num NEWLINE
+    (13) num -> . FLOAT
+    (14) num -> . INT
+
+    FLOAT           shift and go to state 36
+    INT             shift and go to state 37
+
+    num                            shift and go to state 35
+
+state 29
+
+    (12) trx -> TRX ID ID . num NEWLINE
+    (13) num -> . FLOAT
+    (14) num -> . INT
+
+    FLOAT           shift and go to state 36
+    INT             shift and go to state 37
+
+    num                            shift and go to state 38
+
+state 30
+
+    (1) spec -> locations transitions obscosts properties startloc worldconstrs . query
+    (2) spec -> locations transitions obscosts properties startloc worldconstrs .
+    (45) query -> . QRY COLON passthruformula blanks
+
+    $end            reduce using rule 2 (spec -> locations transitions obscosts properties startloc worldconstrs .)
+    QRY             shift and go to state 40
+
+    query                          shift and go to state 39
+
+state 31
+
+    (24) worldconstrs -> blanks . formula worldconstrs
+    (25) worldconstrs -> blanks . formula
+    (26) worldconstrs -> blanks .
+    (27) formula -> . passthruformula
+    (28) formula -> . flatfactformula
+    (31) passthruformula -> . quantifier promelaformula
+    (32) passthruformula -> . promelaformula
+    (29) flatfactformula -> . ID LPAREN ID RPAREN
+    (30) flatfactformula -> . neg ID LPAREN ID RPAREN
+    (33) quantifier -> . LBRAC RBRAC
+    (34) quantifier -> . LBRAC qlist RBRAC
+    (35) quantifier -> . LBRAC qlist BAR qdifflist RBRAC
+    (42) promelaformula -> . OPAQUEFORMULA
+    (43) neg -> . NOT
+    (44) neg -> . NEG
+
+    QRY             reduce using rule 26 (worldconstrs -> blanks .)
+    $end            reduce using rule 26 (worldconstrs -> blanks .)
+    ID              shift and go to state 46
+    LBRAC           shift and go to state 48
+    OPAQUEFORMULA   shift and go to state 49
+    NOT             shift and go to state 50
+    NEG             shift and go to state 51
+
+    formula                        shift and go to state 41
+    passthruformula                shift and go to state 42
+    flatfactformula                shift and go to state 43
+    quantifier                     shift and go to state 44
+    promelaformula                 shift and go to state 45
+    neg                            shift and go to state 47
+
+state 32
+
+    (23) startloc -> STL ID . NEWLINE
+
+    NEWLINE         shift and go to state 52
+
+
+state 33
+
+    (19) properties -> blanks prop properties .
+
+    STL             reduce using rule 19 (properties -> blanks prop properties .)
+
+
+state 34
+
+    (22) prop -> PRP ID . NEWLINE
+
+    NEWLINE         shift and go to state 53
+
+
+state 35
+
+    (18) ocost -> OCS ID num . NEWLINE
+
+    NEWLINE         shift and go to state 54
+
+
+state 36
+
+    (13) num -> FLOAT .
+
+    NEWLINE         reduce using rule 13 (num -> FLOAT .)
+
+
+state 37
+
+    (14) num -> INT .
+
+    NEWLINE         reduce using rule 14 (num -> INT .)
+
+
+state 38
+
+    (12) trx -> TRX ID ID num . NEWLINE
+
+    NEWLINE         shift and go to state 55
+
+
+state 39
+
+    (1) spec -> locations transitions obscosts properties startloc worldconstrs query .
+
+    $end            reduce using rule 1 (spec -> locations transitions obscosts properties startloc worldconstrs query .)
+
+
+state 40
+
+    (45) query -> QRY . COLON passthruformula blanks
+
+    COLON           shift and go to state 56
+
+
+state 41
+
+    (24) worldconstrs -> blanks formula . worldconstrs
+    (25) worldconstrs -> blanks formula .
+    (24) worldconstrs -> . blanks formula worldconstrs
+    (25) worldconstrs -> . blanks formula
+    (26) worldconstrs -> . blanks
+    (3) blanks -> . NEWLINE blanks
+    (4) blanks -> .
+
+  ! reduce/reduce conflict for QRY resolved using rule 4 (blanks -> .)
+  ! reduce/reduce conflict for $end resolved using rule 4 (blanks -> .)
+    NEWLINE         shift and go to state 4
+    ID              reduce using rule 4 (blanks -> .)
+    LBRAC           reduce using rule 4 (blanks -> .)
+    OPAQUEFORMULA   reduce using rule 4 (blanks -> .)
+    NOT             reduce using rule 4 (blanks -> .)
+    NEG             reduce using rule 4 (blanks -> .)
+    QRY             reduce using rule 4 (blanks -> .)
+    $end            reduce using rule 4 (blanks -> .)
+
+  ! QRY             [ reduce using rule 25 (worldconstrs -> blanks formula .) ]
+  ! $end            [ reduce using rule 25 (worldconstrs -> blanks formula .) ]
+
+    blanks                         shift and go to state 31
+    worldconstrs                   shift and go to state 57
+
+state 42
+
+    (27) formula -> passthruformula .
+
+    NEWLINE         reduce using rule 27 (formula -> passthruformula .)
+    ID              reduce using rule 27 (formula -> passthruformula .)
+    LBRAC           reduce using rule 27 (formula -> passthruformula .)
+    OPAQUEFORMULA   reduce using rule 27 (formula -> passthruformula .)
+    NOT             reduce using rule 27 (formula -> passthruformula .)
+    NEG             reduce using rule 27 (formula -> passthruformula .)
+    QRY             reduce using rule 27 (formula -> passthruformula .)
+    $end            reduce using rule 27 (formula -> passthruformula .)
+
+
+state 43
+
+    (28) formula -> flatfactformula .
+
+    NEWLINE         reduce using rule 28 (formula -> flatfactformula .)
+    ID              reduce using rule 28 (formula -> flatfactformula .)
+    LBRAC           reduce using rule 28 (formula -> flatfactformula .)
+    OPAQUEFORMULA   reduce using rule 28 (formula -> flatfactformula .)
+    NOT             reduce using rule 28 (formula -> flatfactformula .)
+    NEG             reduce using rule 28 (formula -> flatfactformula .)
+    QRY             reduce using rule 28 (formula -> flatfactformula .)
+    $end            reduce using rule 28 (formula -> flatfactformula .)
+
+
+state 44
+
+    (31) passthruformula -> quantifier . promelaformula
+    (42) promelaformula -> . OPAQUEFORMULA
+
+    OPAQUEFORMULA   shift and go to state 49
+
+    promelaformula                 shift and go to state 58
+
+state 45
+
+    (32) passthruformula -> promelaformula .
+
+    NEWLINE         reduce using rule 32 (passthruformula -> promelaformula .)
+    ID              reduce using rule 32 (passthruformula -> promelaformula .)
+    LBRAC           reduce using rule 32 (passthruformula -> promelaformula .)
+    OPAQUEFORMULA   reduce using rule 32 (passthruformula -> promelaformula .)
+    NOT             reduce using rule 32 (passthruformula -> promelaformula .)
+    NEG             reduce using rule 32 (passthruformula -> promelaformula .)
+    QRY             reduce using rule 32 (passthruformula -> promelaformula .)
+    $end            reduce using rule 32 (passthruformula -> promelaformula .)
+
+
+state 46
+
+    (29) flatfactformula -> ID . LPAREN ID RPAREN
+
+    LPAREN          shift and go to state 59
+
+
+state 47
+
+    (30) flatfactformula -> neg . ID LPAREN ID RPAREN
+
+    ID              shift and go to state 60
+
+
+state 48
+
+    (33) quantifier -> LBRAC . RBRAC
+    (34) quantifier -> LBRAC . qlist RBRAC
+    (35) quantifier -> LBRAC . qlist BAR qdifflist RBRAC
+    (36) qlist -> . VAR COMMA qlist
+    (37) qlist -> . VAR
+    (38) qlist -> . EVAR
+
+    RBRAC           shift and go to state 61
+    VAR             shift and go to state 63
+    EVAR            shift and go to state 64
+
+    qlist                          shift and go to state 62
+
+state 49
+
+    (42) promelaformula -> OPAQUEFORMULA .
+
+    NEWLINE         reduce using rule 42 (promelaformula -> OPAQUEFORMULA .)
+    ID              reduce using rule 42 (promelaformula -> OPAQUEFORMULA .)
+    LBRAC           reduce using rule 42 (promelaformula -> OPAQUEFORMULA .)
+    OPAQUEFORMULA   reduce using rule 42 (promelaformula -> OPAQUEFORMULA .)
+    NOT             reduce using rule 42 (promelaformula -> OPAQUEFORMULA .)
+    NEG             reduce using rule 42 (promelaformula -> OPAQUEFORMULA .)
+    QRY             reduce using rule 42 (promelaformula -> OPAQUEFORMULA .)
+    $end            reduce using rule 42 (promelaformula -> OPAQUEFORMULA .)
+
+
+state 50
+
+    (43) neg -> NOT .
+
+    ID              reduce using rule 43 (neg -> NOT .)
+
+
+state 51
+
+    (44) neg -> NEG .
+
+    ID              reduce using rule 44 (neg -> NEG .)
+
+
+state 52
+
+    (23) startloc -> STL ID NEWLINE .
+
+    NEWLINE         reduce using rule 23 (startloc -> STL ID NEWLINE .)
+    QRY             reduce using rule 23 (startloc -> STL ID NEWLINE .)
+    ID              reduce using rule 23 (startloc -> STL ID NEWLINE .)
+    LBRAC           reduce using rule 23 (startloc -> STL ID NEWLINE .)
+    OPAQUEFORMULA   reduce using rule 23 (startloc -> STL ID NEWLINE .)
+    NOT             reduce using rule 23 (startloc -> STL ID NEWLINE .)
+    NEG             reduce using rule 23 (startloc -> STL ID NEWLINE .)
+    $end            reduce using rule 23 (startloc -> STL ID NEWLINE .)
+
+
+state 53
+
+    (22) prop -> PRP ID NEWLINE .
+
+    NEWLINE         reduce using rule 22 (prop -> PRP ID NEWLINE .)
+    PRP             reduce using rule 22 (prop -> PRP ID NEWLINE .)
+    STL             reduce using rule 22 (prop -> PRP ID NEWLINE .)
+
+
+state 54
+
+    (18) ocost -> OCS ID num NEWLINE .
+
+    NEWLINE         reduce using rule 18 (ocost -> OCS ID num NEWLINE .)
+    OCS             reduce using rule 18 (ocost -> OCS ID num NEWLINE .)
+    STL             reduce using rule 18 (ocost -> OCS ID num NEWLINE .)
+    PRP             reduce using rule 18 (ocost -> OCS ID num NEWLINE .)
+
+
+state 55
+
+    (12) trx -> TRX ID ID num NEWLINE .
+
+    NEWLINE         reduce using rule 12 (trx -> TRX ID ID num NEWLINE .)
+    TRX             reduce using rule 12 (trx -> TRX ID ID num NEWLINE .)
+    STL             reduce using rule 12 (trx -> TRX ID ID num NEWLINE .)
+    PRP             reduce using rule 12 (trx -> TRX ID ID num NEWLINE .)
+    OCS             reduce using rule 12 (trx -> TRX ID ID num NEWLINE .)
+
+
+state 56
+
+    (45) query -> QRY COLON . passthruformula blanks
+    (31) passthruformula -> . quantifier promelaformula
+    (32) passthruformula -> . promelaformula
+    (33) quantifier -> . LBRAC RBRAC
+    (34) quantifier -> . LBRAC qlist RBRAC
+    (35) quantifier -> . LBRAC qlist BAR qdifflist RBRAC
+    (42) promelaformula -> . OPAQUEFORMULA
+
+    LBRAC           shift and go to state 48
+    OPAQUEFORMULA   shift and go to state 49
+
+    passthruformula                shift and go to state 65
+    quantifier                     shift and go to state 44
+    promelaformula                 shift and go to state 45
+
+state 57
+
+    (24) worldconstrs -> blanks formula worldconstrs .
+
+    QRY             reduce using rule 24 (worldconstrs -> blanks formula worldconstrs .)
+    $end            reduce using rule 24 (worldconstrs -> blanks formula worldconstrs .)
+
+
+state 58
+
+    (31) passthruformula -> quantifier promelaformula .
+
+    NEWLINE         reduce using rule 31 (passthruformula -> quantifier promelaformula .)
+    ID              reduce using rule 31 (passthruformula -> quantifier promelaformula .)
+    LBRAC           reduce using rule 31 (passthruformula -> quantifier promelaformula .)
+    OPAQUEFORMULA   reduce using rule 31 (passthruformula -> quantifier promelaformula .)
+    NOT             reduce using rule 31 (passthruformula -> quantifier promelaformula .)
+    NEG             reduce using rule 31 (passthruformula -> quantifier promelaformula .)
+    QRY             reduce using rule 31 (passthruformula -> quantifier promelaformula .)
+    $end            reduce using rule 31 (passthruformula -> quantifier promelaformula .)
+
+
+state 59
+
+    (29) flatfactformula -> ID LPAREN . ID RPAREN
+
+    ID              shift and go to state 66
+
+
+state 60
+
+    (30) flatfactformula -> neg ID . LPAREN ID RPAREN
+
+    LPAREN          shift and go to state 67
+
+
+state 61
+
+    (33) quantifier -> LBRAC RBRAC .
+
+    OPAQUEFORMULA   reduce using rule 33 (quantifier -> LBRAC RBRAC .)
+
+
+state 62
+
+    (34) quantifier -> LBRAC qlist . RBRAC
+    (35) quantifier -> LBRAC qlist . BAR qdifflist RBRAC
+
+    RBRAC           shift and go to state 68
+    BAR             shift and go to state 69
+
+
+state 63
+
+    (36) qlist -> VAR . COMMA qlist
+    (37) qlist -> VAR .
+
+    COMMA           shift and go to state 70
+    RBRAC           reduce using rule 37 (qlist -> VAR .)
+    BAR             reduce using rule 37 (qlist -> VAR .)
+
+
+state 64
+
+    (38) qlist -> EVAR .
+
+    RBRAC           reduce using rule 38 (qlist -> EVAR .)
+    BAR             reduce using rule 38 (qlist -> EVAR .)
+
+
+state 65
+
+    (45) query -> QRY COLON passthruformula . blanks
+    (3) blanks -> . NEWLINE blanks
+    (4) blanks -> .
+
+    NEWLINE         shift and go to state 4
+    $end            reduce using rule 4 (blanks -> .)
+
+    blanks                         shift and go to state 71
+
+state 66
+
+    (29) flatfactformula -> ID LPAREN ID . RPAREN
+
+    RPAREN          shift and go to state 72
+
+
+state 67
+
+    (30) flatfactformula -> neg ID LPAREN . ID RPAREN
+
+    ID              shift and go to state 73
+
+
+state 68
+
+    (34) quantifier -> LBRAC qlist RBRAC .
+
+    OPAQUEFORMULA   reduce using rule 34 (quantifier -> LBRAC qlist RBRAC .)
+
+
+state 69
+
+    (35) quantifier -> LBRAC qlist BAR . qdifflist RBRAC
+    (39) qdifflist -> . diff COMMA qdifflist
+    (40) qdifflist -> . diff
+    (41) diff -> . VAR NEQ VAR
+
+    VAR             shift and go to state 76
+
+    qdifflist                      shift and go to state 74
+    diff                           shift and go to state 75
+
+state 70
+
+    (36) qlist -> VAR COMMA . qlist
+    (36) qlist -> . VAR COMMA qlist
+    (37) qlist -> . VAR
+    (38) qlist -> . EVAR
+
+    VAR             shift and go to state 63
+    EVAR            shift and go to state 64
+
+    qlist                          shift and go to state 77
+
+state 71
+
+    (45) query -> QRY COLON passthruformula blanks .
+
+    $end            reduce using rule 45 (query -> QRY COLON passthruformula blanks .)
+
+
+state 72
+
+    (29) flatfactformula -> ID LPAREN ID RPAREN .
+
+    NEWLINE         reduce using rule 29 (flatfactformula -> ID LPAREN ID RPAREN .)
+    ID              reduce using rule 29 (flatfactformula -> ID LPAREN ID RPAREN .)
+    LBRAC           reduce using rule 29 (flatfactformula -> ID LPAREN ID RPAREN .)
+    OPAQUEFORMULA   reduce using rule 29 (flatfactformula -> ID LPAREN ID RPAREN .)
+    NOT             reduce using rule 29 (flatfactformula -> ID LPAREN ID RPAREN .)
+    NEG             reduce using rule 29 (flatfactformula -> ID LPAREN ID RPAREN .)
+    QRY             reduce using rule 29 (flatfactformula -> ID LPAREN ID RPAREN .)
+    $end            reduce using rule 29 (flatfactformula -> ID LPAREN ID RPAREN .)
+
+
+state 73
+
+    (30) flatfactformula -> neg ID LPAREN ID . RPAREN
+
+    RPAREN          shift and go to state 78
+
+
+state 74
+
+    (35) quantifier -> LBRAC qlist BAR qdifflist . RBRAC
+
+    RBRAC           shift and go to state 79
+
+
+state 75
+
+    (39) qdifflist -> diff . COMMA qdifflist
+    (40) qdifflist -> diff .
+
+    COMMA           shift and go to state 80
+    RBRAC           reduce using rule 40 (qdifflist -> diff .)
+
+
+state 76
+
+    (41) diff -> VAR . NEQ VAR
+
+    NEQ             shift and go to state 81
+
+
+state 77
+
+    (36) qlist -> VAR COMMA qlist .
+
+    RBRAC           reduce using rule 36 (qlist -> VAR COMMA qlist .)
+    BAR             reduce using rule 36 (qlist -> VAR COMMA qlist .)
+
+
+state 78
+
+    (30) flatfactformula -> neg ID LPAREN ID RPAREN .
+
+    NEWLINE         reduce using rule 30 (flatfactformula -> neg ID LPAREN ID RPAREN .)
+    ID              reduce using rule 30 (flatfactformula -> neg ID LPAREN ID RPAREN .)
+    LBRAC           reduce using rule 30 (flatfactformula -> neg ID LPAREN ID RPAREN .)
+    OPAQUEFORMULA   reduce using rule 30 (flatfactformula -> neg ID LPAREN ID RPAREN .)
+    NOT             reduce using rule 30 (flatfactformula -> neg ID LPAREN ID RPAREN .)
+    NEG             reduce using rule 30 (flatfactformula -> neg ID LPAREN ID RPAREN .)
+    QRY             reduce using rule 30 (flatfactformula -> neg ID LPAREN ID RPAREN .)
+    $end            reduce using rule 30 (flatfactformula -> neg ID LPAREN ID RPAREN .)
+
+
+state 79
+
+    (35) quantifier -> LBRAC qlist BAR qdifflist RBRAC .
+
+    OPAQUEFORMULA   reduce using rule 35 (quantifier -> LBRAC qlist BAR qdifflist RBRAC .)
+
+
+state 80
+
+    (39) qdifflist -> diff COMMA . qdifflist
+    (39) qdifflist -> . diff COMMA qdifflist
+    (40) qdifflist -> . diff
+    (41) diff -> . VAR NEQ VAR
+
+    VAR             shift and go to state 76
+
+    diff                           shift and go to state 75
+    qdifflist                      shift and go to state 82
+
+state 81
+
+    (41) diff -> VAR NEQ . VAR
+
+    VAR             shift and go to state 83
+
+
+state 82
+
+    (39) qdifflist -> diff COMMA qdifflist .
+
+    RBRAC           reduce using rule 39 (qdifflist -> diff COMMA qdifflist .)
+
+
+state 83
+
+    (41) diff -> VAR NEQ VAR .
+
+    COMMA           reduce using rule 41 (diff -> VAR NEQ VAR .)
+    RBRAC           reduce using rule 41 (diff -> VAR NEQ VAR .)
+
+WARNING: 
+WARNING: Conflicts:
+WARNING: 
+WARNING: shift/reduce conflict for NEWLINE in state 0 resolved as shift
+WARNING: shift/reduce conflict for NEWLINE in state 2 resolved as shift
+WARNING: shift/reduce conflict for NEWLINE in state 4 resolved as shift
+WARNING: shift/reduce conflict for NEWLINE in state 5 resolved as shift
+WARNING: shift/reduce conflict for NEWLINE in state 7 resolved as shift
+WARNING: shift/reduce conflict for NEWLINE in state 7 resolved as shift
+WARNING: shift/reduce conflict for NEWLINE in state 12 resolved as shift
+WARNING: shift/reduce conflict for NEWLINE in state 12 resolved as shift
+WARNING: shift/reduce conflict for NEWLINE in state 18 resolved as shift
+WARNING: shift/reduce conflict for NEWLINE in state 18 resolved as shift
+WARNING: reduce/reduce conflict in state 7 resolved using rule (blanks -> <empty>)
+WARNING: rejected rule (locations -> blanks loc) in state 7
+WARNING: reduce/reduce conflict in state 12 resolved using rule (blanks -> <empty>)
+WARNING: rejected rule (transitions -> blanks trx) in state 12
+WARNING: reduce/reduce conflict in state 18 resolved using rule (blanks -> <empty>)
+WARNING: rejected rule (obscosts -> blanks ocost) in state 18
+WARNING: reduce/reduce conflict in state 25 resolved using rule (blanks -> <empty>)
+WARNING: rejected rule (properties -> blanks prop) in state 25
+WARNING: reduce/reduce conflict in state 41 resolved using rule (blanks -> <empty>)
+WARNING: rejected rule (worldconstrs -> blanks formula) in state 41
+WARNING: Rule (locations -> blanks loc) is never reduced
+WARNING: Rule (transitions -> blanks trx) is never reduced
+WARNING: Rule (obscosts -> blanks ocost) is never reduced
+WARNING: Rule (properties -> blanks prop) is never reduced
+WARNING: Rule (worldconstrs -> blanks formula) is never reduced
