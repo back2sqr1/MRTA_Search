@@ -4,10 +4,13 @@ import re, sys
 
 reserved = {
    'location'               : 'LOC',
+   'at'                     : 'AT',
    'transition'             : 'TRX',
    'recognizable-property'  : 'PRP',
    'observation-cost'       : 'OCS',
-   'starting-location'       :'STL',
+   'robots'                 : 'ROB',
+   'robot'                  : 'ROBOT',
+   'starts-at'              : 'STARTS',
    r'Query'                 : 'QRY',
    }
 
@@ -103,18 +106,24 @@ class Node:
 
 # Precedence rules for the arithmetic operators
 precedence = (
-    ('left','LOC','TRX','OCS', 'PRP', 'STL'),
+    ('left','LOC','AT','TRX','OCS', 'PRP', 'ROB', 'ROBOT', 'STARTS'),
     #('right','NOT'),
     #('left','AND','OR'),
     )
 
 def p_world_spec(p):
-    '''spec : locations transitions obscosts properties startloc worldconstrs query
-            | locations transitions obscosts properties startloc worldconstrs'''
-    if len(p) == 8:
-        p[0] = {'locations':p[1], 'transitions':p[2], 'obscosts':p[3], 'properties':p[4], 'startloc':p[5], 'constraints':p[6], 'query':p[7]}
-    else:
-        p[0] = {'locations':p[1], 'transitions':p[2], 'obscosts':p[3], 'properties':p[4], 'startloc':p[5], 'constraints':p[6], 'query':None}
+    '''spec : locations robots properties worldconstrs query
+            | locations robots properties worldconstrs
+            | locations transitions obscosts properties worldconstrs query
+            | locations transitions obscosts properties worldconstrs'''
+    if len(p) == 6:  # new format with robots
+        p[0] = {'locations':p[1], 'robots':p[2], 'transitions':[], 'obscosts':[], 'properties':p[3], 'constraints':p[4], 'query':p[5]}
+    elif len(p) == 5:  # new format with robots, no query
+        p[0] = {'locations':p[1], 'robots':p[2], 'transitions':[], 'obscosts':[], 'properties':p[3], 'constraints':p[4], 'query':None}
+    elif len(p) == 7:  # old format with transitions/obscosts
+        p[0] = {'locations':p[1], 'robots':{'num_robots': 1, 'robot_starts': []}, 'transitions':p[2], 'obscosts':p[3], 'properties':p[4], 'constraints':p[5], 'query':p[6]}
+    else:  # old format with transitions/obscosts, no query
+        p[0] = {'locations':p[1], 'robots':{'num_robots': 1, 'robot_starts': []}, 'transitions':p[2], 'obscosts':p[3], 'properties':p[4], 'constraints':p[5], 'query':None}
 
 def p_blanks(p): # This is a bit obnoxious, but we need the tokenizer to give us blank lines because we used it as a delimiter
     '''blanks : NEWLINE blanks
@@ -132,8 +141,43 @@ def p_locations(p):
         p[0] = [p[2]] + p[3] # general list
 
 def p_loc(p):
-    '''loc : LOC ID NEWLINE'''
+    '''loc : LOC ID AT INT COMMA INT NEWLINE
+           | LOC ID NEWLINE'''
+    if len(p) == 4:  # Old format: location name
+        p[0] = {'name': p[2], 'x': None, 'y': None}
+    else:  # New format: location name at x, y
+        p[0] = {'name': p[2], 'x': p[4], 'y': p[6]}
+
+
+def p_robots(p):
+    '''robots : blanks robotcount robotstarts
+              | blanks robotcount
+              | blanks'''
+    if len(p) == 2:  # No robots section
+        p[0] = {'num_robots': 1, 'robot_starts': []}
+    elif len(p) == 3:  # Only robot count
+        p[0] = {'num_robots': p[2], 'robot_starts': []}
+    else:  # Robot count and starts
+        p[0] = {'num_robots': p[2], 'robot_starts': p[3]}
+
+def p_robotcount(p):
+    '''robotcount : ROB INT NEWLINE'''
     p[0] = p[2]
+
+def p_robotstarts(p):
+    '''robotstarts : blanks robotstart robotstarts
+                   | blanks robotstart
+                   | blanks'''
+    if len(p) == 2:
+        p[0] = []  # empty case
+    elif len(p) == 3:
+        p[0] = [p[2]]  # singleton case
+    else:
+        p[0] = [p[2]] + p[3]  # general list
+
+def p_robotstart(p):
+    '''robotstart : ROBOT ID STARTS ID NEWLINE'''
+    p[0] = {'robot_id': p[2], 'start_location': p[4]}
 
 
 def p_transitions(p):
@@ -188,10 +232,6 @@ def p_properties(p):
 
 def p_prop(p):
     '''prop : PRP ID NEWLINE'''
-    p[0] = p[2]
-
-def p_startloc(p):
-    '''startloc : STL ID NEWLINE'''
     p[0] = p[2]
 
 def p_worldconstrs(p): 

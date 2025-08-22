@@ -5,9 +5,9 @@ _tabversion = '3.10'
 
 _lr_method = 'LALR'
 
-_lr_signature = 'leftLOCTRXOCSPRPSTLID VAR EVAR NEWLINE FLOAT INT LBRAC RBRAC LPAREN RPAREN OPAQUEFORMULA COMMA COLON BAR NEQ NOT NEG LOC TRX PRP OCS STL QRYspec : locations transitions obscosts properties startloc worldconstrs query\n            | locations transitions obscosts properties startloc worldconstrsblanks : NEWLINE blanks\n              | locations : blanks loc locations\n                 | blanks loc\n                 | blanksloc : LOC ID NEWLINEtransitions  : blanks trx transitions\n                    | blanks trx\n                    | blankstrx : TRX ID ID num NEWLINEnum : FLOAT\n           | INTobscosts : blanks ocost obscosts\n                | blanks ocost\n                | blanksocost : OCS ID num NEWLINEproperties : blanks prop properties\n                  | blanks prop\n                  | blanksprop : PRP ID NEWLINEstartloc : STL ID NEWLINEworldconstrs : blanks formula worldconstrs \n                    | blanks formula\n                    | blanksformula : passthruformula\n               | flatfactformulaflatfactformula : ID LPAREN ID RPAREN\n                       | neg ID LPAREN ID RPARENpassthruformula : quantifier promelaformula\n                       | promelaformulaquantifier : LBRAC RBRAC\n                  | LBRAC qlist RBRAC\n                  | LBRAC qlist BAR qdifflist RBRACqlist : VAR COMMA qlist\n             | VAR\n             | EVARqdifflist : diff COMMA qdifflist\n                 | diff diff : VAR NEQ VARpromelaformula : OPAQUEFORMULAneg : NOT \n           | NEGquery : QRY COLON passthruformula blanks'
+_lr_signature = 'leftLOCATTRXOCSPRPROBROBOTSTARTSID VAR EVAR NEWLINE FLOAT INT LBRAC RBRAC LPAREN RPAREN OPAQUEFORMULA COMMA COLON BAR NEQ NOT NEG LOC AT TRX PRP OCS ROB ROBOT STARTS QRYspec : locations robots properties worldconstrs query\n            | locations robots properties worldconstrs\n            | locations transitions obscosts properties worldconstrs query\n            | locations transitions obscosts properties worldconstrsblanks : NEWLINE blanks\n              | locations : blanks loc locations\n                 | blanks loc\n                 | blanksloc : LOC ID AT INT COMMA INT NEWLINE\n           | LOC ID NEWLINErobots : blanks robotcount robotstarts\n              | blanks robotcount\n              | blanksrobotcount : ROB INT NEWLINErobotstarts : blanks robotstart robotstarts\n                   | blanks robotstart\n                   | blanksrobotstart : ROBOT ID STARTS ID NEWLINEtransitions  : blanks trx transitions\n                    | blanks trx\n                    | blankstrx : TRX ID ID num NEWLINEnum : FLOAT\n           | INTobscosts : blanks ocost obscosts\n                | blanks ocost\n                | blanksocost : OCS ID num NEWLINEproperties : blanks prop properties\n                  | blanks prop\n                  | blanksprop : PRP ID NEWLINEworldconstrs : blanks formula worldconstrs \n                    | blanks formula\n                    | blanksformula : passthruformula\n               | flatfactformulaflatfactformula : ID LPAREN ID RPAREN\n                       | neg ID LPAREN ID RPARENpassthruformula : quantifier promelaformula\n                       | promelaformulaquantifier : LBRAC RBRAC\n                  | LBRAC qlist RBRAC\n                  | LBRAC qlist BAR qdifflist RBRACqlist : VAR COMMA qlist\n             | VAR\n             | EVARqdifflist : diff COMMA qdifflist\n                 | diff diff : VAR NEQ VARpromelaformula : OPAQUEFORMULAneg : NOT \n           | NEGquery : QRY COLON passthruformula blanks'
     
-_lr_action_items = {'NEWLINE':([0,2,3,4,5,6,7,9,10,11,12,14,15,18,20,22,23,25,27,32,34,35,36,37,38,41,42,43,45,49,52,53,54,55,58,65,72,78,],[4,4,-7,4,4,-11,4,-3,4,-17,4,-5,22,4,-9,-8,4,4,-15,52,53,54,-13,-14,55,4,-27,-28,-32,-42,-23,-22,-18,-12,-31,4,-29,-30,]),'LOC':([0,3,4,7,9,22,],[-4,8,-4,-4,-3,-8,]),'STL':([0,2,3,4,5,6,7,9,10,11,12,14,16,17,18,20,22,25,27,33,53,54,55,],[-4,-4,-7,-4,-4,-11,-4,-3,-4,-17,-4,-5,24,-21,-4,-9,-8,-4,-15,-19,-22,-18,-12,]),'PRP':([0,2,3,4,5,6,7,9,10,11,12,14,17,18,20,22,25,27,53,54,55,],[-4,-4,-7,-4,-4,-11,-4,-3,-4,-17,-4,-5,26,-4,-9,-8,-4,-15,-22,-18,-12,]),'OCS':([0,2,3,4,5,6,7,9,11,12,14,18,20,22,54,55,],[-4,-4,-7,-4,-4,-11,-4,-3,19,-4,-5,-4,-9,-8,-18,-12,]),'TRX':([0,2,3,4,6,7,9,12,14,22,55,],[-4,-4,-7,-4,13,-4,-3,-4,-5,-8,-12,]),'$end':([1,4,9,23,30,31,39,41,42,43,45,49,52,57,58,65,71,72,78,],[0,-4,-3,-4,-2,-26,-1,-4,-27,-28,-32,-42,-23,-24,-31,-4,-45,-29,-30,]),'ID':([4,8,9,13,19,21,23,24,26,31,41,42,43,45,47,49,50,51,52,58,59,67,72,78,],[-4,15,-3,21,28,29,-4,32,34,46,-4,-27,-28,-32,60,-42,-43,-44,-23,-31,66,73,-29,-30,]),'LBRAC':([4,9,23,31,41,42,43,45,49,52,56,58,72,78,],[-4,-3,-4,48,-4,-27,-28,-32,-42,-23,48,-31,-29,-30,]),'OPAQUEFORMULA':([4,9,23,31,41,42,43,44,45,49,52,56,58,61,68,72,78,79,],[-4,-3,-4,49,-4,-27,-28,49,-32,-42,-23,49,-31,-33,-34,-29,-30,-35,]),'NOT':([4,9,23,31,41,42,43,45,49,52,58,72,78,],[-4,-3,-4,50,-4,-27,-28,-32,-42,-23,-31,-29,-30,]),'NEG':([4,9,23,31,41,42,43,45,49,52,58,72,78,],[-4,-3,-4,51,-4,-27,-28,-32,-42,-23,-31,-29,-30,]),'QRY':([4,9,23,30,31,41,42,43,45,49,52,57,58,72,78,],[-4,-3,-4,40,-26,-4,-27,-28,-32,-42,-23,-24,-31,-29,-30,]),'FLOAT':([28,29,],[36,36,]),'INT':([28,29,],[37,37,]),'COLON':([40,],[56,]),'LPAREN':([46,60,],[59,67,]),'RBRAC':([48,62,63,64,74,75,77,82,83,],[61,68,-37,-38,79,-40,-36,-39,-41,]),'VAR':([48,69,70,80,81,],[63,76,63,76,83,]),'EVAR':([48,70,],[64,64,]),'BAR':([62,63,64,77,],[69,-37,-38,-36,]),'COMMA':([63,75,83,],[70,80,-41,]),'RPAREN':([66,73,],[72,78,]),'NEQ':([76,],[81,]),}
+_lr_action_items = {'NEWLINE':([0,2,3,4,5,6,7,8,10,11,12,13,14,15,16,19,20,23,25,26,28,29,30,31,32,35,38,39,40,42,46,49,50,52,54,56,61,68,70,71,72,73,75,77,83,85,86,88,94,95,96,100,],[4,4,-9,4,4,4,-14,4,-5,4,-32,4,-28,4,4,-7,35,4,4,4,-18,-12,-22,-20,56,-11,4,-37,-38,-42,-52,-30,68,-26,4,-15,-41,-33,83,-24,-25,-16,85,4,-29,-23,95,-39,100,-10,-40,-19,]),'LOC':([0,3,4,8,10,35,95,],[-6,9,-6,-6,-5,-11,-10,]),'QRY':([0,2,3,4,5,6,7,8,10,11,12,13,14,15,16,19,21,22,23,25,26,28,29,30,31,35,38,39,40,42,46,49,51,52,54,56,60,61,68,73,83,85,88,95,96,100,],[-6,-6,-9,-6,-6,-6,-14,-6,-5,-6,-32,-6,-28,-6,-6,-7,37,-36,-6,-6,-6,-18,-12,-22,-20,-11,-6,-37,-38,-42,-52,-30,37,-26,-6,-15,-34,-41,-33,-16,-29,-23,-39,-10,-40,-19,]),'ID':([0,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,18,19,22,23,24,25,26,27,28,29,30,31,33,35,38,39,40,42,44,46,47,48,49,52,54,55,56,61,62,68,73,79,83,84,85,88,95,96,100,],[-6,-6,-9,-6,-6,-6,-14,-6,20,-5,-6,-32,-6,-28,-6,-6,33,-7,43,-6,50,-6,-6,53,-18,-12,-22,-20,57,-11,-6,-37,-38,-42,63,-52,-53,-54,-30,-26,-6,74,-15,-41,78,-33,-16,89,-29,94,-23,-39,-10,-40,-19,]),'LBRAC':([0,2,3,4,5,6,7,8,10,11,12,13,14,15,16,19,22,23,25,26,28,29,30,31,35,38,39,40,42,46,49,52,54,56,59,61,68,73,83,85,88,95,96,100,],[-6,-6,-9,-6,-6,-6,-14,-6,-5,-6,-32,-6,-28,-6,-6,-7,45,-6,-6,-6,-18,-12,-22,-20,-11,-6,-37,-38,-42,-52,-30,-26,-6,-15,45,-41,-33,-16,-29,-23,-39,-10,-40,-19,]),'OPAQUEFORMULA':([0,2,3,4,5,6,7,8,10,11,12,13,14,15,16,19,22,23,25,26,28,29,30,31,35,38,39,40,41,42,46,49,52,54,56,59,61,64,68,73,80,83,85,88,95,96,97,100,],[-6,-6,-9,-6,-6,-6,-14,-6,-5,-6,-32,-6,-28,-6,-6,-7,46,-6,-6,-6,-18,-12,-22,-20,-11,-6,-37,-38,46,-42,-52,-30,-26,-6,-15,46,-41,-43,-33,-16,-44,-29,-23,-39,-10,-40,-45,-19,]),'NOT':([0,2,3,4,5,6,7,8,10,11,12,13,14,15,16,19,22,23,25,26,28,29,30,31,35,38,39,40,42,46,49,52,54,56,61,68,73,83,85,88,95,96,100,],[-6,-6,-9,-6,-6,-6,-14,-6,-5,-6,-32,-6,-28,-6,-6,-7,47,-6,-6,-6,-18,-12,-22,-20,-11,-6,-37,-38,-42,-52,-30,-26,-6,-15,-41,-33,-16,-29,-23,-39,-10,-40,-19,]),'NEG':([0,2,3,4,5,6,7,8,10,11,12,13,14,15,16,19,22,23,25,26,28,29,30,31,35,38,39,40,42,46,49,52,54,56,61,68,73,83,85,88,95,96,100,],[-6,-6,-9,-6,-6,-6,-14,-6,-5,-6,-32,-6,-28,-6,-6,-7,48,-6,-6,-6,-18,-12,-22,-20,-11,-6,-37,-38,-42,-52,-30,-26,-6,-15,-41,-33,-16,-29,-23,-39,-10,-40,-19,]),'PRP':([0,2,3,4,5,6,7,8,10,12,13,14,15,16,19,23,26,28,29,30,31,35,52,54,56,68,73,83,85,95,100,],[-6,-6,-9,-6,-6,-6,-14,-6,-5,24,-6,-28,-6,-6,-7,-6,-6,-18,-12,-22,-20,-11,-26,-6,-15,-33,-16,-29,-23,-10,-19,]),'OCS':([0,2,3,4,6,7,8,10,14,16,19,26,30,31,35,83,85,95,],[-6,-6,-9,-6,-6,-22,-6,-5,27,-6,-7,-6,-22,-20,-11,-29,-23,-10,]),'ROB':([0,2,3,4,7,8,10,19,35,95,],[-6,-6,-9,-6,17,-6,-5,-7,-11,-10,]),'TRX':([0,2,3,4,7,8,10,16,19,30,35,85,95,],[-6,-6,-9,-6,18,-6,-5,-6,-7,18,-11,-23,-10,]),'$end':([0,1,2,3,4,5,6,7,8,10,11,12,13,14,15,16,19,21,22,23,25,26,28,29,30,31,35,36,38,39,40,42,46,49,51,52,54,56,60,61,68,69,73,77,83,85,87,88,95,96,100,],[-6,0,-6,-9,-6,-6,-6,-14,-6,-5,-6,-32,-6,-28,-6,-6,-7,-2,-36,-6,-6,-6,-18,-12,-22,-20,-11,-1,-6,-37,-38,-42,-52,-30,-4,-26,-6,-15,-34,-41,-33,-3,-16,-6,-29,-23,-55,-39,-10,-40,-19,]),'ROBOT':([4,10,15,28,54,56,100,],[-6,-5,-6,55,-6,-15,-19,]),'INT':([17,34,53,57,76,],[32,58,72,72,86,]),'AT':([20,],[34,]),'COLON':([37,],[59,]),'LPAREN':([43,63,],[62,79,]),'RBRAC':([45,65,66,67,90,91,93,101,102,],[64,80,-47,-48,97,-50,-46,-49,-51,]),'VAR':([45,81,82,98,99,],[66,92,66,92,102,]),'EVAR':([45,82,],[67,67,]),'FLOAT':([53,57,],[71,71,]),'COMMA':([58,66,91,102,],[76,82,98,-51,]),'BAR':([65,66,67,93,],[81,-47,-48,-46,]),'STARTS':([74,],[84,]),'RPAREN':([78,89,],[88,96,]),'NEQ':([92,],[99,]),}
 
 _lr_action = {}
 for _k, _v in _lr_action_items.items():
@@ -16,7 +16,7 @@ for _k, _v in _lr_action_items.items():
       _lr_action[_x][_k] = _y
 del _lr_action_items
 
-_lr_goto_items = {'spec':([0,],[1,]),'locations':([0,7,],[2,14,]),'blanks':([0,2,4,5,7,10,12,18,23,25,41,65,],[3,6,9,11,3,17,6,11,31,17,31,71,]),'transitions':([2,12,],[5,20,]),'loc':([3,],[7,]),'obscosts':([5,18,],[10,27,]),'trx':([6,],[12,]),'properties':([10,25,],[16,33,]),'ocost':([11,],[18,]),'startloc':([16,],[23,]),'prop':([17,],[25,]),'worldconstrs':([23,41,],[30,57,]),'num':([28,29,],[35,38,]),'query':([30,],[39,]),'formula':([31,],[41,]),'passthruformula':([31,56,],[42,65,]),'flatfactformula':([31,],[43,]),'quantifier':([31,56,],[44,44,]),'promelaformula':([31,44,56,],[45,58,45,]),'neg':([31,],[47,]),'qlist':([48,70,],[62,77,]),'qdifflist':([69,80,],[74,82,]),'diff':([69,80,],[75,75,]),}
+_lr_goto_items = {'spec':([0,],[1,]),'locations':([0,8,],[2,19,]),'blanks':([0,2,4,5,6,8,11,13,15,16,23,25,26,38,54,77,],[3,7,10,12,14,3,22,12,28,30,12,22,14,22,28,87,]),'robots':([2,],[5,]),'transitions':([2,16,],[6,31,]),'loc':([3,],[8,]),'properties':([5,13,23,],[11,25,49,]),'obscosts':([6,26,],[13,52,]),'robotcount':([7,],[15,]),'trx':([7,30,],[16,16,]),'worldconstrs':([11,25,38,],[21,51,60,]),'prop':([12,],[23,]),'ocost':([14,],[26,]),'robotstarts':([15,54,],[29,73,]),'query':([21,51,],[36,69,]),'formula':([22,],[38,]),'passthruformula':([22,59,],[39,77,]),'flatfactformula':([22,],[40,]),'quantifier':([22,59,],[41,41,]),'promelaformula':([22,41,59,],[42,61,42,]),'neg':([22,],[44,]),'robotstart':([28,],[54,]),'qlist':([45,82,],[65,93,]),'num':([53,57,],[70,75,]),'qdifflist':([81,98,],[90,101,]),'diff':([81,98,],[91,91,]),}
 
 _lr_goto = {}
 for _k, _v in _lr_goto_items.items():
@@ -26,49 +26,59 @@ for _k, _v in _lr_goto_items.items():
 del _lr_goto_items
 _lr_productions = [
   ("S' -> spec","S'",1,None,None,None),
-  ('spec -> locations transitions obscosts properties startloc worldconstrs query','spec',7,'p_world_spec','sparser.py',112),
-  ('spec -> locations transitions obscosts properties startloc worldconstrs','spec',6,'p_world_spec','sparser.py',113),
-  ('blanks -> NEWLINE blanks','blanks',2,'p_blanks','sparser.py',120),
-  ('blanks -> <empty>','blanks',0,'p_blanks','sparser.py',121),
-  ('locations -> blanks loc locations','locations',3,'p_locations','sparser.py',124),
-  ('locations -> blanks loc','locations',2,'p_locations','sparser.py',125),
-  ('locations -> blanks','locations',1,'p_locations','sparser.py',126),
-  ('loc -> LOC ID NEWLINE','loc',3,'p_loc','sparser.py',135),
-  ('transitions -> blanks trx transitions','transitions',3,'p_transitions','sparser.py',140),
-  ('transitions -> blanks trx','transitions',2,'p_transitions','sparser.py',141),
-  ('transitions -> blanks','transitions',1,'p_transitions','sparser.py',142),
-  ('trx -> TRX ID ID num NEWLINE','trx',5,'p_trx','sparser.py',152),
-  ('num -> FLOAT','num',1,'p_num','sparser.py',157),
-  ('num -> INT','num',1,'p_num','sparser.py',158),
-  ('obscosts -> blanks ocost obscosts','obscosts',3,'p_obscosts','sparser.py',162),
-  ('obscosts -> blanks ocost','obscosts',2,'p_obscosts','sparser.py',163),
-  ('obscosts -> blanks','obscosts',1,'p_obscosts','sparser.py',164),
-  ('ocost -> OCS ID num NEWLINE','ocost',4,'p_ocost','sparser.py',174),
-  ('properties -> blanks prop properties','properties',3,'p_properties','sparser.py',179),
-  ('properties -> blanks prop','properties',2,'p_properties','sparser.py',180),
-  ('properties -> blanks','properties',1,'p_properties','sparser.py',181),
-  ('prop -> PRP ID NEWLINE','prop',3,'p_prop','sparser.py',190),
-  ('startloc -> STL ID NEWLINE','startloc',3,'p_startloc','sparser.py',194),
-  ('worldconstrs -> blanks formula worldconstrs','worldconstrs',3,'p_worldconstrs','sparser.py',198),
-  ('worldconstrs -> blanks formula','worldconstrs',2,'p_worldconstrs','sparser.py',199),
-  ('worldconstrs -> blanks','worldconstrs',1,'p_worldconstrs','sparser.py',200),
-  ('formula -> passthruformula','formula',1,'p_formula','sparser.py',210),
-  ('formula -> flatfactformula','formula',1,'p_formula','sparser.py',211),
-  ('flatfactformula -> ID LPAREN ID RPAREN','flatfactformula',4,'p_flatfactformula','sparser.py',215),
-  ('flatfactformula -> neg ID LPAREN ID RPAREN','flatfactformula',5,'p_flatfactformula','sparser.py',216),
-  ('passthruformula -> quantifier promelaformula','passthruformula',2,'p_passthruformula','sparser.py',230),
-  ('passthruformula -> promelaformula','passthruformula',1,'p_passthruformula','sparser.py',231),
-  ('quantifier -> LBRAC RBRAC','quantifier',2,'p_quantifier','sparser.py',239),
-  ('quantifier -> LBRAC qlist RBRAC','quantifier',3,'p_quantifier','sparser.py',240),
-  ('quantifier -> LBRAC qlist BAR qdifflist RBRAC','quantifier',5,'p_quantifier','sparser.py',241),
-  ('qlist -> VAR COMMA qlist','qlist',3,'p_qlist','sparser.py',250),
-  ('qlist -> VAR','qlist',1,'p_qlist','sparser.py',251),
-  ('qlist -> EVAR','qlist',1,'p_qlist','sparser.py',252),
-  ('qdifflist -> diff COMMA qdifflist','qdifflist',3,'p_qdifflist','sparser.py',259),
-  ('qdifflist -> diff','qdifflist',1,'p_qdifflist','sparser.py',260),
-  ('diff -> VAR NEQ VAR','diff',3,'p_diff','sparser.py',267),
-  ('promelaformula -> OPAQUEFORMULA','promelaformula',1,'p_promelaformula','sparser.py',272),
-  ('neg -> NOT','neg',1,'p_neg','sparser.py',276),
-  ('neg -> NEG','neg',1,'p_neg','sparser.py',277),
-  ('query -> QRY COLON passthruformula blanks','query',4,'p_query','sparser.py',281),
+  ('spec -> locations robots properties worldconstrs query','spec',5,'p_world_spec','sparser.py',115),
+  ('spec -> locations robots properties worldconstrs','spec',4,'p_world_spec','sparser.py',116),
+  ('spec -> locations transitions obscosts properties worldconstrs query','spec',6,'p_world_spec','sparser.py',117),
+  ('spec -> locations transitions obscosts properties worldconstrs','spec',5,'p_world_spec','sparser.py',118),
+  ('blanks -> NEWLINE blanks','blanks',2,'p_blanks','sparser.py',129),
+  ('blanks -> <empty>','blanks',0,'p_blanks','sparser.py',130),
+  ('locations -> blanks loc locations','locations',3,'p_locations','sparser.py',133),
+  ('locations -> blanks loc','locations',2,'p_locations','sparser.py',134),
+  ('locations -> blanks','locations',1,'p_locations','sparser.py',135),
+  ('loc -> LOC ID AT INT COMMA INT NEWLINE','loc',7,'p_loc','sparser.py',144),
+  ('loc -> LOC ID NEWLINE','loc',3,'p_loc','sparser.py',145),
+  ('robots -> blanks robotcount robotstarts','robots',3,'p_robots','sparser.py',153),
+  ('robots -> blanks robotcount','robots',2,'p_robots','sparser.py',154),
+  ('robots -> blanks','robots',1,'p_robots','sparser.py',155),
+  ('robotcount -> ROB INT NEWLINE','robotcount',3,'p_robotcount','sparser.py',164),
+  ('robotstarts -> blanks robotstart robotstarts','robotstarts',3,'p_robotstarts','sparser.py',168),
+  ('robotstarts -> blanks robotstart','robotstarts',2,'p_robotstarts','sparser.py',169),
+  ('robotstarts -> blanks','robotstarts',1,'p_robotstarts','sparser.py',170),
+  ('robotstart -> ROBOT ID STARTS ID NEWLINE','robotstart',5,'p_robotstart','sparser.py',179),
+  ('transitions -> blanks trx transitions','transitions',3,'p_transitions','sparser.py',184),
+  ('transitions -> blanks trx','transitions',2,'p_transitions','sparser.py',185),
+  ('transitions -> blanks','transitions',1,'p_transitions','sparser.py',186),
+  ('trx -> TRX ID ID num NEWLINE','trx',5,'p_trx','sparser.py',196),
+  ('num -> FLOAT','num',1,'p_num','sparser.py',201),
+  ('num -> INT','num',1,'p_num','sparser.py',202),
+  ('obscosts -> blanks ocost obscosts','obscosts',3,'p_obscosts','sparser.py',206),
+  ('obscosts -> blanks ocost','obscosts',2,'p_obscosts','sparser.py',207),
+  ('obscosts -> blanks','obscosts',1,'p_obscosts','sparser.py',208),
+  ('ocost -> OCS ID num NEWLINE','ocost',4,'p_ocost','sparser.py',218),
+  ('properties -> blanks prop properties','properties',3,'p_properties','sparser.py',223),
+  ('properties -> blanks prop','properties',2,'p_properties','sparser.py',224),
+  ('properties -> blanks','properties',1,'p_properties','sparser.py',225),
+  ('prop -> PRP ID NEWLINE','prop',3,'p_prop','sparser.py',234),
+  ('worldconstrs -> blanks formula worldconstrs','worldconstrs',3,'p_worldconstrs','sparser.py',238),
+  ('worldconstrs -> blanks formula','worldconstrs',2,'p_worldconstrs','sparser.py',239),
+  ('worldconstrs -> blanks','worldconstrs',1,'p_worldconstrs','sparser.py',240),
+  ('formula -> passthruformula','formula',1,'p_formula','sparser.py',250),
+  ('formula -> flatfactformula','formula',1,'p_formula','sparser.py',251),
+  ('flatfactformula -> ID LPAREN ID RPAREN','flatfactformula',4,'p_flatfactformula','sparser.py',255),
+  ('flatfactformula -> neg ID LPAREN ID RPAREN','flatfactformula',5,'p_flatfactformula','sparser.py',256),
+  ('passthruformula -> quantifier promelaformula','passthruformula',2,'p_passthruformula','sparser.py',270),
+  ('passthruformula -> promelaformula','passthruformula',1,'p_passthruformula','sparser.py',271),
+  ('quantifier -> LBRAC RBRAC','quantifier',2,'p_quantifier','sparser.py',279),
+  ('quantifier -> LBRAC qlist RBRAC','quantifier',3,'p_quantifier','sparser.py',280),
+  ('quantifier -> LBRAC qlist BAR qdifflist RBRAC','quantifier',5,'p_quantifier','sparser.py',281),
+  ('qlist -> VAR COMMA qlist','qlist',3,'p_qlist','sparser.py',290),
+  ('qlist -> VAR','qlist',1,'p_qlist','sparser.py',291),
+  ('qlist -> EVAR','qlist',1,'p_qlist','sparser.py',292),
+  ('qdifflist -> diff COMMA qdifflist','qdifflist',3,'p_qdifflist','sparser.py',299),
+  ('qdifflist -> diff','qdifflist',1,'p_qdifflist','sparser.py',300),
+  ('diff -> VAR NEQ VAR','diff',3,'p_diff','sparser.py',307),
+  ('promelaformula -> OPAQUEFORMULA','promelaformula',1,'p_promelaformula','sparser.py',312),
+  ('neg -> NOT','neg',1,'p_neg','sparser.py',316),
+  ('neg -> NEG','neg',1,'p_neg','sparser.py',317),
+  ('query -> QRY COLON passthruformula blanks','query',4,'p_query','sparser.py',321),
 ]

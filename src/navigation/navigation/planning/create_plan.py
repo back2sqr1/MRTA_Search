@@ -33,6 +33,7 @@ class RobotAssignments:
         return self.__str__()
 
 class SearchTree:
+
     def __init__(self):
         self.location_to_pin : dict[str, tuple[int, int]] = {}
         self.pin_to_location : dict[tuple[int, int], str] = {}
@@ -43,7 +44,31 @@ class SearchTree:
         self.next_query: dict[str, list[str]] = {}
         self.cost_map: dict[str, float] = {}
         self.bdd_config = self.import_bdd_config()
-        
+        self.robot_manager = None
+
+    def import_srql_config(self, adjacency_list: dict[str, list[str]], locs: dict[str, tuple[int, int]], code_to_locations_map: dict[str, list[str]], root: str):
+        bdd_config = {}
+        bdd_config['edges'] = adjacency_list
+        bdd_config['locations'] = locs
+        self.prop_to_location = code_to_locations_map
+        bdd_config['prop_to_location'] = self.prop_to_location
+        for loc, pin in locs.items():
+            tuple_pin = tuple(pin)
+            self.location_to_pin[loc] = tuple_pin
+            self.pin_to_location[tuple_pin] = loc
+            self.location_to_prop[loc] = []
+
+        self.props = set(code_to_locations_map.keys())
+        for prop, locs in bdd_config['prop_to_location'].items():
+            for loc in locs:
+                if loc not in self.location_to_prop:
+                    self.location_to_prop[loc] = []
+                self.location_to_prop[loc].append(prop)
+
+        self.next_query = bdd_config['edges']
+        self.starting_prop = root
+
+        return bdd_config
 
     def import_bdd_config(self):
         with open ('src/my_robot_bringup/config/bdd.json', 'r') as file:
@@ -93,11 +118,10 @@ class SearchTree:
         
         return visited_locations
 
-    def process_robot_movement(self, robot_manager: RobotManager, robot_map: RobotMap, current_node: TimeStepNode):
-        while robot_manager.count_traveling_robots(robot_map=robot_map) > 0:
-            arrived_robots = robot_manager.update_robot_positions(robot_map=robot_map)
-            
- 
+    def process_robot_movement(self, robot_map: RobotMap, current_node: TimeStepNode):
+        while self.robot_manager.count_traveling_robots(robot_map=robot_map) > 0:
+            arrived_robots = self.robot_manager.update_robot_positions(robot_map=robot_map)
+
             robot_moving_node = TimeStepNode(
                 robot_map=robot_map,
                 id = str(uuid.uuid1()),
@@ -130,18 +154,20 @@ class SearchTree:
 
             current_node.next.append(query_node)
             current_node = query_node
-            robot_manager.update_time_step(current_node, visited_locations)
+            self.robot_manager.update_time_step(current_node, visited_locations)
         return current_node
 
-    def process_combinations(self, combination: dict[str, str], robot_manager: RobotManager, current_time_step: TimeStepNode, robot_map_original: RobotMap):
+    def process_combinations(self, combination: dict[str, str], current_time_step: TimeStepNode, robot_map_original: RobotMap):
         robot_map = copy.deepcopy(robot_map_original)
         for robot_id, location in combination.items():
-            robot_manager.assign_robot_to_location(robot_id=robot_id, location=location, robot_map=robot_map)
-        
-        self.process_robot_movement(robot_manager, robot_map, current_time_step)
+            self.robot_manager.assign_robot_to_location(robot_id=robot_id, location=location, robot_map=robot_map)
+
+        self.process_robot_movement(robot_map, current_time_step)
 
     def search(self, initial_robot_map: RobotMap, initial_resolution: dict[str, str]) -> TimeStepNode:
-        robot_manager = RobotManager(
+
+
+        self.robot_manager = RobotManager(
             robot_map=copy.deepcopy(initial_robot_map),
             next_question_map=self.next_query,
             initial_question=self.starting_prop,
@@ -152,26 +178,28 @@ class SearchTree:
             initial_resolution=copy.deepcopy(initial_resolution)
         )
 
-        while robot_manager.time_step_queue: 
-            current_time_step = robot_manager.time_step_queue.pop(0)
-        
+
+
+        while self.robot_manager.time_step_queue: 
+            current_time_step = self.robot_manager.time_step_queue.pop(0)
+
             if not current_time_step.robot_map:
                 continue
             
             original_robot_map = copy.deepcopy(current_time_step.robot_map)
-            combinations = robot_manager.generate_combinations(
-                property=current_time_step.query, 
+            combinations = self.robot_manager.generate_combinations(
+                property=current_time_step.query,  
                 robot_map=original_robot_map,
                 visited_locations=current_time_step.visited_locations
             )
 
+
             for combination in combinations:
                 self.process_combinations(combination=combination,
-                                          robot_manager=robot_manager,
                                           current_time_step=current_time_step,
                                           robot_map_original=original_robot_map)
-        return robot_manager.head_time_step_node
-    
+        return self.robot_manager.head_time_step_node
+
 
     def determine_cost(self, node: TimeStepNode, recursive_count:int = 0) -> float:
         if len(node.next) == 0:
@@ -231,29 +259,7 @@ class SearchTree:
 
         return (best_plan, best_plan_text)
 
-# search_tree = SearchTree()
-# initial_robot_map = RobotMap({
-#     'robot_1': Robot(id='robot_1', position=(1, 1)),
-#     'robot_2': Robot(id='robot_2', position=(2, 2))
-# })
-# initial_resolution = {
-#     'p': 'T'
-# }
-# if os.path.exists('current_node.txt'):
-#     os.remove('current_node.txt')
-# if os.path.exists('best_path.txt'):
-#     os.remove('best_path.txt')
 
-# best_plan, best_plan_text = search_tree.get_best_plan(initial_robot_map, initial_resolution)
-
-
-
-# with open('best_path.txt', 'a') as f:
-#     for assignment in best_plan_text:
-#         f.write(f"{assignment}\n")
-
-# print(best_plan)
-    
 
 
 

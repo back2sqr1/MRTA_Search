@@ -2457,7 +2457,7 @@ def to_pydot(roots, bdd, **kw):
 
     return g
 
-
+# THIS IS WHERE THE COST IS CALCULATED
 def compute_max_cost(bdd, product_root, **kwargs):
     import heapq
     def count_of_queries(src, dest): 
@@ -2526,14 +2526,14 @@ def compute_max_cost(bdd, product_root, **kwargs):
             costsarr[(int(right))] = max(costsarr[(int(right))], costsarr[c_n] + comp_cost(idx2vars[ini], "<term>"))
     return max(costsarr[-1], costsarr[1])
 
-
+# TODO: EDIT THIS FUNCTION TO ADD AND/OR
 def compute_query_cost(bdd, wrld, qry, costfxn=None):
     optimizer_bdd = BDD()
     # optimizer_bdd.declare(*sorted(bdd._bdd.vars, key=bdd._bdd.vars.get))
     # ONLY CHANGE FROM DAVID
     for var in (sorted(bdd._bdd.vars, key=bdd._bdd.vars.get)):
         optimizer_bdd.add_var(var, None)
-
+ 
     pd = bdd.form_product_graph(optimizer_bdd, wrld, qry)
     r = compute_max_cost(optimizer_bdd, pd, cost_fxn=costfxn)
 
@@ -2607,7 +2607,7 @@ def _reorder_var_custom_cost(bdd, var, levels, wrld, qry, costfxn):
     @type bdd: `BDD`
     @type var: `str`
     """
-    assert var in bdd._bdd.vars, (var, bdd_bdd.vars)
+    assert var in bdd._bdd.vars, (var, bdd._bdd.vars)
     m = compute_query_cost(bdd, wrld, qry, costfxn)
 
     n = len(bdd._bdd.vars) - 1

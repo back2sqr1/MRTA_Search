@@ -1,0 +1,318 @@
+# Define the map:
+location w01
+location w02
+location w03
+location w04
+location w05
+location w06
+location w07
+location w08
+location w09
+location w10
+location w11
+location w12
+location w13
+location w14
+location w15
+location w16
+location w17
+location w18
+location w19
+location w20
+location w21
+location w22
+#location m00
+#location m01
+#location e01
+#location e02
+#location e03
+#location e04
+#location e05
+#location e06
+#location e07
+#location e08
+#location e09
+#location e10
+#location e11
+#location e12
+#location e13
+#location e14
+#location e15
+#location e16
+#location e17
+#location e18
+
+# Define actions:
+transition w01 w02 238.4
+transition w02 w01 238.4
+transition w02 w03 188.0
+transition w03 w02 188.0
+transition w03 w04 214.6
+transition w04 w03 214.6
+transition w04 w05 196.4
+transition w05 w04 196.4
+transition w05 w06 215.4
+transition w06 w05 215.4
+transition w01 w07 267.7
+transition w07 w01 267.7
+transition w02 w08 266.3
+transition w08 w02 266.3
+transition w05 w10 256.0
+transition w10 w05 256.0
+transition w07 w12 232.8
+transition w12 w07 232.8
+transition w08 w13 229.7
+transition w13 w08 229.7
+transition w12 w13 191.7
+transition w13 w12 191.7
+transition w13 w15 291.4
+transition w15 w13 291.4
+transition w15 w14 145.7
+transition w14 w15 145.7
+transition w15 w09 243.3
+transition w09 w15 243.3
+transition w15 w16 182.3
+transition w16 w15 182.3
+transition w09 w16 236.2
+transition w16 w09 236.2
+transition w16 w17 194.0
+transition w17 w16 194.0
+transition w17 w10 239.3
+transition w10 w17 239.3
+transition w17 w18 210.8
+transition w18 w17 210.8
+transition w18 w11 251.8
+transition w11 w18 251.8
+transition w18 w19 275.7
+transition w19 w18 275.7
+transition w19 w20 220.2
+transition w20 w19 220.2
+transition w20 w21 271.4
+transition w21 w20 271.4
+transition w21 w22 308.0
+transition w22 w21 308.0
+transition w06 w22 422.9
+transition w22 w06 422.9
+#transition w22 m00 476.8
+#transition m00 w22 476.8
+#transition w21 m01 390.4
+#transition m01 w21 390.4
+#transition m00 e01 440.0
+#transition e01 m00 440.0
+#transition e01 e12 250.9
+#transition e12 e01 250.9
+#transition e01 e02 293.8
+#transition e02 e01 293.8
+#transition e02 e03 321.5
+#transition e03 e02 321.5
+#transition e03 e04 368.3
+#transition e04 e03 368.3
+#transition e04 e05 213.8
+#transition e05 e04 213.8
+#transition e05 e06 124.2
+#transition e06 e05 124.2
+#transition e05 e07 237.6
+#transition e07 e05 237.6
+#transition e07 e08 260.6
+#transition e08 e07 260.6
+#transition e08 e18 232.0
+#transition e18 e08 232.0
+#transition e04 e09 263.9
+#transition e09 e04 263.9
+#transition e09 e10 230.5
+#transition e10 e09 230.5
+#transition e10 e11 225.7
+#transition e11 e10 225.7
+#transition e11 e16 232.9
+#transition e16 e11 232.9
+#transition e16 e17 217.8
+#transition e17 e16 217.8
+#transition e17 e18 236.0
+#transition e18 e17 236.0
+#transition e16 e15 369.1
+#transition e15 e16 369.1
+#transition e15 e14 261.3
+#transition e14 e15 261.3
+#transition e14 e13 217.0
+#transition e13 e14 217.0
+#transition e13 e12 276.6
+#transition e12 e13 276.6
+#transition e12 m01 374.9
+#transition m01 e12 374.9
+
+observation-cost w01 5.0
+observation-cost w02 10.0
+observation-cost w03 10.0
+observation-cost w04 10.0
+observation-cost w05 10.0
+observation-cost w06 5.0
+observation-cost w07 5.0
+observation-cost w08 20.0
+observation-cost w09 5.0
+observation-cost w10 20.0
+observation-cost w11 20.0
+observation-cost w12 5.0
+observation-cost w13 5.0
+observation-cost w14 20.0
+observation-cost w15 5.0
+observation-cost w16 5.0
+observation-cost w17 5.0
+observation-cost w18 5.0
+observation-cost w19 5.0
+observation-cost w20 5.0
+observation-cost w21 5.0
+observation-cost w22 1.0
+#observation-cost m00 1.0
+#observation-cost m01 10.0
+#observation-cost e01 1.0
+#observation-cost e02 5.0
+#observation-cost e03 10.0
+#observation-cost e04 5.0
+#observation-cost e05 3.0
+#observation-cost e06 3.0
+#observation-cost e07 5.0
+#observation-cost e08 10.0
+#observation-cost e09 10.0
+#observation-cost e10 20.0
+#observation-cost e11 20.0
+#observation-cost e12 5.0
+#observation-cost e13 5.0
+#observation-cost e14 5.0
+#observation-cost e15 5.0
+#observation-cost e16 5.0
+#observation-cost e17 10.0
+#observation-cost e18 20.0
+
+recognizable-property sculpture
+recognizable-property painting
+recognizable-property print
+recognizable-property monochrome
+recognizable-property yinkashonibare
+recognizable-property josephbeuys 
+recognizable-property marilyn-diptych 
+
+starting-location w22
+
+{ 
+  (marilyn-diptych(w01) & !(marilyn-diptych(w19) | marilyn-diptych(w20) | marilyn-diptych(w18))) | 
+  (marilyn-diptych(w19) & !(marilyn-diptych(w20) | marilyn-diptych(w01) | marilyn-diptych(w18))) | 
+  (marilyn-diptych(w20) & !(marilyn-diptych(w01) | marilyn-diptych(w19) | marilyn-diptych(w18))) |
+  (marilyn-diptych(w18) & !(marilyn-diptych(w01) | marilyn-diptych(w19) | marilyn-diptych(w20)))  
+}
+
+# Large rooms have only one type of media
+#{
+#    (painting(w12) <-> painting(w07)) &
+#    (painting(w18) <-> painting(w19)) &
+#    (painting(w04) <-> painting(w05)) &
+#    (painting(w04) <-> painting(w10)) &
+#    (painting(w09) <-> painting(w16)) &
+#    (painting(w16) <-> painting(w19)) &
+#    (print(w12) <-> print(w07)) &
+#    (print(w18) <-> print(w19)) &
+#    (print(w04) <-> print(w05)) &
+#    (print(w04) <-> print(w10)) &
+#    (print(w09) <-> print(w16)) &
+#    (print(w16) <-> print(w19)) &
+#    (sculpture(w12) <-> sculpture(w07)) &
+#    (sculpture(w18) <-> sculpture(w19)) &
+#    (sculpture(w04) <-> sculpture(w05)) &
+#    (sculpture(w04) <-> sculpture(w10)) &
+#    (sculpture(w09) <-> sculpture(w16)) &
+#    (sculpture(w16) <-> sculpture(w19)) 
+#}
+
+# No sculpture in the west wing
+{
+    ( !sculpture(w01) ) &  
+    ( !sculpture(w02) ) & 
+    ( !sculpture(w03) ) & 
+    ( !sculpture(w04) ) & 
+    ( !sculpture(w05) ) & 
+    ( !sculpture(w06) ) & 
+    ( !sculpture(w07) ) & 
+    ( !sculpture(w08) ) & 
+    ( !sculpture(w09) ) & 
+    ( !sculpture(w10) ) & 
+    ( !sculpture(w11) ) & 
+    ( !sculpture(w12) ) & 
+    ( !sculpture(w13) ) & 
+    ( !sculpture(w14) ) & 
+    ( !sculpture(w15) ) & 
+    ( !sculpture(w16) ) & 
+    ( !sculpture(w17) ) & 
+    ( !sculpture(w18) ) & 
+    ( !sculpture(w19) ) & 
+    ( !sculpture(w20) ) & 
+    ( !sculpture(w21) ) & 
+    ( !sculpture(w22) ) 
+}
+
+[?x]{ 
+ marilyn-diptych(?x) -> (print(?x) & !monochrome(?x))
+}
+
+
+
+[?x]{ 
+ monochrome(?x) -> !yinkashonibare(?x) 
+}
+
+[?x]{ 
+ yinkashonibare(?x) -> !monochrome(?x) 
+}
+
+[?x]{ 
+ yinkashonibare(?x) -> !josephbeuys(?x) 
+}
+
+[?x]{ 
+ josephbeuys(?x) -> (!yinkashonibare(?x) & monochrome(?x) & sculpture(?x)) 
+}
+
+[?x]{ 
+ josephbeuys(?x) -> (!yinkashonibare(?x)) 
+}
+
+
+# A piece comes from exactly one form:
+[?x]{ 
+    ( sculpture(?x)  & !(painting(?x) | print(?x)  )) |
+    ( painting(?x)  & !(print(?x) | sculpture(?x)  )) |
+    (  print(?x)  & !(sculpture(?x) | painting(?x))) 
+}
+
+# There is at least one painting
+[E?x]{ 
+    painting(?x)  
+}
+# There is at least one print
+[E?x]{ 
+    print(?x)  
+}
+
+#Query: [?x]{  (josephbeuys(?x) | yinkashonibare(?x)) }
+Query: {  (marilyn-diptych(w01)) } 
+
+
+# Tautologies:
+#Query: [?x] {  marilyn-diptych(?x) }  # is everything marilyn-diptych?
+#Query: [?x] {  !marilyn-diptych(?x) }  # is there some marilyn-diptych?
+#Query: [?x] {  painting(?x) &  print(?x) }  # is there  a painting and a print?
+#Query: [?x] {  !print(?x)}   # is there some print within the museum?
+# Are all the paintings marilyn-diptych?  
+# This can be true, if there are no paintings --> so we need to re-phrase
+#Query: [?u]{
+#    painting(?u) -> marilyn-diptych(?u)  
+#}
+
+
+
+
+
+
+
+
+
+
+

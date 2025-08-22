@@ -205,6 +205,7 @@ class RobotManager:
         for loc in locations:
             if property in self.location_to_prop[loc]:
                 property_locations.append(loc)
+        
 
         if len(property_locations) == 0:
             return combinations
@@ -212,14 +213,20 @@ class RobotManager:
         
         def generate_assignments(robot_index: int, current_assignment: dict[str, str], used_locations: set[str] = set()):
             if robot_index == len(robot_ids):
-                # Check if at least one robot is assigned to a the property location
+                # Check if at least one robot is assigned to a the property location or is at the location
                 values = current_assignment.values()
                 flag = False
                 for loc in values:
                     if loc in property_locations:
                         flag = True
                         break
-                    
+
+                for robot in robot_ids:
+                    for loc in property_locations:
+                        if self.location_to_pin[loc] == robot_map[robot].position:
+                            flag = True
+                            break
+
                 if flag:
                     combinations.append(copy.deepcopy(current_assignment))
 

@@ -1,0 +1,38 @@
+# Define the map with pin coordinates:
+location locA at 0, 0
+location locB at 0, 1
+location loc06 at 1, 2
+location loc07 at 2, 2
+location loc08 at 3, 2
+location loc15 at 2, 4
+
+robots 2
+robot robot1 starts-at locB
+robot robot2 starts-at locA
+
+recognizable-property marilyn-diptych 
+
+
+# This can only be in one of the big rooms loc15, loc08, loc07, loc06
+{ 
+  marilyn-diptych(loc15) | marilyn-diptych(loc06) | marilyn-diptych(loc07) | marilyn-diptych(loc08)
+}
+
+# But the preceeding didn't say that there are no other marilyns
+[?u, ?v | ?u != ?v]{
+marilyn-diptych(?u) -> !marilyn-diptych(?v)
+}
+
+
+
+
+
+# Go to the corner, vs. 6, 7, 8
+Query: {  (marilyn-diptych(loc15)) }  
+
+
+
+
+
+
+

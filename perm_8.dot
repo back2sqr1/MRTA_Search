@@ -1,0 +1,95 @@
+digraph bdd {
+subgraph  {
+rank=same;
+"L-1" [label=ref, shape=none, style=invis];
+ref2 [color=white, label="@2", shape=box];
+"ref-84" [color=white, label="@-84", shape=box];
+}
+
+subgraph  {
+rank=same;
+L0 [label=0, shape=none, style=invis];
+84 [fillcolor=white, label="Visit: locA\n Observe: marilyn-diptych", shape=oval, style=invis];
+"-84" [fillcolor=white, label="Visit: locA\n Observe: marilyn-diptych", shape=oval, style=filled];
+}
+
+subgraph  {
+rank=same;
+L1 [label=1, shape=none, style=invis];
+81 [fillcolor=white, label="Visit: locB\n Observe: marilyn-diptych", shape=oval, style=invis];
+"-81" [fillcolor=white, label="Visit: locB\n Observe: marilyn-diptych", shape=oval, style=filled];
+}
+
+subgraph  {
+rank=same;
+L2 [label=2, shape=none, style=invis];
+80 [fillcolor=white, label="Visit: loc07\n Observe: marilyn-diptych", shape=oval, style=invis];
+"-80" [fillcolor=white, label="Visit: loc07\n Observe: marilyn-diptych", shape=oval, style=filled];
+}
+
+subgraph  {
+rank=same;
+L3 [label=3, shape=none, style=invis];
+3 [fillcolor=white, label="Visit: loc06\n Observe: marilyn-diptych", shape=oval, style=invis];
+"-3" [fillcolor=white, label="Visit: loc06\n Observe: marilyn-diptych", shape=oval, style=filled];
+5 [fillcolor=white, label="Visit: loc06\n Observe: marilyn-diptych", shape=oval, style=invis];
+"-5" [fillcolor=white, label="Visit: loc06\n Observe: marilyn-diptych", shape=oval, style=filled];
+}
+
+subgraph  {
+rank=same;
+L4 [label=4, shape=none, style=invis];
+2 [fillcolor=white, label="Visit: loc15\n Observe: marilyn-diptych", shape=oval, style=filled];
+"-2" [fillcolor=white, label="Visit: loc15\n Observe: marilyn-diptych", shape=oval, style=invis];
+4 [fillcolor=white, label="Visit: loc15\n Observe: marilyn-diptych", shape=oval, style=invis];
+"-4" [fillcolor=white, label="Visit: loc15\n Observe: marilyn-diptych", shape=oval, style=filled];
+8 [fillcolor=white, label="Visit: loc15\n Observe: marilyn-diptych", shape=oval, style=invis];
+"-8" [fillcolor=white, label="Visit: loc15\n Observe: marilyn-diptych", shape=oval, style=filled];
+}
+
+subgraph  {
+rank=same;
+L5 [label=5, shape=none, style=invis];
+9 [fillcolor=white, label="Visit: loc08\n Observe: marilyn-diptych", shape=oval, style=filled];
+"-9" [fillcolor=white, label="Visit: loc08\n Observe: marilyn-diptych", shape=oval, style=filled];
+}
+
+subgraph  {
+rank=same;
+L6 [label=6, shape=none, style=invis];
+1 [color=darkseagreen4, fillcolor=lightgreen, label="Yes ", shape=box, style=filled];
+"-1" [color=firebrick4, fillcolor=lightcoral, label=" No ", shape=box, style=filled];
+}
+
+"L-1" -> L0  [style=invis];
+L0 -> L1  [style=invis];
+L1 -> L2  [style=invis];
+L2 -> L3  [style=invis];
+L3 -> L4  [style=invis];
+L4 -> L5  [style=invis];
+L5 -> L6  [style=invis];
+2 -> "-1"  [color=black, style=dashed];
+2 -> 1  [color=black, style=solid];
+ref2 -> 2  [color=black, style=solid];
+ref2 -> 2  [color=black, style=dashed];
+"-84" -> "-81"  [color=black, style=dashed];
+"-81" -> "-80"  [color=black, style=dashed];
+"-80" -> "-3"  [color=black, style=dashed];
+"-3" -> "-8"  [color=black, style=dashed];
+"-8" -> 9  [color=black, style=dashed];
+9 -> "-1"  [color=black, style=dashed];
+9 -> 1  [color=black, style=solid];
+"-8" -> "-9"  [color=black, style=solid];
+"-9" -> 1  [color=black, style=dashed];
+"-9" -> "-1"  [color=black, style=solid];
+"-3" -> "-4"  [color=black, style=solid];
+"-4" -> "-9"  [color=black, style=dashed];
+"-4" -> "-1"  [color=black, style=solid];
+"-80" -> "-5"  [color=black, style=solid];
+"-5" -> "-4"  [color=black, style=dashed];
+"-5" -> "-1"  [color=black, style=solid];
+"-81" -> "-1"  [color=black, style=solid];
+"-84" -> "-1"  [color=black, style=solid];
+"ref-84" -> "-84"  [color=black, style=solid];
+"ref-84" -> "-84"  [color=black, style=dashed];
+}

@@ -293,6 +293,7 @@ def main():
         for (s,d,c) in pz['transitions']:
             floydtable[(s,d)] = c
 
+        # DAVID's Note - Floyd-Warshall Algorithm
         for m in locs:
             for s in locs:
                 for d in locs:
