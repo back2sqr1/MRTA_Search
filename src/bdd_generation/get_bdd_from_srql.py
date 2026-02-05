@@ -1,7 +1,8 @@
 #!/usr/bin/python
-import sys 
+import sys
+import os
 import re
-import sparser 
+import sparser
 import argparse
 import random
 from time import process_time
@@ -192,15 +193,18 @@ def reorder_blocks_for_size(bdd, block_dict):
         BDD.reorder(bdd, window=(r, r+block_size-1))
 
 
-def get_bdd_from_srql():
+def get_bdd_from_srql(input_file=None):
     global locs, props, verbose
 
     parser = argparse.ArgumentParser()
 
-    input_file = "src/bdd_generation/examples_2/tate-ex1.srql"
+    # Use provided input_file or default
+    if input_file is None:
+        # Try to find the file relative to this script's location
+        script_dir = os.path.dirname(os.path.abspath(__file__))
+        input_file = os.path.join(script_dir, "examples_2/tate-ex1.srql")
 
     dumpformat = ["pdf", "dot"]
-
 
     pz = sparser.parse_world(open(input_file,'r').read())
 

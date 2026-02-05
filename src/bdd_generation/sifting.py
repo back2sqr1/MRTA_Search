@@ -12,6 +12,101 @@ from navigation.navigation.planning.create_plan import SearchTree
 from navigation.navigation.planning.robot_class import Robot, RobotMap
 import random
 
+
+class PlanningCostEvaluator:
+    """
+    Encapsulates all data needed to compute multi-robot planning costs for BDD sifting.
+
+    This class is designed to be used as a cost function during Rudell's sifting algorithm.
+    Instead of using simple edge costs, it computes the full multi-robot planning cost
+    by building a SearchTree and running determine_cost().
+
+    Usage:
+        evaluator = PlanningCostEvaluator(elegant_var_dict, robots, locs_with_coords)
+        cost = evaluator(bdd, wrld, qry)
+    """
+
+    def __init__(self, elegant_var_dict, robots, locs_with_coords):
+        """
+        Initialize the planning cost evaluator.
+
+        Args:
+            elegant_var_dict: Dict mapping elegant names to BDD variable names
+            robots: Dict with 'num_robots' and 'robot_starts' list
+            locs_with_coords: Dict mapping location names to {'x': int, 'y': int}
+        """
+        self.elegant_var_dict = elegant_var_dict
+        self.robots = robots
+        self.locs_with_coords = locs_with_coords
+
+        # Precompute location tuples
+        self.locs = {}
+        for loc_name, coords in locs_with_coords.items():
+            self.locs[loc_name] = (coords['x'], coords['y'])
+
+    def __call__(self, bdd, wrld, qry):
+        """
+        Compute the planning cost for the current BDD variable ordering.
+
+        This method:
+        1. Creates a SEPARATE BDD for the product graph (to avoid modifying the original during sifting)
+        2. Forms the product graph from world and query BDDs
+        3. Builds an adjacency list from the product graph
+        4. Creates a SearchTree and imports the BDD configuration
+        5. Runs search() to build the planning tree
+        6. Returns the cost via determine_cost()
+
+        Args:
+            bdd: The BDD manager (autoref.BDD wrapper)
+            wrld: The world constraints BDD node
+            qry: The query BDD node
+
+        Returns:
+            float: The multi-robot planning cost (uses MIN over assignments, MAX over queries)
+        """
+        # Create a SEPARATE BDD for the product graph to avoid modifying the original
+        # This is critical during sifting - we can't add nodes to a BDD while reordering it
+        product_bdd = BDD()
+        for var in sorted(bdd._bdd.vars, key=bdd._bdd.vars.get):
+            product_bdd.add_var(var, None)
+
+        # Form product graph in the separate BDD
+        product_root = bdd.form_product_graph(product_bdd, wrld, qry)
+
+        # Handle trivial cases
+        if abs(int(product_root)) == 1:
+            return 0  # Tautology or contradiction - no planning needed
+
+        # Build adjacency list from product graph (using product_bdd)
+        adjacency_list = build_adjacency_list(product_bdd, product_root)
+
+        # Get code-to-locations mapping (using product_bdd)
+        code_to_locations_map = get_code_to_locations_map(product_bdd, product_root, self.elegant_var_dict)
+
+        # Create and configure SearchTree
+        search_tree = SearchTree()
+        search_tree.bdd_config = search_tree.import_srql_config(
+            adjacency_list,
+            self.locs,
+            code_to_locations_map,
+            str(product_root)
+        )
+
+        # Build initial robot map
+        r_map = {}
+        for robot in self.robots['robot_starts']:
+            robot_id = robot['robot_id']
+            start_loc = robot['start_location']
+            r_map[robot_id] = Robot(id=robot_id, position=self.locs[start_loc])
+
+        initial_robot_map = RobotMap(r_map)
+        initial_resolutions = {}
+
+        # Fast cost-only search with alpha-beta pruning (no tree materialization)
+        cost = search_tree.get_best_plan(initial_robot_map, initial_resolutions, get_only_cost=True)
+        # best_plan, _, _ = search_tree.get_best_plan(initial_robot_map, initial_resolutions)
+        return cost
+
 def print_descendants(bdd, u, elegant_var_dict, visited=None):
     """Print BDD descendants with code-to-elegant name conversion."""
     if visited is None:
@@ -254,52 +349,15 @@ def determine_plan_cost(bdd, product_root, elegant_var_dict, visited=None):
     return best_plan, search_tree.determine_cost(node=search_tree.robot_manager.head_time_step_node)
 
 
-bdd, product_root, elegant_var_dict, dumpformat, robots, locs_with_coords, q, w = get_bdd_from_srql()
-bdd.dump('product_graph', roots=[q, w], method="new", v_dict=elegant_var_dict, root_names_map={int(product_root):"Plan"}, leaf_names_map={True:"Yes ", False:" No "}, simplify_names=True, clean_print=True, fileformat=dumpformat)
-bdd.dump('plan', roots=[product_root], method="new", v_dict=elegant_var_dict, root_names_map={int(product_root):"Plan"}, leaf_names_map={True:"Yes ", False:" No "}, simplify_names=True, clean_print=True, fileformat=dumpformat)
+if __name__ == "__main__":
+    bdd, product_root, elegant_var_dict, dumpformat, robots, locs_with_coords, q, w = get_bdd_from_srql()
+    bdd.dump('product_graph', roots=[q, w], method="new", v_dict=elegant_var_dict, root_names_map={int(product_root):"Plan"}, leaf_names_map={True:"Yes ", False:" No "}, simplify_names=True, clean_print=True, fileformat=dumpformat)
+    bdd.dump('plan', roots=[product_root], method="new", v_dict=elegant_var_dict, root_names_map={int(product_root):"Plan"}, leaf_names_map={True:"Yes ", False:" No "}, simplify_names=True, clean_print=True, fileformat=dumpformat)
 
-print("Finished the after PDFs")
+    print("Finished the after PDFs")
 
-order = deepcopy(bdd.vars)
+    order = deepcopy(bdd.vars)
 
-
-
-
-
-# REMEMBER: PROPERTIES can involve different results from different locations
-# ex: diptypch(loc01), diptypch(loc02)
-# however, I'm trying these as different properties in my code (DAVID)
-
-# TODO: DO Complete search
-it = 0
-# Get all permutations and shuffle them randomly
-diff_adj_list = set()
-diff_cost = set()
-possible_best_plan, cost_2 = determine_plan_cost(bdd, q, elegant_var_dict)
-if len(possible_best_plan) == 0:
-    cost_2 = 0
-print("Possible Plan", possible_best_plan, cost_2)
-print("FINISHED PLANNING")
-
-for perm in itertools.permutations(order):
-
-
-    perm_dict = dict(zip(perm, range(len(perm))))
-    # convert perm to dict
-    # bdd.dump(f'perm_{it}', roots=[q, w], method="new", v_dict=elegant_var_dict, root_names_map={int(product_root):"Plan"}, leaf_names_map={True:"Yes ", False:" No "}, simplify_names=True, clean_print=True, fileformat=dumpformat)
-    # bdd.dump(f'plan_{it}', roots=[product_root], method="new", v_dict=elegant_var_dict, root_names_map={int(product_root):"Plan"}, leaf_names_map={True:"Yes ", False:" No "}, simplify_names=True, clean_print=True, fileformat=dumpformat)
-
-    bdd.reorder(perm_dict)
-    print("FINISHED REORDERING")
-    best_plan, cost = determine_plan_cost(bdd, product_root, elegant_var_dict, visited=None)
-    if len(best_plan) == 0:
-        cost = 0
-
-    print(f"Plan {it} has cost {cost}")
-    print(best_plan)
-
-    it+=1
-
-# Clean up all references to prevent memory leak
-del product_root, q, w
+    # Clean up all references to prevent memory leak
+    del product_root, q, w
 

@@ -38,6 +38,14 @@ class RobotManager:
 
         robot_map_copy = copy.deepcopy(robot_map)
 
+        # Compute initial visited locations from robot starting positions
+        initial_visited = set()
+        if pin_to_location:
+            for robot in robot_map_copy.values():
+                pos_tuple = tuple(robot.position) if not isinstance(robot.position, tuple) else robot.position
+                if pos_tuple in pin_to_location:
+                    initial_visited.add(pin_to_location[pos_tuple])
+
         start_node = TimeStepNode(
             id = str(uuid.uuid1()),
             robot_map = robot_map_copy,
@@ -46,7 +54,7 @@ class RobotManager:
             type = 'robot_assignment',
             resolved_questions= copy.deepcopy(initial_resolution) if initial_resolution else {},
         )
-        start_node.visited_locations = set()
+        start_node.visited_locations = copy.deepcopy(initial_visited)
         self.head_time_step_node = TimeStepNode(
             id = str(uuid.uuid1()),
             robot_map = robot_map_copy,
@@ -55,7 +63,7 @@ class RobotManager:
             type = 'query',
             resolved_questions= copy.deepcopy(initial_resolution) if initial_resolution else {},
         )
-        self.head_time_step_node.visited_locations = set()
+        self.head_time_step_node.visited_locations = copy.deepcopy(initial_visited)
         self.time_step_queue = []
         self.time_step_queue.append(start_node)
 

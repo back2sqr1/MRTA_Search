@@ -4,7 +4,7 @@ location locB at 0, 1
 location loc06 at 1, 2
 location loc07 at 2, 2
 location loc08 at 3, 2
-location loc15 at 2, 4
+location loc15 at 2, 1
 
 robots 2
 robot robot1 starts-at locB

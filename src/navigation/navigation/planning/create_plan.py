@@ -1,7 +1,7 @@
 import copy
 import json, uuid
 from .robot_class import Robot, RobotMap
-from .robot_manager import RobotManager, euclidean_distance, DISTANCE_TOLERANCE   
+from .robot_manager import RobotManager, euclidean_distance, DISTANCE_TOLERANCE, _known_properties
 from .time_step_node_class import TimeStepNode
 import os
 
@@ -71,14 +71,19 @@ class SearchTree:
         return bdd_config
 
     def import_bdd_config(self):
-        with open ('src/my_robot_bringup/config/bdd.json', 'r') as file:
-            bdd_config = json.load(file)
+        # Try to load bdd.json, but don't fail if it doesn't exist
+        # (we may be using import_srql_config instead)
+        try:
+            with open('src/my_robot_bringup/config/bdd.json', 'r') as file:
+                bdd_config = json.load(file)
+        except FileNotFoundError:
+            # Return empty config - will be populated via import_srql_config
+            return {}
 
         self.props = set(bdd_config['props'])
         for prop in self.props:
             self.prop_to_location[prop] = []
 
-        
         for loc, pin in bdd_config['locations'].items():
             tuple_pin = tuple(pin)
             self.location_to_pin[loc] = tuple_pin
@@ -230,36 +235,317 @@ class SearchTree:
     
 
     # By cost = cumulative distance traveled by all robots
-    def get_best_plan(self, initial_robot_map: RobotMap, initial_resolution: dict[str, str]) -> tuple[list[(str, tuple[int, int])], list[str]]:
+    def get_best_plan(self, initial_robot_map: RobotMap, initial_resolution: dict[str, str], get_only_cost: bool = False) -> tuple[list[(str, tuple[int, int])], list[str], list[dict]]:
         cur_node = self.search(initial_robot_map, initial_resolution)
         best_cost = self.determine_cost(cur_node)
         best_plan_text = []
-        best_plan : list[(str, tuple[int, int])] = []
+        best_plan: list[(str, tuple[int, int])] = []
+        detailed_steps: list[dict] = []  # Detailed step-by-step instructions
+        step_number = 0
+
+        if get_only_cost:
+            return best_cost
+
         while cur_node is not None:
-            with open ('current_node.txt', 'a') as f:
-                f.write(f"{cur_node}\n")
             for next_node in cur_node.next:
                 if (abs(self.determine_cost(next_node) - best_cost)) < COST_TOLERANCE:
+                    step_info = {
+                        'step': step_number,
+                        'type': next_node.type,
+                        'query': next_node.query,
+                        'resolved_questions': dict(next_node.resolved_questions),
+                        'visited_locations': list(next_node.visited_locations),
+                        'cumulative_cost': next_node.get_cost(),
+                        'robots': {}
+                    }
+
+                    # Capture robot state at this step
+                    for robot_id, robot in next_node.robot_map.items():
+                        robot_info = {
+                            'position': robot.position,
+                            'assigned_location': robot.assigned_loc if robot.assigned_loc else None,
+                            'target_position': self.location_to_pin.get(robot.assigned_loc) if robot.assigned_loc else None,
+                            'cost_so_far': robot.cost,
+                            'time': robot.time
+                        }
+                        step_info['robots'][robot_id] = robot_info
+
+                    # Generate human-readable instruction
                     if next_node.type == 'robot_moving':
+                        instructions = []
+                        for robot_id, robot in next_node.robot_map.items():
+                            if robot.assigned_loc:
+                                target = self.location_to_pin.get(robot.assigned_loc)
+                                instructions.append(f"{robot_id}: Move to {robot.assigned_loc} at {target}")
+                        step_info['instruction'] = "; ".join(instructions) if instructions else "Robots in transit"
                         best_plan_text.append(str(RobotAssignments(next_node, self.location_to_pin)))
+
                     elif next_node.type == 'query':
+                        step_info['instruction'] = f"Evaluate query: {next_node.query}"
+                        if next_node.resolved_questions:
+                            step_info['instruction'] += f" | Resolved: {next_node.resolved_questions}"
                         best_plan_text.append(next_node.resolved_questions)
+
                     elif next_node.type == 'robot_assignment':
+                        instructions = []
                         for robot_id, robot in next_node.robot_map.items():
                             if robot.assigned_loc != '':
-                                best_plan.append((robot_id, self.location_to_pin[robot.assigned_loc]))
-
+                                target = self.location_to_pin[robot.assigned_loc]
+                                best_plan.append((robot_id, target))
+                                instructions.append(f"{robot_id}: Assigned to {robot.assigned_loc} at {target}")
                                 best_plan_text.append(f"{robot_id} -> {robot.assigned_loc}")
+                        step_info['instruction'] = "; ".join(instructions) if instructions else "No assignments"
 
+                    detailed_steps.append(step_info)
+                    step_number += 1
                     cur_node = next_node
                     break
 
             else:
                 cur_node = None
 
-        return (best_plan, best_plan_text)
+        return (best_plan, best_plan_text, detailed_steps)
 
+    # ── Fast cost-only search (for sifting) ──────────────────────────────
 
+    def get_cost_only(self, initial_robot_map: RobotMap,
+                      initial_resolutions: dict[str, str]) -> float:
+        """Compute minimax planning cost via DFS with alpha-beta pruning.
+
+        This is an approximation that models simultaneous robot arrivals
+        (all robots arrive at once, then branch) rather than sequential
+        arrivals.  Valid for sifting where only relative cost comparisons
+        between variable orderings matter.
+        """
+        robot_positions = {}
+        robot_costs = {}
+        for rid, robot in initial_robot_map.items():
+            robot_positions[rid] = robot.position
+            robot_costs[rid] = robot.cost
+
+        return self._minimax_cost(
+            query=self.starting_prop,
+            robot_positions=robot_positions,
+            robot_costs=robot_costs,
+            visited_locations=set(),
+            resolved_questions=dict(initial_resolutions),
+            alpha=0.0,
+            beta=float('inf'),
+        )
+
+    def _minimax_cost(self, query: str, robot_positions: dict[str, tuple],
+                      robot_costs: dict[str, float],
+                      visited_locations: set[str],
+                      resolved_questions: dict[str, str],
+                      alpha: float, beta: float) -> float:
+        """Recursive DFS minimax with alpha-beta pruning.
+
+        Levels alternate:
+          MIN - choose best robot assignment   (we pick)
+          MAX - adversary picks worst resolution (environment picks)
+        """
+        # Terminal: query is not a known prop (leaf of the BDD)
+        if query not in self.props:
+            return sum(robot_costs.values())
+
+        # ── MIN level: try every robot-assignment combination ────────
+        combinations = self._generate_combinations_fast(
+            query, robot_positions, visited_locations)
+
+        if not combinations:
+            return sum(robot_costs.values())
+
+        # Sort by move_cost (cheapest first) so alpha-beta prunes more
+        combinations.sort(key=lambda c: c[1])
+
+        best = float('inf')
+
+        for combo, move_cost in combinations:
+            # Prune: since combos are sorted ascending and future_cost >= 0,
+            # if move_cost alone already >= best, all remaining are worse.
+            # NO PRUNING check
+            # if move_cost >= best:
+            #     break
+
+            # # Alpha-beta prune at MIN level
+            # if best <= alpha:
+            #     break
+
+            # Compute new robot positions and costs after this assignment
+            new_positions = dict(robot_positions)
+            new_costs = dict(robot_costs)
+            new_visited = set(visited_locations)
+            for rid, loc in combo.items():
+                target = self.location_to_pin[loc]
+                dist = euclidean_distance(new_positions[rid], target)
+                new_costs[rid] = new_costs[rid] + dist
+                new_positions[rid] = target
+                new_visited.add(loc)
+
+            # Also mark locations where robots already are
+            for rid, pos in new_positions.items():
+                if pos in self.pin_to_location:
+                    new_visited.add(self.pin_to_location[pos])
+
+            # ── MAX level: adversary picks worst resolution ──────
+            child_beta = min(beta, best)
+            worst = self._max_over_resolutions(
+                query, new_positions, new_costs, new_visited,
+                resolved_questions, alpha, child_beta)
+
+            if worst < best:
+                best = worst
+
+        return best
+
+    def _max_over_resolutions(self, query: str,
+                              robot_positions: dict[str, tuple],
+                              robot_costs: dict[str, float],
+                              visited_locations: set[str],
+                              resolved_questions: dict[str, str],
+                              alpha: float, beta: float) -> float:
+        """MAX level: adversary picks the worst-case resolution."""
+        known_props = _known_properties(visited_locations, self.location_to_prop)
+        # Find unresolved known properties
+        unresolved = [p for p in known_props if p not in resolved_questions]
+
+        worst = 0.0
+
+        # Iterate over all resolutions via backtracking
+        for resolution in self._generate_resolutions_fast(unresolved, resolved_questions):
+            # Follow BDD edges to find next query
+            next_query = self._resolve_query(query, resolution)
+
+            if next_query == query:
+                # No progress – skip this resolution
+                continue
+
+            child_cost = self._minimax_cost(
+                next_query, robot_positions, robot_costs,
+                visited_locations, resolution, worst, beta)
+
+            if child_cost > worst:
+                worst = child_cost
+
+            # Alpha-beta prune at MAX level
+            if worst >= beta:
+                break
+
+        return worst
+
+    def _resolve_query(self, query: str,
+                       resolution: dict[str, str]) -> str:
+        """Follow BDD edges given a resolution to find the next query."""
+        current = query
+        while current in resolution:
+            truth = resolution[current] == 'T'
+            if truth:
+                current = self.next_query[current][1]
+            else:
+                current = self.next_query[current][0]
+        return current
+
+    def _generate_combinations_fast(self, query: str,
+                                    robot_positions: dict[str, tuple],
+                                    visited_locations: set[str]
+                                    ) -> list[tuple[dict[str, str], float]]:
+        """Generate (assignment_dict, move_cost) pairs via backtracking.
+
+        Returns a list of (combo, move_cost) where move_cost is the
+        analytical euclidean cost for that assignment.
+        """
+        locations = list(self.location_to_pin.keys())
+        robot_ids = list(robot_positions.keys())
+
+        property_locations = [
+            loc for loc in locations
+            if query in self.location_to_prop.get(loc, [])
+        ]
+        if not property_locations:
+            return []
+
+        # Check if any robot is already at a property location
+        robot_at_prop = False
+        for rid in robot_ids:
+            pos = robot_positions[rid]
+            if pos in self.pin_to_location:
+                loc = self.pin_to_location[pos]
+                if loc in property_locations:
+                    robot_at_prop = True
+                    break
+
+        results: list[tuple[dict[str, str], float]] = []
+        assignment: dict[str, str] = {}
+        used_locations: set[str] = set(visited_locations)
+        assignment_cost: float = 0.0
+
+        def backtrack(robot_index: int):
+            nonlocal assignment_cost
+            if robot_index == len(robot_ids):
+                # Validate: at least one robot targets a property location
+                if not robot_at_prop:
+                    covers = any(loc in property_locations
+                                 for loc in assignment.values())
+                    if not covers:
+                        return
+                results.append((dict(assignment), assignment_cost))
+                return
+
+            rid = robot_ids[robot_index]
+
+            # Option: skip this robot (no assignment)
+            backtrack(robot_index + 1)
+
+            known_props = _known_properties(used_locations, self.location_to_prop)
+            for loc in locations:
+                if loc in used_locations:
+                    continue
+                # Only assign to locations with unknown properties
+                props = self.location_to_prop.get(loc, [])
+                if all(p in known_props for p in props):
+                    continue
+
+                target = self.location_to_pin[loc]
+                dist = euclidean_distance(robot_positions[rid], target)
+
+                assignment[rid] = loc
+                used_locations.add(loc)
+                assignment_cost += dist
+
+                backtrack(robot_index + 1)
+
+                del assignment[rid]
+                used_locations.discard(loc)
+                assignment_cost -= dist
+
+        backtrack(0)
+        return results
+
+    @staticmethod
+    def _generate_resolutions_fast(unresolved: list[str],
+                                   resolved_questions: dict[str, str]
+                                   ):
+        """Yield all T/F resolutions for unresolved properties via backtracking.
+
+        Mutates and restores *resolved_questions* in place for speed;
+        callers must not hold references across yields.
+        """
+        if not unresolved:
+            yield dict(resolved_questions)
+            return
+
+        def _backtrack(idx):
+            if idx == len(unresolved):
+                yield dict(resolved_questions)
+                return
+
+            prop = unresolved[idx]
+            for val in ('T', 'F'):
+                resolved_questions[prop] = val
+                yield from _backtrack(idx + 1)
+            del resolved_questions[prop]
+
+        yield from _backtrack(0)
 
 
 
