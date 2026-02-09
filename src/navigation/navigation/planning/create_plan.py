@@ -43,6 +43,7 @@ class SearchTree:
         self.starting_prop: str = ''
         self.next_query: dict[str, list[str]] = {}
         self.cost_map: dict[str, float] = {}
+        self.time_map: dict[str, float] = {}
         self.bdd_config = self.import_bdd_config()
         self.robot_manager = None
 
@@ -127,8 +128,9 @@ class SearchTree:
         while self.robot_manager.count_traveling_robots(robot_map=robot_map) > 0:
             arrived_robots = self.robot_manager.update_robot_positions(robot_map=robot_map)
 
+            # Snapshot robot_map so all assignments are preserved on this node
             robot_moving_node = TimeStepNode(
-                robot_map=robot_map,
+                robot_map=copy.deepcopy(robot_map),
                 id = str(uuid.uuid1()),
                 query = current_node.query,
                 type = 'robot_moving',
@@ -139,12 +141,16 @@ class SearchTree:
             current_node.next.append(robot_moving_node)
             current_node = robot_moving_node
 
-            
-
             visited_locations = copy.deepcopy(current_node.visited_locations)
+            visited_locations.update(self.check_robot_destinations(robot_map))
 
+            # Clear arrived robots on the working robot_map AFTER checking destinations
+            for robot in arrived_robots:
+                robot_map[robot.id].assigned_loc = ''
+
+            # Snapshot the cleared state for the query node
             query_node = TimeStepNode(
-                robot_map=robot_map,
+                robot_map=copy.deepcopy(robot_map),
                 id = str(uuid.uuid1()),
                 query = current_node.query,
                 type = 'query',
@@ -152,10 +158,6 @@ class SearchTree:
                 next = []
             )
             query_node.visited_locations = visited_locations
-            query_node.visited_locations.update(self.check_robot_destinations(robot_map))
-            for robot in arrived_robots:
-                query_node.robot_map[robot.id].assigned_loc = ''
-
 
             current_node.next.append(query_node)
             current_node = query_node
@@ -229,6 +231,35 @@ class SearchTree:
             for next_node in node.next:
                 cost = min(cost, self.determine_cost(next_node, recursive_count + 1))
             return cost
+        else:
+            raise ValueError(f"Unknown node type: {node.type}")
+
+    # TIME IS BY PARALLEL COMPLETION: max over robots (wall-clock time)
+    def determine_time(self, node: TimeStepNode, recursive_count: int = 0) -> float:
+        if len(node.next) == 0:
+            time = node.get_time()
+            self.time_map[node.id] = time
+            return time
+
+        if node.id in self.time_map:
+            return self.time_map[node.id]
+
+        if node.type == 'robot_moving':
+            return self.determine_time(node.next[0], recursive_count + 1)
+
+        elif node.type == 'query':
+            # Worst case over all possible observations
+            time = 0
+            for next_node in node.next:
+                time = max(time, self.determine_time(next_node, recursive_count + 1))
+            return time
+
+        elif node.type == 'robot_assignment':
+            # Best assignment: pick the one that finishes earliest
+            time = float('inf')
+            for next_node in node.next:
+                time = min(time, self.determine_time(next_node, recursive_count + 1))
+            return time
         else:
             raise ValueError(f"Unknown node type: {node.type}")
         
@@ -308,6 +339,76 @@ class SearchTree:
 
         return (best_plan, best_plan_text, detailed_steps)
 
+    # By time = wall-clock parallel completion time (max over robots)
+    def get_best_plan_by_time(self, initial_robot_map: RobotMap, initial_resolution: dict[str, str], get_only_time: bool = False) -> tuple[list[(str, tuple[int, int])], list[str], list[dict]]:
+        cur_node = self.search(initial_robot_map, initial_resolution)
+        best_time = self.determine_time(cur_node)
+        best_plan_text = []
+        best_plan: list[(str, tuple[int, int])] = []
+        detailed_steps: list[dict] = []
+        step_number = 0
+
+        if get_only_time:
+            return best_time
+
+        while cur_node is not None:
+            for next_node in cur_node.next:
+                if (abs(self.determine_time(next_node) - best_time)) < COST_TOLERANCE:
+                    step_info = {
+                        'step': step_number,
+                        'type': next_node.type,
+                        'query': next_node.query,
+                        'resolved_questions': dict(next_node.resolved_questions),
+                        'visited_locations': list(next_node.visited_locations),
+                        'parallel_time': next_node.get_time(),
+                        'cumulative_cost': next_node.get_cost(),
+                        'robots': {}
+                    }
+
+                    for robot_id, robot in next_node.robot_map.items():
+                        robot_info = {
+                            'position': robot.position,
+                            'assigned_location': robot.assigned_loc if robot.assigned_loc else None,
+                            'target_position': self.location_to_pin.get(robot.assigned_loc) if robot.assigned_loc else None,
+                            'cost_so_far': robot.cost,
+                            'time': robot.time
+                        }
+                        step_info['robots'][robot_id] = robot_info
+
+                    if next_node.type == 'robot_moving':
+                        instructions = []
+                        for robot_id, robot in next_node.robot_map.items():
+                            if robot.assigned_loc:
+                                target = self.location_to_pin.get(robot.assigned_loc)
+                                instructions.append(f"{robot_id}: Move to {robot.assigned_loc} at {target}")
+                        step_info['instruction'] = "; ".join(instructions) if instructions else "Robots in transit"
+                        best_plan_text.append(str(RobotAssignments(next_node, self.location_to_pin)))
+
+                    elif next_node.type == 'query':
+                        step_info['instruction'] = f"Evaluate query: {next_node.query}"
+                        if next_node.resolved_questions:
+                            step_info['instruction'] += f" | Resolved: {next_node.resolved_questions}"
+                        best_plan_text.append(next_node.resolved_questions)
+
+                    elif next_node.type == 'robot_assignment':
+                        instructions = []
+                        for robot_id, robot in next_node.robot_map.items():
+                            if robot.assigned_loc != '':
+                                target = self.location_to_pin[robot.assigned_loc]
+                                best_plan.append((robot_id, target))
+                                instructions.append(f"{robot_id}: Assigned to {robot.assigned_loc} at {target}")
+                                best_plan_text.append(f"{robot_id} -> {robot.assigned_loc}")
+                        step_info['instruction'] = "; ".join(instructions) if instructions else "No assignments"
+
+                    detailed_steps.append(step_info)
+                    step_number += 1
+                    cur_node = next_node
+                    break
+
+            else:
+                cur_node = None
+
+        return (best_plan, best_plan_text, detailed_steps)
 
 
 

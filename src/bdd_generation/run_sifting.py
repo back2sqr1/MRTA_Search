@@ -89,8 +89,11 @@ def sorted_var_names(bdd):
 # Planning
 # ---------------------------------------------------------------------------
 
-def compute_plan_and_cost(bdd, wrld, qry, elegant_var_dict, robots, locs_with_coords):
+def compute_plan_and_cost(bdd, wrld, qry, elegant_var_dict, robots, locs_with_coords, cost_metric='distance'):
     """Compute the planning cost and detailed plan for the current variable ordering.
+
+    Args:
+        cost_metric: 'distance' for sum of robot distances, 'time' for parallel wall-clock time.
 
     Returns (cost, best_plan, detailed_steps, product_root).
     """
@@ -102,7 +105,6 @@ def compute_plan_and_cost(bdd, wrld, qry, elegant_var_dict, robots, locs_with_co
             for name, coords in locs_with_coords.items()}
 
     adjacency_list = build_adjacency_list(bdd, product_root)
-    print("ADJANCEY LIST", adjacency_list)
     code_to_locations_map = get_code_to_locations_map(bdd, product_root, elegant_var_dict)
 
     search_tree = SearchTree()
@@ -114,11 +116,17 @@ def compute_plan_and_cost(bdd, wrld, qry, elegant_var_dict, robots, locs_with_co
         for r in robots['robot_starts']
     }
 
-    best_plan, _, detailed_steps = search_tree.get_best_plan(RobotMap(r_map), {})
-    if not detailed_steps:
-        return 0, [], [], product_root
+    if cost_metric == 'time':
+        best_plan, _, detailed_steps = search_tree.get_best_plan_by_time(RobotMap(r_map), {})
+        if not detailed_steps:
+            return 0, [], [], product_root
+        cost = search_tree.determine_time(node=search_tree.robot_manager.head_time_step_node)
+    else:
+        best_plan, _, detailed_steps = search_tree.get_best_plan(RobotMap(r_map), {})
+        if not detailed_steps:
+            return 0, [], [], product_root
+        cost = search_tree.determine_cost(node=search_tree.robot_manager.head_time_step_node)
 
-    cost = search_tree.determine_cost(node=search_tree.robot_manager.head_time_step_node)
     return cost, best_plan, detailed_steps, product_root
 
 
@@ -157,7 +165,21 @@ def main():
     parser = argparse.ArgumentParser(description='Run Rudell Sifting with Planning Cost')
     parser.add_argument('--input', type=str, default='examples_2/tate-ex1.srql',
                         help='Input SRQL file')
+    parser.add_argument('--cost-metric', type=str, choices=['distance', 'time'],
+                        default=None,
+                        help='Cost metric: "distance" (sum of all robot distances) '
+                             'or "time" (wall-clock parallel completion time)')
     args = parser.parse_args()
+
+    cost_metric = args.cost_metric
+    if cost_metric is None:
+        print("\nSelect cost metric:")
+        print("  [1] distance  — sum of all robot distances (sequential)")
+        print("  [2] time      — wall-clock parallel completion time")
+        choice = input("Enter 1 or 2 (default: 1): ").strip()
+        cost_metric = 'time' if choice == '2' else 'distance'
+
+    print(f"\nCost metric: {cost_metric}")
 
     # --- Load ---
     print_section("RUDELL'S SIFTING WITH PLANNING-BASED COST")
@@ -179,7 +201,7 @@ def main():
     print(f"\nVariable order: {sorted_var_names(bdd)}")
 
     cost_before, _, steps_before, prod_before = compute_plan_and_cost(
-        bdd, w, q, elegant_var_dict, robots, locs_with_coords)
+        bdd, w, q, elegant_var_dict, robots, locs_with_coords, cost_metric)
     print(f"\nCost: {cost_before:.4f}")
     print_detailed_plan(steps_before, "BEFORE")
 
@@ -193,7 +215,8 @@ def main():
     evaluator = PlanningCostEvaluator(
         elegant_var_dict=elegant_var_dict,
         robots=robots,
-        locs_with_coords=locs_with_coords)
+        locs_with_coords=locs_with_coords,
+        cost_metric=cost_metric)
 
     print("\nSifting in progress...")
     print("(Each variable is swept across all positions to find optimal placement)\n")
@@ -219,7 +242,7 @@ def main():
     print(f"\nVariable order: {sorted_var_names(bdd)}")
 
     cost_after, _, steps_after, prod_after = compute_plan_and_cost(
-        bdd, w, q, elegant_var_dict, robots, locs_with_coords)
+        bdd, w, q, elegant_var_dict, robots, locs_with_coords, cost_metric)
     
     print(f"\nCost: {cost_after:.4f}")
     print_detailed_plan(steps_after, "AFTER")
@@ -230,8 +253,10 @@ def main():
 
     # --- Summary ---
     print_section("SUMMARY")
-    print(f"\nCost BEFORE sifting: {cost_before:.4f}")
-    print(f"Cost AFTER sifting:  {cost_after:.4f}")
+    metric_label = "Time" if cost_metric == 'time' else "Cost"
+    print(f"\nMetric: {cost_metric}")
+    print(f"{metric_label} BEFORE sifting: {cost_before:.4f}")
+    print(f"{metric_label} AFTER sifting:  {cost_after:.4f}")
 
     if cost_before > 0:
         improvement = cost_before - cost_after

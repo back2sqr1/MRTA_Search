@@ -26,7 +26,7 @@ class PlanningCostEvaluator:
         cost = evaluator(bdd, wrld, qry)
     """
 
-    def __init__(self, elegant_var_dict, robots, locs_with_coords):
+    def __init__(self, elegant_var_dict, robots, locs_with_coords, cost_metric='distance'):
         """
         Initialize the planning cost evaluator.
 
@@ -34,10 +34,12 @@ class PlanningCostEvaluator:
             elegant_var_dict: Dict mapping elegant names to BDD variable names
             robots: Dict with 'num_robots' and 'robot_starts' list
             locs_with_coords: Dict mapping location names to {'x': int, 'y': int}
+            cost_metric: 'distance' for sum of robot distances, 'time' for parallel wall-clock time
         """
         self.elegant_var_dict = elegant_var_dict
         self.robots = robots
         self.locs_with_coords = locs_with_coords
+        self.cost_metric = cost_metric
 
         # Precompute location tuples
         self.locs = {}
@@ -102,9 +104,10 @@ class PlanningCostEvaluator:
         initial_robot_map = RobotMap(r_map)
         initial_resolutions = {}
 
-        # Fast cost-only search with alpha-beta pruning (no tree materialization)
-        cost = search_tree.get_best_plan(initial_robot_map, initial_resolutions, get_only_cost=True)
-        # best_plan, _, _ = search_tree.get_best_plan(initial_robot_map, initial_resolutions)
+        if self.cost_metric == 'time':
+            cost = search_tree.get_best_plan_by_time(initial_robot_map, initial_resolutions, get_only_time=True)
+        else:
+            cost = search_tree.get_best_plan(initial_robot_map, initial_resolutions, get_only_cost=True)
         return cost
 
 def print_descendants(bdd, u, elegant_var_dict, visited=None):

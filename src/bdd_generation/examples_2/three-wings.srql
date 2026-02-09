@@ -23,16 +23,16 @@
 location hub1 at 47, 50
 location hub2 at 53, 50
 
-# WEST WING (~51 units from center)
-location a at 5, 25
-location b at 5, 30
+# WEST WING 
+location a at 25, 25
+location b at 25, 30
 
 # NORTH WING (~50 units from center)
 location c at 50, 100
 
-# EAST WING (~51 units from center)
-location d at 95, 25
-location e at 95, 30
+# EAST WING 
+location d at 75, 75
+location e at 75, 78
 
 robots 2
 robot r1 starts-at hub1
