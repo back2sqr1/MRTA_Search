@@ -3,4 +3,5 @@ build
 install
 log
 .venv
+src/bdd_generation/__pycache__/
 # src/bdd_generation/
