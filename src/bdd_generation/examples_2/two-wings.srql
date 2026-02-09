@@ -32,7 +32,6 @@ recognizable-property artifact
 # Artifact is at exactly one location in the museum
 {
   artifact(westLobby) | artifact(westGallery) | artifact(westStorage) |
-  artifact(centralLobby) | artifact(centralHall) |
   artifact(eastLobby)
 }
 
@@ -48,5 +47,5 @@ recognizable-property artifact
 # Good ordering: Go to East Wing
 # Bad ordering: Check West Wing
 Query: {
-  (artifact(westLobby)) | (artifact(westGallery)) | (artifact(westStorage))
+  (artifact(westLobby)) | (artifact(westGallery)) | (artifact(eastLobby))
 }
