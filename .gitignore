@@ -4,4 +4,4 @@ install
 log
 .venv
 **/__pycache__/
-# src/bdd_generation/
+*.pdf

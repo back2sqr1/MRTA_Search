@@ -617,7 +617,7 @@ class BDD(_abc.BDD):
                 if (abs(int(wv)) == 1): # The world vertex reaches the leaf on the left, and we condition on the world, so we can infer what the value must be
                     if (int(wv) != w_par): # Note that determine whether it is a free positive or a free negative value, we need to know the parity
                         inferred_any = True
-                elif (abs(int(ww)) == 1): # The world vertex reaches the leaf on the right, ... etc.
+                if (abs(int(ww)) == 1): # The world vertex reaches the leaf on the right, ... etc.
                     if (int(ww) != w_par): # Ditto
                         inferred_any = False
 

@@ -168,6 +168,7 @@ def main():
     print(f"\nLoading: {input_path}")
 
     bdd, _, elegant_var_dict, _, robots, locs_with_coords, q, w = get_bdd_from_srql(input_path)
+    bdd.dump("world_bdd.pdf", [q, w], v_dict=elegant_var_dict, **DUMP_DEFAULTS)
     var_to_readable = build_readable_var_map(elegant_var_dict)
 
     print(f"Variables: {len(bdd.vars)}")
