@@ -14,14 +14,16 @@
 # WEST WING (far left)
 location westLobby at 0, 0
 location westGallery at 0, 5
+
+# EAST WING (far right)
+location eastLobby at 100, 0
+
 location westStorage at 0, 10
 
 # CENTRAL WING (middle - robots start here)
 location centralLobby at 50, 0
 location centralHall at 50, 5
 
-# EAST WING (far right)
-location eastLobby at 100, 0
 
 robots 2
 robot security1 starts-at centralLobby
