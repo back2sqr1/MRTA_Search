@@ -4,15 +4,12 @@
 # each equidistant (~50 units) from the hub but in different directions.
 #
 #                    c  (North Wing)
-#                 (50, 100)
 #                    |
 #                    |
 #              hub1 --- hub2   (center)
-#             (47,50)  (53,50)
 #              /             \
 #             /               \
 #        a, b                 d, e
-#   (5,25)(5,30)         (95,25)(95,30)
 #   (West Wing)           (East Wing)
 #
 # Query: !art(c) | (art(e) & art(b) & !art(d) & !art(a))

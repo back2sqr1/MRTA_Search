@@ -235,16 +235,54 @@ Formulas wrapped in braces using propositional logic.
 { <formula> }
 ```
 
-**Operators:**
-| Operator | Meaning |
-|----------|---------|
-| `&`      | AND     |
-| `\|`     | OR      |
-| `^`      | XOR     |
-| `!`      | NOT     |
-| `~`      | NOT (alternative) |
-| `->`     | IMPLIES |
-| `()`     | Grouping |
+**Operators (usable inside `{}`):**
+
+| Operator | Meaning | Aliases | Notes |
+|----------|---------|---------|-------|
+| `&`      | AND     | `&&`    | Both operands must be true |
+| `\|`     | OR      | `\|\|` | At least one operand must be true |
+| `^`      | XOR     |         | Exactly one operand must be true. **Caution:** the product graph may infer variables from world constraints, which can prevent the planner from investigating both sides — see Known Limitations below |
+| `!`      | NOT     |         | Prefix negation. (`~` works only outside braces in flat facts) |
+| `->`     | IMPLIES |         | `a -> b` means "if a then b" (equivalent to `!a \| b`) |
+| `<->`    | EQUIV   |         | `a <-> b` means "a if and only if b" (true when both are equal) |
+| `()`     | Grouping |        | Parentheses for controlling evaluation order |
+| `True`   | Boolean true |    | Constant |
+| `False`  | Boolean false |   | Constant |
+
+**Precedence (highest to lowest binding):**
+
+| Priority | Operator | Associativity |
+|----------|----------|---------------|
+| 1 (highest) | `!` (NOT) | Right |
+| 2        | `&` (AND) | Left |
+| 3        | `\|` (OR) | Left |
+| 4        | `^` (XOR) | Left |
+| 5        | `->` (IMPLIES) | Left |
+| 6 (lowest) | `<->` (EQUIV) | Left |
+
+**Atoms:**
+
+Atoms inside formulas take the form `property(location)`, where both the property
+and location must be declared earlier in the file. Quantifier variables (`?x`) can
+be used in place of locations when the formula is wrapped in a quantifier block.
+
+**Symbols blocked inside `{}`:**
+
+The SRQL lexer only passes a limited character set through to the Boolean formula
+parser. The following operators are supported by the underlying BDD engine but
+**cannot** be used inside `{}` braces in SRQL files:
+
+| Symbol | Meaning | Why blocked |
+|--------|---------|-------------|
+| `~`    | NOT (alternative) | `~` not in SRQL brace charset. Use `!` instead |
+| `=>`   | IMPLIES (alternative) | `=` not in SRQL brace charset. Use `->` instead |
+| `<=>`  | EQUIV (alternative) | `=` not in SRQL brace charset. Use `<->` instead |
+| `/\`   | AND (alternative) | `/` not in SRQL brace charset. Use `&` instead |
+| `\/`   | OR (alternative) | `/` not in SRQL brace charset. Use `\|` instead |
+| `ite(a, b, c)` | If-then-else | `,` not in SRQL brace charset |
+
+> **Note:** `~` and `!` both work for negation in **flat facts** outside braces
+> (e.g., `!art(hub)` or `~art(hub)`), but only `!` works inside `{}` formulas.
 
 **Example:**
 ```srql
@@ -253,6 +291,12 @@ Formulas wrapped in braces using propositional logic.
 {
   marilyn-diptych(loc15) | marilyn-diptych(loc06) | marilyn-diptych(loc07) | marilyn-diptych(loc08)
 }
+
+# EQUIV example: art at b if and only if sign at a
+{ sign(a) <-> art(b) }
+
+# IMPLIES example: if art at b, then no art at c, d, or e
+{ art(b) -> !art(c) & !art(d) & !art(e) }
 ```
 
 ##### 7.3 Quantified Formulas
@@ -706,8 +750,8 @@ class RobotManager:
 | File | Description |
 |------|-------------|
 | `examples_2/tate-ex1.srql` | Simple 2-robot museum navigation |
-| `examples_2/tate-ex2.srql` | Complex museum with multiple properties |
-| `examples_2/ex1.srql` | Old format with transitions |
+| `examples_2/decision-tree.sqrl` | Branching out example A -> B, C OR -> D, E |
+| `examples_2/three-wings.srql` | Three different ways to go, fastest is when two robots go to 2 wings that are closer |
 
 ### Key Functions
 
@@ -721,7 +765,8 @@ class RobotManager:
 | `custom_reorder()` | customdd/bdd.py:2546 | Rudell's sifting with optional `plan_cost_fn` |
 | `PlanningCostEvaluator` | sifting.py:17 | Callable class for multi-robot planning cost |
 | `determine_plan_cost()` | sifting.py:317 | Legacy function for planning-based cost |
-| `SearchTree.determine_cost()` | create_plan.py:204 | Core cost aggregation (MIN/MAX tree) |
+| `SearchTree.determine_cost()` | create_plan.py:204 | Core cost aggregation (MIN/MAX) |
+| `SearchTree.determine_time()` | create plan.py:238 | Cost in time, only with single pins, no midpoint or centroid |
 
 ---
 

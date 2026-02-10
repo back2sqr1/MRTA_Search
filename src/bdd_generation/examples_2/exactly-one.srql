@@ -1,0 +1,75 @@
+# Decision Tree with Sign Property
+#
+# A signpost at location `a` (property: sign) tells the robot which wing to search.
+#   sign(a) = true  -> art is in {b, c}
+#   sign(a) = false -> art is in {d, e}
+#
+# BDD levels:
+#
+#   Level 0:       sign(a)
+#                  /     \
+#   Level 1:  art(d)    art(b)
+#              / \       / \
+#   Level 2: art(e) T  art(c) T
+#             / \       / \
+#   Leaves:  F   T     F   T
+#
+# Left = false, Right = true at every node.
+#
+# Layout:
+#
+#   b (0, 60)                     d (100, 60)
+#       \                         /
+#   c (0, 40)      a (50, 50)    e (100, 40)
+#                  /
+#          hub (50, 20)
+
+# ROBOT HUB
+location hub at 50, 20
+
+# SIGNPOST — has the `sign` property
+location a at 50, 50
+
+# Left wing — candidate art locations
+location b at 0, 60
+location c at 0, 40
+
+# Right wing — candidate art locations
+location d at 100, 60
+location e at 100, 40
+
+robots 2
+robot r1 starts-at hub
+robot r2 starts-at hub
+
+recognizable-property art
+recognizable-property sign
+
+# Ground facts: no art at hub or a
+!art(hub)
+!art(a)
+
+# Ground facts: sign only exists at a
+!sign(hub)
+!sign(b)
+!sign(c)
+!sign(d)
+!sign(e)
+
+# World: at least one artifact among b, c, d, e
+{
+  art(b) | art(c) | art(d) | art(e)
+}
+
+# Left wing: at most one art                                                                                                                                                                                                                                
+{ art(b) -> !art(c) }                                     
+{ art(c) -> !art(b) }
+
+# Right wing: at most one art
+{ art(d) -> !art(e) }
+{ art(e) -> !art(d) }
+
+Query: {
+  (sign(a) & (art(b) | art(c))) ^ (!sign(a) & (art(d) | art(e)))
+}
+

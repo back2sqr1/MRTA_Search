@@ -14,6 +14,10 @@ Usage:
 import sys
 import os
 import argparse
+import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
+from matplotlib.lines import Line2D
 
 # Add source directories to path
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -158,6 +162,138 @@ def print_detailed_plan(detailed_steps, label):
 
 
 # ---------------------------------------------------------------------------
+# Plan Visualization
+# ---------------------------------------------------------------------------
+
+ROBOT_COLORS = ['#1f77b4', '#d62728', '#2ca02c', '#ff7f0e', '#9467bd', '#8c564b']
+
+def _extract_move_phases(detailed_steps, robots, locs_with_coords):
+    """Extract sequential movement phases from the detailed plan steps.
+
+    Returns a list of phases.  Each phase is a list of
+    (robot_id, from_xy, to_xy) tuples representing simultaneous moves.
+    """
+    locs_xy = {name: (c['x'], c['y']) for name, c in locs_with_coords.items()}
+
+    # Initialise current positions from robot starts
+    cur_pos = {}
+    for r in robots['robot_starts']:
+        cur_pos[r['robot_id']] = locs_xy[r['start_location']]
+
+    phases = []
+    seen_in_phase = set()
+
+    for step in detailed_steps:
+        if step['type'] == 'robot_moving':
+            phase_moves = []
+            for rid, info in step['robots'].items():
+                if info['assigned_location'] and info['target_position']:
+                    key = (rid, info['assigned_location'])
+                    if key not in seen_in_phase:
+                        seen_in_phase.add(key)
+                        from_xy = cur_pos.get(rid, info['position'])
+                        to_xy = tuple(info['target_position'])
+                        phase_moves.append((rid, from_xy, to_xy))
+                        cur_pos[rid] = to_xy
+            if phase_moves:
+                phases.append(phase_moves)
+        elif step['type'] == 'query':
+            seen_in_phase.clear()
+
+    return phases
+
+
+def _draw_plan(ax, phases, locs_with_coords, robots, title, cost, cost_metric):
+    """Draw a single plan on a matplotlib Axes."""
+    locs_xy = {name: (c['x'], c['y']) for name, c in locs_with_coords.items()}
+
+    # Assign a stable colour index to each robot id
+    all_robot_ids = [r['robot_id'] for r in robots['robot_starts']]
+    rid_to_color = {rid: ROBOT_COLORS[i % len(ROBOT_COLORS)]
+                    for i, rid in enumerate(all_robot_ids)}
+
+    # --- Draw locations ---
+    for name, (lx, ly) in locs_xy.items():
+        ax.plot(lx, ly, 'o', color='#555555', markersize=9, zorder=3)
+        ax.annotate(name, (lx, ly), fontsize=8, fontweight='bold',
+                    textcoords='offset points', xytext=(6, 6), zorder=4)
+
+    # --- Draw robot starting positions ---
+    for r in robots['robot_starts']:
+        rid = r['robot_id']
+        sx, sy = locs_xy[r['start_location']]
+        ax.plot(sx, sy, 's', color=rid_to_color[rid], markersize=13,
+                markeredgecolor='black', markeredgewidth=1.0, zorder=5)
+        ax.annotate(rid, (sx, sy), fontsize=6, ha='center', va='center',
+                    color='white', fontweight='bold', zorder=6)
+
+    # --- Draw movement arrows per phase ---
+    if not phases:
+        ax.text(0.5, 0.02, 'Trivial query - no movement needed',
+                transform=ax.transAxes, ha='center', fontsize=9, style='italic')
+    else:
+        for phase_idx, phase_moves in enumerate(phases):
+            for rid, (fx, fy), (tx, ty) in phase_moves:
+                dx, dy = tx - fx, ty - fy
+                color = rid_to_color[rid]
+                ax.annotate('',
+                    xy=(tx, ty), xytext=(fx, fy),
+                    arrowprops=dict(arrowstyle='->', color=color,
+                                    lw=2.0, shrinkA=6, shrinkB=6),
+                    zorder=2)
+                # Phase label at midpoint
+                mx, my = fx + dx * 0.5, fy + dy * 0.5
+                ax.text(mx, my, str(phase_idx + 1),
+                        fontsize=8, fontweight='bold', color='white',
+                        ha='center', va='center', zorder=8,
+                        bbox=dict(boxstyle='round,pad=0.2', fc=color,
+                                  ec='black', lw=0.5, alpha=0.9))
+
+    # --- Title and axes ---
+    metric_label = 'Time' if cost_metric == 'time' else 'Cost'
+    ax.set_title(f'{title}\n{metric_label}: {cost:.2f}', fontsize=11, fontweight='bold')
+    ax.set_xlabel('x')
+    ax.set_ylabel('y')
+    ax.set_aspect('equal', adjustable='datalim')
+    ax.margins(0.15)
+    ax.grid(True, alpha=0.3)
+
+
+def visualize_plans(steps_before, cost_before, steps_after, cost_after,
+                    locs_with_coords, robots, cost_metric, filename='plan_comparison'):
+    """Generate a side-by-side PDF comparing plans before and after sifting."""
+    phases_before = _extract_move_phases(steps_before, robots, locs_with_coords)
+    phases_after = _extract_move_phases(steps_after, robots, locs_with_coords)
+
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 6))
+    fig.suptitle('Robot Plan Comparison: Before vs After Sifting',
+                 fontsize=13, fontweight='bold', y=0.98)
+
+    _draw_plan(ax1, phases_before, locs_with_coords, robots,
+               'Before Sifting', cost_before, cost_metric)
+    _draw_plan(ax2, phases_after, locs_with_coords, robots,
+               'After Sifting', cost_after, cost_metric)
+
+    # --- Shared legend ---
+    all_robot_ids = [r['robot_id'] for r in robots['robot_starts']]
+    legend_handles = []
+    for i, rid in enumerate(all_robot_ids):
+        color = ROBOT_COLORS[i % len(ROBOT_COLORS)]
+        legend_handles.append(Line2D([0], [0], color=color, lw=2.5, label=rid))
+    legend_handles.append(Line2D([0], [0], marker='o', color='#555555', lw=0,
+                                 markersize=8, label='Location'))
+    legend_handles.append(Line2D([0], [0], marker='s', color='gray', lw=0,
+                                 markersize=10, markeredgecolor='black', label='Start'))
+    fig.legend(handles=legend_handles, loc='lower center', ncol=len(legend_handles),
+               fontsize=9, frameon=True, fancybox=True)
+
+    plt.tight_layout(rect=[0, 0.06, 1, 0.95])
+    fig.savefig(f'{filename}.pdf', bbox_inches='tight')
+    plt.close(fig)
+    print(f"  - {filename}.pdf  (Side-by-side plan comparison)")
+
+
+# ---------------------------------------------------------------------------
 # Main
 # ---------------------------------------------------------------------------
 
@@ -192,6 +328,9 @@ def main():
     bdd, _, elegant_var_dict, _, robots, locs_with_coords, q, w = get_bdd_from_srql(input_path)
     var_to_readable = build_readable_var_map(elegant_var_dict)
 
+    # Derive output prefix from input filename (e.g. "decision-tree" from "examples_2/decision-tree.srql")
+    prefix = os.path.splitext(os.path.basename(input_path))[0]
+
     print(f"Variables: {len(bdd.vars)}")
     print(f"Robots: {robots['num_robots']}")
     print(f"Locations: {list(locs_with_coords.keys())}")
@@ -206,7 +345,7 @@ def main():
     print_detailed_plan(steps_before, "BEFORE")
 
     if abs(int(prod_before)) != 1:
-        dump_bdd_pdf(bdd, 'before_sifting', [prod_before],
+        dump_bdd_pdf(bdd, f'{prefix}_before_sifting', [prod_before],
                      f"Before Sifting (cost={cost_before:.2f})", elegant_var_dict)
 
     # --- Sift ---
@@ -229,7 +368,7 @@ def main():
         print(f"  Sifted '{readable}' -> level {best_level}, cost = {cost:.4f}")
         dump_product_graph_pdf(
             bdd, w, q,
-            filename=f'sifting_step_{step}',
+            filename=f'{prefix}_sifting_step_{step}',
             label=f"Step {step}: sifted '{readable}' (cost={cost:.2f})",
             elegant_var_dict=elegant_var_dict)
         sifting_step[0] += 1
@@ -248,8 +387,14 @@ def main():
     print_detailed_plan(steps_after, "AFTER")
 
     if abs(int(prod_after)) != 1:
-        dump_bdd_pdf(bdd, 'after_sifting', [prod_after],
+        dump_bdd_pdf(bdd, f'{prefix}_after_sifting', [prod_after],
                      f"After Sifting (cost={cost_after:.2f})", elegant_var_dict)
+
+    # --- Visualization ---
+    print_section("GENERATING PLAN VISUALIZATION")
+    visualize_plans(steps_before, cost_before, steps_after, cost_after,
+                    locs_with_coords, robots, cost_metric,
+                    filename=f'{prefix}_plan_comparison')
 
     # --- Summary ---
     print_section("SUMMARY")
@@ -266,10 +411,11 @@ def main():
         print("Trivial query - no improvement possible")
 
     print("\nGenerated files:")
-    print("  - before_sifting.pdf  (Initial variable ordering)")
+    print(f"  - {prefix}_before_sifting.pdf  (Initial variable ordering)")
     for i in range(sifting_step[0]):
-        print(f"  - sifting_step_{i}.pdf  (After sifting variable {i + 1})")
-    print("  - after_sifting.pdf   (After Rudell's sifting)")
+        print(f"  - {prefix}_sifting_step_{i}.pdf  (After sifting variable {i + 1})")
+    print(f"  - {prefix}_after_sifting.pdf   (After Rudell's sifting)")
+    print(f"  - {prefix}_plan_comparison.pdf (Side-by-side plan visualization)")
     print("\nDone!")
 
 
