@@ -46,6 +46,14 @@ class PlanningCostEvaluator:
         for loc_name, coords in locs_with_coords.items():
             self.locs[loc_name] = (coords['x'], coords['y'])
 
+        # Saved state from the most recent evaluation.
+        # on_var_sifted can read these to colour the PDF without
+        # running a second search.
+        self.last_temp_bdd = None
+        self.last_product_root = None
+        self.last_search_tree = None
+        self.last_root_node = None
+
     def __call__(self, bdd, wrld, qry):
         """
         Compute the planning cost for the current BDD variable ordering.
@@ -104,10 +112,24 @@ class PlanningCostEvaluator:
         initial_robot_map = RobotMap(r_map)
         initial_resolutions = {}
 
+        # During sifting we only need the cost, not the plan.
+        # Use alpha-beta pruning to skip branches that cannot affect
+        # the minimax result (only safe here because we discard the tree
+        # immediately after; plan extraction still uses the un-pruned path).
+        root_node = search_tree.search(initial_robot_map, initial_resolutions)
         if self.cost_metric == 'time':
-            cost = search_tree.get_best_plan_by_time(initial_robot_map, initial_resolutions, get_only_time=True)
+            cost = search_tree.determine_time_with_pruning(root_node)
         else:
-            cost = search_tree.get_best_plan(initial_robot_map, initial_resolutions, get_only_cost=True)
+            cost = search_tree.determine_cost_with_pruning(root_node)
+
+        # Save state so on_var_sifted can colour the PDF without a
+        # redundant search.  The last call before on_var_sifted is
+        # always at the best position for that variable.
+        self.last_temp_bdd = product_bdd
+        self.last_product_root = product_root
+        self.last_search_tree = search_tree
+        self.last_root_node = root_node
+
         return cost
 
 def print_descendants(bdd, u, elegant_var_dict, visited=None):

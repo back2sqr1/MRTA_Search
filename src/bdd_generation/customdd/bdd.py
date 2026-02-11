@@ -1380,7 +1380,7 @@ class BDD(_abc.BDD):
     def _dump_figure(self, roots, filename,
                      filetype, **kw):
         """Write BDDs to `filename` as figure."""
-        custom_vars = ['method', 'v_dict', 'root_names_map', 'leaf_names_map', 'simplify_names', 'show_pass_thru_nodes', 'pass_thru_strict', 'condition_upon', 'clean_print', 'fileformat']
+        custom_vars = ['method', 'v_dict', 'root_names_map', 'leaf_names_map', 'simplify_names', 'show_pass_thru_nodes', 'pass_thru_strict', 'condition_upon', 'clean_print', 'fileformat', 'node_color_map', 'robot_color_legend']
 
         ff = kw.get("fileformat", False)
 
@@ -2239,11 +2239,17 @@ def to_pydot(roots, bdd, **kw):
     simplabels=kw.get('simplify_names',{})
     pass_double=kw.get('pass_thru_strict', False)
     leaf_labels=kw.get('leaf_names_map',{True:"  True  ", False:"[False]"})
+    node_color_map=kw.get('node_color_map',{})
+    robot_color_legend=kw.get('robot_color_legend',{})
 
     for u in nodes:
         i, v, w = bdd._succ[abs(u)]
-    
-        if (int(u) in cond_determined):
+
+        # --- colour for the positive pydot node (@{abs(u)}) ---
+        pos_code = "@" + str(abs(u))
+        if pos_code in node_color_map:
+            col = node_color_map[pos_code]
+        elif (int(u) in cond_determined):
             if cond_determined[int(u)] == 'l':
                 col = "lightcoral"
             elif cond_determined[int(u)] == 'r':
@@ -2265,13 +2271,17 @@ def to_pydot(roots, bdd, **kw):
         else:
             label = '{var}  {u}\n{loc}'.format(var=var, u=su, loc=rev_query_v_dict(var))
         if v is None:
-            
+
             nd = pydot.Node(name=su, label=leaf_labels[True], shape="box", color="darkseagreen4", fillcolor="lightgreen", style="filled")
         else:
             nd = pydot.Node(name=su, label=label, shape="oval",  style="filled", fillcolor=col)
         pynodeDict[int(su)] = nd
 
-        if ((-int(u)) in cond_determined):
+        # --- colour for the complemented pydot node (@-{abs(u)}) ---
+        neg_code = "@-" + str(abs(u))
+        if neg_code in node_color_map:
+            col = node_color_map[neg_code]
+        elif ((-int(u)) in cond_determined):
             if cond_determined[(-int(u))] == 'l':
                 col = "lightcoral"
             elif cond_determined[(-int(u))] == 'r':
@@ -2454,6 +2464,22 @@ def to_pydot(roots, bdd, **kw):
     for k in pynodeDict.keys():
         if not (k in connected_vs):
             pynodeDict[k].set_style('invis')
+
+    # Robot assignment legend
+    if robot_color_legend:
+        legend = pydot.Cluster('legend', label='Robot Assignments',
+                               style='rounded', color='gray', fontsize='10')
+        prev_legend_name = None
+        for rid, color in robot_color_legend.items():
+            legend_name = 'legend_' + str(rid)
+            nd = pydot.Node(name=legend_name, label=str(rid), shape='box',
+                            fillcolor=color, style='filled', fontcolor='white',
+                            fontsize='10', width='0.6', height='0.3')
+            legend.add_node(nd)
+            if prev_legend_name is not None:
+                legend.add_edge(pydot.Edge(prev_legend_name, legend_name, style='invis'))
+            prev_legend_name = legend_name
+        g.add_subgraph(legend)
 
     return g
 

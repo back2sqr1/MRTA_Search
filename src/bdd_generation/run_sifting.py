@@ -54,14 +54,38 @@ def build_readable_var_map(elegant_var_dict):
             for readable, internal in elegant_var_dict.items()}
 
 
-def dump_bdd_pdf(bdd, filename, roots, label, elegant_var_dict):
+def dump_bdd_pdf(bdd, filename, roots, label, elegant_var_dict,
+                 node_color_map=None, robot_color_legend=None):
     """Dump a BDD to PDF with standard formatting.
 
     ``roots`` should be a list of Function objects (autoref nodes).
     """
     root_names = {int(r): label for r in roots}
+    extra = {}
+    if node_color_map is not None:
+        extra['node_color_map'] = node_color_map
+    if robot_color_legend is not None:
+        extra['robot_color_legend'] = robot_color_legend
     bdd.dump(filename, roots=roots, v_dict=elegant_var_dict,
-             root_names_map=root_names, **DUMP_DEFAULTS)
+             root_names_map=root_names, **DUMP_DEFAULTS, **extra)
+
+
+def _build_robot_color_maps(search_tree, root_node, robots, cost_metric):
+    """Compute node_color_map and robot_color_legend from a solved search tree.
+
+    Returns (node_color_map, robot_color_legend).
+    """
+    use_time = (cost_metric == 'time')
+    assignments = search_tree.get_optimal_node_assignments(root_node, use_time=use_time)
+
+    all_robot_ids = [r['robot_id'] for r in robots['robot_starts']]
+    rid_to_color = {rid: ROBOT_COLORS[i % len(ROBOT_COLORS)]
+                    for i, rid in enumerate(all_robot_ids)}
+
+    node_color_map = {code: rid_to_color.get(rid, 'white')
+                      for code, rid in assignments.items()}
+    robot_color_legend = {rid: rid_to_color[rid] for rid in all_robot_ids}
+    return node_color_map, robot_color_legend
 
 
 def dump_product_graph_pdf(bdd, wrld, qry, filename, label, elegant_var_dict):
@@ -75,6 +99,42 @@ def dump_product_graph_pdf(bdd, wrld, qry, filename, label, elegant_var_dict):
     if abs(int(prod)) == 1:
         return
     dump_bdd_pdf(temp_bdd, filename, [prod], label, elegant_var_dict)
+
+
+def dump_colored_product_graph_pdf(bdd, wrld, qry, filename, label,
+                                   elegant_var_dict, robots, locs_with_coords,
+                                   cost_metric):
+    """Form a product graph, run the search, and dump a robot-colored PDF.
+
+    Uses the same temporary BDD for both the search and the PDF so that
+    node IDs match between the color map and the rendered graph.
+    """
+    temp_bdd = BDD(bdd.vars)
+    prod = bdd.form_product_graph(temp_bdd, wrld, qry)
+    if abs(int(prod)) == 1:
+        return
+
+    adjacency_list = build_adjacency_list(temp_bdd, prod)
+    code_to_locations_map = get_code_to_locations_map(temp_bdd, prod, elegant_var_dict)
+
+    locs = {name: (coords['x'], coords['y'])
+            for name, coords in locs_with_coords.items()}
+
+    search_tree = SearchTree()
+    search_tree.import_srql_config(adjacency_list, locs,
+                                   code_to_locations_map, str(prod))
+
+    r_map = {r['robot_id']: Robot(id=r['robot_id'], position=locs[r['start_location']])
+             for r in robots['robot_starts']}
+
+    root_node = search_tree.search(RobotMap(r_map), {})
+
+    node_color_map, robot_color_legend = _build_robot_color_maps(
+        search_tree, root_node, robots, cost_metric)
+
+    dump_bdd_pdf(temp_bdd, filename, [prod], label, elegant_var_dict,
+                 node_color_map=node_color_map,
+                 robot_color_legend=robot_color_legend)
 
 
 def print_section(title):
@@ -99,11 +159,12 @@ def compute_plan_and_cost(bdd, wrld, qry, elegant_var_dict, robots, locs_with_co
     Args:
         cost_metric: 'distance' for sum of robot distances, 'time' for parallel wall-clock time.
 
-    Returns (cost, best_plan, detailed_steps, product_root).
+    Returns (cost, best_plan, detailed_steps, product_root, search_tree).
     """
     product_root = bdd.form_product_graph(bdd, wrld, qry)
+    dump_bdd_pdf(bdd, "product_graph", [product_root],  "Product Graph", elegant_var_dict)
     if abs(int(product_root)) == 1:
-        return 0, [], [], product_root
+        return 0, [], [], product_root, None
 
     locs = {name: (coords['x'], coords['y'])
             for name, coords in locs_with_coords.items()}
@@ -123,15 +184,15 @@ def compute_plan_and_cost(bdd, wrld, qry, elegant_var_dict, robots, locs_with_co
     if cost_metric == 'time':
         best_plan, _, detailed_steps = search_tree.get_best_plan_by_time(RobotMap(r_map), {})
         if not detailed_steps:
-            return 0, [], [], product_root
+            return 0, [], [], product_root, None
         cost = search_tree.determine_time(node=search_tree.robot_manager.head_time_step_node)
     else:
         best_plan, _, detailed_steps = search_tree.get_best_plan(RobotMap(r_map), {})
         if not detailed_steps:
-            return 0, [], [], product_root
+            return 0, [], [], product_root, None
         cost = search_tree.determine_cost(node=search_tree.robot_manager.head_time_step_node)
 
-    return cost, best_plan, detailed_steps, product_root
+    return cost, best_plan, detailed_steps, product_root, search_tree
 
 
 def print_detailed_plan(detailed_steps, label):
@@ -339,14 +400,20 @@ def main():
     print_section("BEFORE SIFTING (Initial Variable Ordering)")
     print(f"\nVariable order: {sorted_var_names(bdd)}")
 
-    cost_before, _, steps_before, prod_before = compute_plan_and_cost(
+    cost_before, _, steps_before, prod_before, st_before = compute_plan_and_cost(
         bdd, w, q, elegant_var_dict, robots, locs_with_coords, cost_metric)
     print(f"\nCost: {cost_before:.4f}")
     print_detailed_plan(steps_before, "BEFORE")
 
     if abs(int(prod_before)) != 1:
+        ncm_b, rcl_b = (None, None)
+        if st_before is not None:
+            ncm_b, rcl_b = _build_robot_color_maps(
+                st_before, st_before.robot_manager.head_time_step_node,
+                robots, cost_metric)
         dump_bdd_pdf(bdd, f'{prefix}_before_sifting', [prod_before],
-                     f"Before Sifting (cost={cost_before:.2f})", elegant_var_dict)
+                     f"Before Sifting (cost={cost_before:.2f})", elegant_var_dict,
+                     node_color_map=ncm_b, robot_color_legend=rcl_b)
 
     # --- Sift ---
     print_section("RUNNING RUDELL'S SIFTING ALGORITHM")
@@ -366,11 +433,22 @@ def main():
         step = sifting_step[0]
         readable = var_to_readable.get(var, var)
         print(f"  Sifted '{readable}' -> level {best_level}, cost = {cost:.4f}")
-        dump_product_graph_pdf(
-            bdd, w, q,
-            filename=f'{prefix}_sifting_step_{step}',
-            label=f"Step {step}: sifted '{readable}' (cost={cost:.2f})",
-            elegant_var_dict=elegant_var_dict)
+
+        # Reuse the search tree that the evaluator already built at the
+        # best position — no redundant search.  Colour is assigned only
+        # once, here, after the variable has been placed.
+        if evaluator.last_temp_bdd is not None and evaluator.last_search_tree is not None:
+            ncm, rcl = _build_robot_color_maps(
+                evaluator.last_search_tree, evaluator.last_root_node,
+                robots, cost_metric)
+            dump_bdd_pdf(
+                evaluator.last_temp_bdd,
+                f'{prefix}_sifting_step_{step}',
+                [evaluator.last_product_root],
+                f"Step {step}: sifted '{readable}' (cost={cost:.2f})",
+                elegant_var_dict,
+                node_color_map=ncm,
+                robot_color_legend=rcl)
         sifting_step[0] += 1
 
     custom_reorder(bdd, w, q, plan_cost_fn=evaluator, on_var_sifted=on_var_sifted)
@@ -380,15 +458,21 @@ def main():
     print_section("AFTER SIFTING (Optimized Variable Ordering)")
     print(f"\nVariable order: {sorted_var_names(bdd)}")
 
-    cost_after, _, steps_after, prod_after = compute_plan_and_cost(
+    cost_after, _, steps_after, prod_after, st_after = compute_plan_and_cost(
         bdd, w, q, elegant_var_dict, robots, locs_with_coords, cost_metric)
-    
+
     print(f"\nCost: {cost_after:.4f}")
     print_detailed_plan(steps_after, "AFTER")
 
     if abs(int(prod_after)) != 1:
+        ncm_a, rcl_a = (None, None)
+        if st_after is not None:
+            ncm_a, rcl_a = _build_robot_color_maps(
+                st_after, st_after.robot_manager.head_time_step_node,
+                robots, cost_metric)
         dump_bdd_pdf(bdd, f'{prefix}_after_sifting', [prod_after],
-                     f"After Sifting (cost={cost_after:.2f})", elegant_var_dict)
+                     f"After Sifting (cost={cost_after:.2f})", elegant_var_dict,
+                     node_color_map=ncm_a, robot_color_legend=rcl_a)
 
     # --- Visualization ---
     print_section("GENERATING PLAN VISUALIZATION")

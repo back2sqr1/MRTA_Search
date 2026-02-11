@@ -32,11 +32,11 @@ location a at 50, 50
 
 # Left wing — candidate art locations
 location b at 0, 60
-location c at 0, 40
+# location c at 0, 40
 
 # Right wing — candidate art locations
 location d at 100, 60
-location e at 100, 40
+# location e at 100, 40
 
 robots 2
 robot r1 starts-at hub
@@ -52,24 +52,17 @@ recognizable-property sign
 # Ground facts: sign only exists at a
 !sign(hub)
 !sign(b)
-!sign(c)
+# !sign(c)
 !sign(d)
-!sign(e)
+# !sign(e)
 
 # World: at least one artifact among b, c, d, e
 {
-  art(b) | art(c) | art(d) | art(e)
+  art(b) | art(d)
 }
 
-# Left wing: at most one art                                                                                                                                                                                                                                
-{ art(b) -> !art(c) }                                     
-{ art(c) -> !art(b) }
-
-# Right wing: at most one art
-{ art(d) -> !art(e) }
-{ art(e) -> !art(d) }
 
 Query: {
-  (sign(a) & (art(b) | art(c))) ^ (!sign(a) & (art(d) | art(e)))
+  (sign(a) & art(b)) ^ (!sign(a) & art(d))
 }
 

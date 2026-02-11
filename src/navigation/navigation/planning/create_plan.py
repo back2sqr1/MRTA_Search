@@ -234,6 +234,77 @@ class SearchTree:
         else:
             raise ValueError(f"Unknown node type: {node.type}")
 
+    def determine_cost_with_pruning(self, node: TimeStepNode, alpha: float = float('-inf'), beta: float = float('inf')) -> float:
+        """Alpha-beta pruned minimax cost. Only used during sifting for speed.
+
+        Alpha tracks the best (highest) value the MAX player (query nodes)
+        can guarantee. Beta tracks the best (lowest) value the MIN player
+        (robot_assignment nodes) can guarantee. When alpha >= beta, the
+        remaining children cannot influence the result and are pruned.
+        """
+        if len(node.next) == 0:
+            return node.get_cost()
+
+        if node.type == 'robot_moving':
+            return self.determine_cost_with_pruning(node.next[0], alpha, beta)
+
+        elif node.type == 'query':
+            # MAX node: adversarial world picks worst outcome
+            cost = 0
+            for next_node in node.next:
+                cost = max(cost, self.determine_cost_with_pruning(next_node, alpha, beta))
+                alpha = max(alpha, cost)
+                if alpha >= beta:
+                    break  # Beta cutoff: MIN ancestor already has a cheaper option
+            return cost
+
+        elif node.type == 'robot_assignment':
+            # MIN node: planner picks best (cheapest) assignment
+            cost = float('inf')
+            for next_node in node.next:
+                cost = min(cost, self.determine_cost_with_pruning(next_node, alpha, beta))
+                beta = min(beta, cost)
+                if beta <= alpha:
+                    break  # Alpha cutoff: MAX ancestor already has a costlier option
+            return cost
+        else:
+            raise ValueError(f"Unknown node type: {node.type}")
+
+    def determine_time_with_pruning(self, node: TimeStepNode, alpha: float = float('-inf'), beta: float = float('inf')) -> float:
+        """Alpha-beta pruned minimax time. Only used during sifting for speed.
+
+        Same semantics as determine_cost_with_pruning but evaluates
+        wall-clock parallel completion time (max over robots) instead of
+        cumulative distance.
+        """
+        if len(node.next) == 0:
+            return node.get_time()
+
+        if node.type == 'robot_moving':
+            return self.determine_time_with_pruning(node.next[0], alpha, beta)
+
+        elif node.type == 'query':
+            # MAX node: adversarial world picks worst outcome
+            time = 0
+            for next_node in node.next:
+                time = max(time, self.determine_time_with_pruning(next_node, alpha, beta))
+                alpha = max(alpha, time)
+                if alpha >= beta:
+                    break  # Beta cutoff: MIN ancestor already has a faster option
+            return time
+
+        elif node.type == 'robot_assignment':
+            # MIN node: planner picks fastest assignment
+            time = float('inf')
+            for next_node in node.next:
+                time = min(time, self.determine_time_with_pruning(next_node, alpha, beta))
+                beta = min(beta, time)
+                if beta <= alpha:
+                    break  # Alpha cutoff: MAX ancestor already has a slower option
+            return time
+        else:
+            raise ValueError(f"Unknown node type: {node.type}")
+
     # TIME IS BY PARALLEL COMPLETION: max over robots (wall-clock time)
     def determine_time(self, node: TimeStepNode, recursive_count: int = 0) -> float:
         if len(node.next) == 0:
@@ -264,6 +335,59 @@ class SearchTree:
             raise ValueError(f"Unknown node type: {node.type}")
         
     
+
+    def get_optimal_node_assignments(self, root_node: TimeStepNode, use_time: bool = False) -> dict[str, str]:
+        """Walk the search tree to find the optimal robot for every BDD node.
+
+        At robot_assignment (MIN) nodes, follows the best combination.
+        At query (MAX) nodes, explores ALL branches so that every
+        reachable BDD node gets an assignment.
+
+        Args:
+            root_node: Root of the search tree (from search()).
+            use_time: If True, pick the best assignment by time instead of cost.
+
+        Returns:
+            dict mapping BDD query code (e.g. "@-87") to robot_id.
+        """
+        # Populate cost/time maps so determine_cost/time can be used for comparisons.
+        if use_time:
+            self.determine_time(root_node)
+        else:
+            self.determine_cost(root_node)
+
+        assignments: dict[str, str] = {}
+        self._walk_for_assignments(root_node, assignments, use_time)
+        return assignments
+
+    def _walk_for_assignments(self, node: TimeStepNode, assignments: dict[str, str], use_time: bool) -> None:
+        if not node.next:
+            return
+
+        if node.type == 'robot_moving':
+            self._walk_for_assignments(node.next[0], assignments, use_time)
+
+        elif node.type == 'query':
+            # Explore every possible world outcome
+            for child in node.next:
+                self._walk_for_assignments(child, assignments, use_time)
+
+        elif node.type == 'robot_assignment':
+            # Pick the best (MIN) combination
+            if use_time:
+                best_child = min(node.next, key=lambda n: self.determine_time(n))
+            else:
+                best_child = min(node.next, key=lambda n: self.determine_cost(n))
+
+            # Record which robot is sent to which location.
+            # Map every BDD code at that location to the robot.
+            for robot_id, robot in best_child.robot_map.items():
+                if robot.assigned_loc and robot.assigned_loc in self.location_to_prop:
+                    for code in self.location_to_prop[robot.assigned_loc]:
+                        if code not in assignments:
+                            assignments[code] = robot_id
+
+            self._walk_for_assignments(best_child, assignments, use_time)
 
     # By cost = cumulative distance traveled by all robots
     def get_best_plan(self, initial_robot_map: RobotMap, initial_resolution: dict[str, str], get_only_cost: bool = False) -> tuple[list[(str, tuple[int, int])], list[str], list[dict]]:
