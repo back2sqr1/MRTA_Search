@@ -21,3 +21,8 @@ class Robot:
 
 
 RobotMap = dict[str, Robot]
+
+
+def clone_robot_map(rm: RobotMap) -> RobotMap:
+    return {k: Robot(id=v.id, position=v.position, assigned_loc=v.assigned_loc,
+                     cost=v.cost, time=v.time) for k, v in rm.items()}

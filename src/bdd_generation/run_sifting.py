@@ -162,7 +162,6 @@ def compute_plan_and_cost(bdd, wrld, qry, elegant_var_dict, robots, locs_with_co
     Returns (cost, best_plan, detailed_steps, product_root, search_tree).
     """
     product_root = bdd.form_product_graph(bdd, wrld, qry)
-    dump_bdd_pdf(bdd, "product_graph", [product_root],  "Product Graph", elegant_var_dict)
     if abs(int(product_root)) == 1:
         return 0, [], [], product_root, None
 

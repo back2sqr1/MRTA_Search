@@ -1,4 +1,5 @@
 from copy import deepcopy
+import gc
 import itertools
 import json
 import sys
@@ -74,6 +75,13 @@ class PlanningCostEvaluator:
         Returns:
             float: The multi-robot planning cost (uses MIN over assignments, MAX over queries)
         """
+        # Free previous evaluation's objects before allocating new ones
+        self.last_search_tree = None
+        self.last_temp_bdd = None
+        self.last_product_root = None
+        self.last_root_node = None
+        gc.collect()
+
         # Create a SEPARATE BDD for the product graph to avoid modifying the original
         # This is critical during sifting - we can't add nodes to a BDD while reordering it
         product_bdd = BDD()
@@ -123,8 +131,8 @@ class PlanningCostEvaluator:
             cost = search_tree.determine_cost_with_pruning(root_node)
 
         # Save state so on_var_sifted can colour the PDF without a
-        # redundant search.  The last call before on_var_sifted is
-        # always at the best position for that variable.
+        # redundant search.  _reorder_var_custom_cost re-evaluates at
+        # the best position after shifting, so this state is current.
         self.last_temp_bdd = product_bdd
         self.last_product_root = product_root
         self.last_search_tree = search_tree

@@ -1,6 +1,5 @@
-from .robot_class import Robot, RobotMap
+from .robot_class import Robot, RobotMap, clone_robot_map
 from .time_step_node_class import TimeStepNode
-import copy
 import uuid
 
 def euclidean_distance(pos1, pos2):
@@ -36,7 +35,7 @@ class RobotManager:
         self.pin_to_location = pin_to_location
         self.location_to_prop = location_to_prop
 
-        robot_map_copy = copy.deepcopy(robot_map)
+        robot_map_copy = clone_robot_map(robot_map)
 
         # Compute initial visited locations from robot starting positions
         initial_visited = set()
@@ -52,18 +51,18 @@ class RobotManager:
             query = initial_question,
             next = [],
             type = 'robot_assignment',
-            resolved_questions= copy.deepcopy(initial_resolution) if initial_resolution else {},
+            resolved_questions= initial_resolution.copy() if initial_resolution else {},
         )
-        start_node.visited_locations = copy.deepcopy(initial_visited)
+        start_node.visited_locations = set(initial_visited)
         self.head_time_step_node = TimeStepNode(
             id = str(uuid.uuid1()),
             robot_map = robot_map_copy,
             query = initial_question,
             next = [start_node],
             type = 'query',
-            resolved_questions= copy.deepcopy(initial_resolution) if initial_resolution else {},
+            resolved_questions= initial_resolution.copy() if initial_resolution else {},
         )
-        self.head_time_step_node.visited_locations = copy.deepcopy(initial_visited)
+        self.head_time_step_node.visited_locations = set(initial_visited)
         self.time_step_queue = []
         self.time_step_queue.append(start_node)
 
@@ -85,56 +84,105 @@ class RobotManager:
         resolutions : list[dict[str, str]] = []
 
         if index < 0 or index >= len(known_properties):
-            resolutions.append(copy.deepcopy(resolved_questions))
+            resolutions.append(resolved_questions.copy())
             return resolutions
-        
+
         property = known_properties[index]
         if property in resolved_questions:
             return self.possible_resolutions(index + 1, known_properties, resolved_questions)
 
-        true_resolution = copy.deepcopy(resolved_questions)
+        true_resolution = resolved_questions.copy()
         true_resolution[property] = 'T'
         resolutions.extend(self.possible_resolutions(index + 1, known_properties, true_resolution))
 
-        false_resolution = copy.deepcopy(resolved_questions)
+        false_resolution = resolved_questions.copy()
         false_resolution[property] = 'F'
         resolutions.extend(self.possible_resolutions(index + 1, known_properties, false_resolution))
 
         return resolutions
     
-    def update_time_step(self, current_time_step: TimeStepNode, visited_locations_this_step: set[str]):
-        resolved_questions = copy.deepcopy(current_time_step.resolved_questions)
-        robot_map = copy.deepcopy(current_time_step.robot_map)
+    def _advance_query(self, query, known_properties, resolved_questions):
+        """Walk the BDD from query, branching only on known properties on the path.
 
-        new_visited_locations = copy.deepcopy(current_time_step.visited_locations)
+        Instead of enumerating all 2^n resolution combinations and then
+        walking the BDD for each, this walks the BDD directly and only
+        branches when it encounters a known-but-unresolved property.
+        Properties not on the BDD path don't affect which node we reach,
+        so enumerating their combinations is unnecessary.
+
+        Deduplicates on next_question: if multiple BDD paths reach the
+        same node, only one child is created (the sub-trees are identical
+        since in a BDD, future behavior depends only on the current node,
+        not how we reached it).
+
+        Returns a list of (next_question, resolution_dict) pairs.
+        """
+        results = []
+        seen_next = set()
+        stack = [(query, resolved_questions.copy())]
+
+        while stack:
+            node, resolutions = stack.pop()
+
+            # Terminal node: no children, query fully resolved on this path
+            children = self.next_question_map.get(node)
+            if not children:
+                if node not in seen_next:
+                    seen_next.add(node)
+                    results.append((node, resolutions))
+                continue
+
+            low_child = children[0]   # False branch
+            high_child = children[1]  # True branch
+
+            if node in resolutions:
+                # Already resolved: follow the appropriate branch
+                if resolutions[node] == 'T':
+                    stack.append((high_child, resolutions))
+                else:
+                    stack.append((low_child, resolutions))
+            elif node in known_properties:
+                # Known but not yet resolved: branch into T and F
+                true_res = resolutions.copy()
+                true_res[node] = 'T'
+                stack.append((high_child, true_res))
+
+                false_res = resolutions.copy()
+                false_res[node] = 'F'
+                stack.append((low_child, false_res))
+            else:
+                # Unknown property: can't advance, this is the next question
+                if node not in seen_next:
+                    seen_next.add(node)
+                    results.append((node, resolutions))
+
+        return results
+
+    def update_time_step(self, current_time_step: TimeStepNode, visited_locations_this_step: set[str]):
+        resolved_questions = current_time_step.resolved_questions.copy()
+        robot_map = clone_robot_map(current_time_step.robot_map)
+
+        new_visited_locations = set(current_time_step.visited_locations)
         new_visited_locations.update(visited_locations_this_step)
 
         known_properties = _known_properties(new_visited_locations, self.location_to_prop)
-        query = copy.deepcopy(current_time_step.query)
-        possible_resolutions = self.possible_resolutions(0, copy.deepcopy(list(known_properties)), resolved_questions)
-        for resolution in possible_resolutions:
-            next_question = copy.deepcopy(query)
+        query = current_time_step.query
 
-            while next_question in resolution:
-                truth = resolution[next_question] == 'T'
+        advanced = self._advance_query(query, known_properties, resolved_questions)
 
-                if truth:
-                    next_question = self.next_question_map[next_question][1]
-                else:
-                    next_question = self.next_question_map[next_question][0]
-
+        for next_question, resolution in advanced:
             if next_question == current_time_step.query:
                 continue
 
             next_time_step = TimeStepNode(
                 id = str(uuid.uuid1()),
-                robot_map = copy.deepcopy(robot_map),
+                robot_map = clone_robot_map(robot_map),
                 query = next_question,
                 next = [],
                 type = 'robot_assignment',
-                resolved_questions= copy.deepcopy(resolution),
+                resolved_questions= resolution.copy(),
             )
-            next_time_step.visited_locations = copy.deepcopy(new_visited_locations)
+            next_time_step.visited_locations = set(new_visited_locations)
             current_time_step.next.append(next_time_step)
 
             if next_question in self.props:
@@ -208,18 +256,43 @@ class RobotManager:
         locations = list(self.location_to_pin.keys())
         robot_ids = list(robot_map.keys())
         combinations : list[dict [str, str]] = []
-        
+
         property_locations = []
         for loc in locations:
             if property in self.location_to_prop[loc]:
                 property_locations.append(loc)
-        
+
 
         if len(property_locations) == 0:
             return combinations
-            
-        
-        def generate_assignments(robot_index: int, current_assignment: dict[str, str], used_locations: set[str] = set()):
+
+        # Locations where a robot is already en route are effectively
+        # committed — sending a second robot there is always suboptimal.
+        en_route_locations = set()
+        for robot in robot_map.values():
+            if robot.assigned_loc and robot.assigned_loc != '':
+                en_route_locations.add(robot.assigned_loc)
+
+        # Symmetry breaking: identify groups of interchangeable robots
+        # (same position and same accumulated cost). Within a group, we
+        # enforce that assigned locations are in sorted order to avoid
+        # generating mirror-image assignments with identical cost.
+        robot_state = {}
+        for rid in robot_ids:
+            r = robot_map[rid]
+            pos = (round(r.position[0], 2), round(r.position[1], 2))
+            robot_state[rid] = (pos, round(r.cost, 2), round(r.time, 2))
+
+        # prev_in_group[i] = index of the previous robot in the same
+        # equivalence group, or -1 if this robot is the first in its group.
+        prev_in_group = [-1] * len(robot_ids)
+        for i in range(1, len(robot_ids)):
+            for j in range(i - 1, -1, -1):
+                if robot_state[robot_ids[i]] == robot_state[robot_ids[j]]:
+                    prev_in_group[i] = j
+                    break
+
+        def generate_assignments(robot_index: int, current_assignment: dict[str, str], used_locations: set[str]):
             if robot_index == len(robot_ids):
                 # Check if at least one robot is assigned to a the property location or is at the location
                 values = current_assignment.values()
@@ -236,16 +309,37 @@ class RobotManager:
                             break
 
                 if flag:
-                    combinations.append(copy.deepcopy(current_assignment))
+                    combinations.append(current_assignment.copy())
 
                 return
-                        
+
 
             robot_id = robot_ids[robot_index]
             known_props = _known_properties(used_locations, self.location_to_prop)
+
+            # Symmetry breaking: if a previous robot in the same equivalence
+            # group was skipped, this one must also be skipped (otherwise we
+            # generate mirror-image assignments that have identical cost).
+            prev_idx = prev_in_group[robot_index]
+            prev_skipped = prev_idx >= 0 and robot_ids[prev_idx] not in current_assignment
+
             generate_assignments(robot_index + 1, current_assignment, used_locations)  # Skip this robot
 
+            if prev_skipped:
+                # Symmetric partner was skipped — skip this robot too
+                return
+
+            # Symmetry breaking: if the previous robot in the same group was
+            # assigned to location L, only consider locations >= L (sorted order).
+            min_loc = None
+            if prev_idx >= 0 and robot_ids[prev_idx] in current_assignment:
+                min_loc = current_assignment[robot_ids[prev_idx]]
+
             for location in locations:
+                # Symmetry: enforce sorted-location order within equivalent robots
+                if min_loc is not None and location < min_loc:
+                    continue
+
                 props = self.location_to_prop[location]
                 skip = True
                 for prop in props:
@@ -253,11 +347,9 @@ class RobotManager:
                         skip = False
                         break
 
-               
-                
-                if (location not in used_locations) and (not skip):
-                    new_assignment = copy.deepcopy(current_assignment)
-                    new_used_locations = copy.deepcopy(used_locations)
+                if (location not in used_locations) and (location not in en_route_locations) and (not skip):
+                    new_assignment = current_assignment.copy()
+                    new_used_locations = set(used_locations)
                     new_assignment[robot_id] = location
                     new_used_locations.add(location)
                     generate_assignments(robot_index + 1, new_assignment, new_used_locations)

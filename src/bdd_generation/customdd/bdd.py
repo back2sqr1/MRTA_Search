@@ -2596,12 +2596,10 @@ def custom_reorder(bdd, wrld, qry, costfxn=None, blocksdefn=None, plan_cost_fn=N
         return
 
     if not blocksdefn:
-        _apply_custom_sifting(bdd, wrld, qry, costfxn, plan_cost_fn, on_var_sifted)
+        cost_after = _apply_custom_sifting(bdd, wrld, qry, costfxn, cost_before, plan_cost_fn, on_var_sifted)
     else:
         assert _check_ordering_respects_blocks(bdd, blocksdefn, None)
-        _apply_custom_block_sifting(bdd, wrld, qry, costfxn, blocksdefn, plan_cost_fn, on_var_sifted)
-
-    cost_after = get_cost()
+        cost_after = _apply_custom_block_sifting(bdd, wrld, qry, costfxn, blocksdefn, cost_before, plan_cost_fn, on_var_sifted)
 
     logger.info(
         'Reordering changed `BDD` manager size '
@@ -2609,27 +2607,23 @@ def custom_reorder(bdd, wrld, qry, costfxn=None, blocksdefn=None, plan_cost_fn=N
             a=cost_before, b=cost_after))
 
 
-def _apply_custom_sifting(bdd, wrld, qry, costfxn, plan_cost_fn=None, on_var_sifted=None):
+def _apply_custom_sifting(bdd, wrld, qry, costfxn, initial_cost, plan_cost_fn=None, on_var_sifted=None):
     """Apply Rudell's sifting algorithm.
 
     If plan_cost_fn is provided, uses multi-robot planning cost.
     Otherwise falls back to edge-based cost via costfxn.
-    """
-    def get_cost():
-        if plan_cost_fn is not None:
-            return plan_cost_fn(bdd, wrld, qry)
-        return compute_query_cost(bdd, wrld, qry, costfxn)
 
+    Returns the final cost after sifting all variables.
+    """
     bdd._bdd.collect_garbage()
-    n = get_cost()
+    n = initial_cost
+    m = n
     levels = bdd._bdd._levels()
     # using `set` injects some randomness
     #names = set(bdd._bdd.vars) # we comment this out to remove the randomness
     names = bdd._bdd.vars
     for var in names:
-        k = _reorder_var_custom_cost(bdd, var, levels, wrld, qry, costfxn, plan_cost_fn)
-
-        m = get_cost()
+        k, m = _reorder_var_custom_cost(bdd, var, levels, wrld, qry, costfxn, m, plan_cost_fn)
 
         if on_var_sifted is not None:
             on_var_sifted(var, k, m)
@@ -2639,24 +2633,22 @@ def _apply_custom_sifting(bdd, wrld, qry, costfxn, plan_cost_fn=None, on_var_sif
                 m=m, v=var, k=k))
     assert m <= n, (m, n)
     logger.info('final variable order:\b{v}'.format(v=bdd._bdd.vars))
+    return m
 
 
-def _reorder_var_custom_cost(bdd, var, levels, wrld, qry, costfxn, plan_cost_fn=None):
+def _reorder_var_custom_cost(bdd, var, levels, wrld, qry, costfxn, current_cost, plan_cost_fn=None):
     """Reorder by sifting a variable `var`.
 
     If plan_cost_fn is provided, uses multi-robot planning cost.
     Otherwise falls back to edge-based cost via costfxn.
 
+    Returns (best_level, best_cost) tuple.
+
     @type bdd: `BDD`
     @type var: `str`
     """
-    def get_cost():
-        if plan_cost_fn is not None:
-            return plan_cost_fn(bdd, wrld, qry)
-        return compute_query_cost(bdd, wrld, qry, costfxn)
-
     assert var in bdd._bdd.vars, (var, bdd._bdd.vars)
-    m = get_cost()
+    m = current_cost
 
     n = len(bdd._bdd.vars) - 1
     assert n >= 0, n
@@ -2671,11 +2663,16 @@ def _reorder_var_custom_cost(bdd, var, levels, wrld, qry, costfxn, plan_cost_fn=
     k = min(costs, key=costs.get)
     _shift(bdd._bdd, end, k, levels)  # This is not _custom_shift as we just need to put the variable in the right place
 
-    m_ = get_cost()
+    # Re-evaluate at the best position so that plan_cost_fn's cached
+    # state (last_search_tree, last_product_root, etc.) corresponds to
+    # this position.  Without this, the cached state is stale — it
+    # belongs to position `end` (the last one swept), not `k`.
+    if plan_cost_fn is not None and k != end:
+        plan_cost_fn(bdd, wrld, qry)
 
-    assert costs[k] == m_, (costs[k], m_)
-    assert m_ <= m, (m_, m)
-    return k
+    best_cost = costs[k]
+    assert best_cost <= m, (best_cost, m)
+    return k, best_cost
 
 
 def _custom_shift(bdd, start, end, levels, wrld, qry, costfxn, plan_cost_fn=None):
@@ -2761,19 +2758,17 @@ def _verify_valid_block_ref(bdd, varname, blocksdefn):
     return False
 
 
-def _apply_custom_block_sifting(bdd, wrld, qry, costfxn, blocksdefn, plan_cost_fn=None, on_var_sifted=None):
+def _apply_custom_block_sifting(bdd, wrld, qry, costfxn, blocksdefn, initial_cost, plan_cost_fn=None, on_var_sifted=None):
     """Apply Rudell's sifting algorithm, moving variables in blocks.
 
     If plan_cost_fn is provided, uses multi-robot planning cost.
     Otherwise falls back to edge-based cost via costfxn.
-    """
-    def get_cost():
-        if plan_cost_fn is not None:
-            return plan_cost_fn(bdd, wrld, qry)
-        return compute_query_cost(bdd, wrld, qry, costfxn)
 
+    Returns the final cost after sifting all blocks.
+    """
     bdd._bdd.collect_garbage()
-    n = get_cost()
+    n = initial_cost
+    m = n
     levels = bdd._bdd._levels()
 
     block_var = {}
@@ -2800,37 +2795,33 @@ def _apply_custom_block_sifting(bdd, wrld, qry, costfxn, blocksdefn, plan_cost_f
     blocks = set(block_var.values())
 
     for block in blocks:
-        k = _reorder_block_custom_cost(bdd, block, block_sz[blocksdefn[block]], levels, wrld, qry, costfxn, blocksdefn, levels_to_block_num, plan_cost_fn)
-
-        m = get_cost()
+        k, m = _reorder_block_custom_cost(bdd, block, block_sz[blocksdefn[block]], levels, wrld, qry, costfxn, blocksdefn, levels_to_block_num, m, plan_cost_fn)
 
         if on_var_sifted is not None:
             on_var_sifted(block, k, m)
 
         logger.info(
             '{m} cost for variable "{v}" at level {k}'.format(
-                m=m, v=var, k=k))
+                m=m, v=block, k=k))
     assert m <= n, (m, n)
     logger.info('final variable order:\b{v}'.format(v=bdd._bdd.vars))
+    return m
 
 
-def _reorder_block_custom_cost(bdd, block, blocksize, levels, wrld, qry, costfxn, blocksdefn, levels2blocknum, plan_cost_fn=None):
+def _reorder_block_custom_cost(bdd, block, blocksize, levels, wrld, qry, costfxn, blocksdefn, levels2blocknum, current_cost, plan_cost_fn=None):
     """Reorder by sifting variables for the whole `block`.
 
     If plan_cost_fn is provided, uses multi-robot planning cost.
     Otherwise falls back to edge-based cost via costfxn.
 
+    Returns (best_level, best_cost) tuple.
+
     @type bdd: `BDD`
     @type block: `str`
     """
-    def get_cost():
-        if plan_cost_fn is not None:
-            return plan_cost_fn(bdd, wrld, qry)
-        return compute_query_cost(bdd, wrld, qry, costfxn)
-
     assert block in bdd._bdd.vars, (block, bdd._bdd.vars)
     assert _verify_valid_block_ref(bdd, block, blocksdefn)
-    m = get_cost()
+    m = current_cost
 
     n = len(bdd._bdd.vars) - 1
     assert n >= 0, n
@@ -2847,10 +2838,9 @@ def _reorder_block_custom_cost(bdd, block, blocksize, levels, wrld, qry, costfxn
     k = min(costs, key=costs.get)
     _block_shift(bdd, end, blocksize, k, levels, levels2blocknum)  # Move this block to optimal position
 
-    m_ = get_cost()
-    assert costs[k] == m_, (costs[k], m_)
-    assert m_ <= m, (m_, m)
-    return k
+    best_cost = costs[k]
+    assert best_cost <= m, (best_cost, m)
+    return k, best_cost
 
 
 

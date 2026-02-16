@@ -1,6 +1,5 @@
-import copy
 import json, uuid
-from .robot_class import Robot, RobotMap
+from .robot_class import Robot, RobotMap, clone_robot_map
 from .robot_manager import RobotManager, euclidean_distance, DISTANCE_TOLERANCE, _known_properties
 from .time_step_node_class import TimeStepNode
 import os
@@ -130,18 +129,18 @@ class SearchTree:
 
             # Snapshot robot_map so all assignments are preserved on this node
             robot_moving_node = TimeStepNode(
-                robot_map=copy.deepcopy(robot_map),
+                robot_map=clone_robot_map(robot_map),
                 id = str(uuid.uuid1()),
                 query = current_node.query,
                 type = 'robot_moving',
                 resolved_questions = current_node.resolved_questions,
                 next = [],
             )
-            robot_moving_node.visited_locations = copy.deepcopy(current_node.visited_locations)
+            robot_moving_node.visited_locations = set(current_node.visited_locations)
             current_node.next.append(robot_moving_node)
             current_node = robot_moving_node
 
-            visited_locations = copy.deepcopy(current_node.visited_locations)
+            visited_locations = set(current_node.visited_locations)
             visited_locations.update(self.check_robot_destinations(robot_map))
 
             # Clear arrived robots on the working robot_map AFTER checking destinations
@@ -150,7 +149,7 @@ class SearchTree:
 
             # Snapshot the cleared state for the query node
             query_node = TimeStepNode(
-                robot_map=copy.deepcopy(robot_map),
+                robot_map=clone_robot_map(robot_map),
                 id = str(uuid.uuid1()),
                 query = current_node.query,
                 type = 'query',
@@ -165,7 +164,7 @@ class SearchTree:
         return current_node
 
     def process_combinations(self, combination: dict[str, str], current_time_step: TimeStepNode, robot_map_original: RobotMap):
-        robot_map = copy.deepcopy(robot_map_original)
+        robot_map = clone_robot_map(robot_map_original)
         for robot_id, location in combination.items():
             self.robot_manager.assign_robot_to_location(robot_id=robot_id, location=location, robot_map=robot_map)
 
@@ -175,14 +174,14 @@ class SearchTree:
 
 
         self.robot_manager = RobotManager(
-            robot_map=copy.deepcopy(initial_robot_map),
+            robot_map=clone_robot_map(initial_robot_map),
             next_question_map=self.next_query,
             initial_question=self.starting_prop,
             props=self.props,
             location_to_pin=self.location_to_pin,
             pin_to_location=self.pin_to_location,
             location_to_prop=self.location_to_prop,
-            initial_resolution=copy.deepcopy(initial_resolution)
+            initial_resolution=initial_resolution.copy() if initial_resolution else {}
         )
 
 
@@ -193,7 +192,7 @@ class SearchTree:
             if not current_time_step.robot_map:
                 continue
             
-            original_robot_map = copy.deepcopy(current_time_step.robot_map)
+            original_robot_map = clone_robot_map(current_time_step.robot_map)
             combinations = self.robot_manager.generate_combinations(
                 property=current_time_step.query,  
                 robot_map=original_robot_map,
@@ -358,7 +357,52 @@ class SearchTree:
 
         assignments: dict[str, str] = {}
         self._walk_for_assignments(root_node, assignments, use_time)
+
+        # Mirror polarities: ensure both @X and @-X are covered
+        mirrored: dict[str, str] = {}
+        for code, robot_id in assignments.items():
+            if code.startswith('@-'):
+                opposite = '@' + code[2:]   # @-87 -> @87
+            elif code.startswith('@'):
+                opposite = '@-' + code[1:]  # @87 -> @-87
+            else:
+                continue
+            if opposite not in assignments and opposite not in mirrored:
+                mirrored[opposite] = robot_id
+        assignments.update(mirrored)
+
         return assignments
+
+    def _find_next_ras(self, node: TimeStepNode) -> list[TimeStepNode]:
+        """Traverse from node through robot_moving/query chains to find nearest robot_assignment descendants."""
+        if not node.next:
+            return []
+        result = []
+        for child in node.next:
+            if child.type == 'robot_assignment':
+                result.append(child)
+            else:
+                result.extend(self._find_next_ras(child))
+        return result
+
+    def _trace_consumed_codes(self, from_code: str, resolved_questions: dict[str, str]) -> list[str]:
+        """Follow BDD edges from from_code using resolved_questions to collect consumed codes.
+
+        Starting from from_code, follows BDD edges (self.next_query) using
+        resolved_questions to determine direction (T->high edge, F->low edge).
+        Collects all codes that are already resolved. Stops at unresolved codes
+        or terminals.
+        """
+        consumed = []
+        current = from_code
+        while current in resolved_questions and current in self.next_query:
+            edges = self.next_query[current]
+            if len(edges) < 2:
+                break  # terminal
+            consumed.append(current)
+            truth = resolved_questions[current] == 'T'
+            current = edges[1] if truth else edges[0]
+        return consumed
 
     def _walk_for_assignments(self, node: TimeStepNode, assignments: dict[str, str], use_time: bool) -> None:
         if not node.next:
@@ -379,13 +423,37 @@ class SearchTree:
             else:
                 best_child = min(node.next, key=lambda n: self.determine_cost(n))
 
-            # Record which robot is sent to which location.
-            # Map every BDD code at that location to the robot.
+            # Build loc_to_robot: location -> robot_id
+            loc_to_robot: dict[str, str] = {}
             for robot_id, robot in best_child.robot_map.items():
-                if robot.assigned_loc and robot.assigned_loc in self.location_to_prop:
-                    for code in self.location_to_prop[robot.assigned_loc]:
-                        if code not in assignments:
-                            assignments[code] = robot_id
+                # Robots assigned to a location
+                if robot.assigned_loc:
+                    loc_to_robot[robot.assigned_loc] = robot_id
+                # Robots already at a location (by position)
+                pos_tuple = tuple(robot.position)
+                if pos_tuple in self.pin_to_location:
+                    loc = self.pin_to_location[pos_tuple]
+                    if loc not in loc_to_robot:
+                        loc_to_robot[loc] = robot_id
+
+            # Map the current query code to the robot visiting its location
+            if node.query and node.query in self.prop_to_location:
+                for loc in self.prop_to_location[node.query]:
+                    if loc in loc_to_robot:
+                        if node.query not in assignments:
+                            assignments[node.query] = loc_to_robot[loc]
+                        break
+
+            # Find descendant robot_assignment nodes and trace consumed codes
+            desc_ras = self._find_next_ras(best_child)
+            for desc_ra in desc_ras:
+                consumed = self._trace_consumed_codes(node.query, desc_ra.resolved_questions)
+                for code in consumed:
+                    if code not in assignments and code in self.prop_to_location:
+                        for loc in self.prop_to_location[code]:
+                            if loc in loc_to_robot:
+                                assignments[code] = loc_to_robot[loc]
+                                break
 
             self._walk_for_assignments(best_child, assignments, use_time)
 
