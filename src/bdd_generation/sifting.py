@@ -53,7 +53,7 @@ class PlanningCostEvaluator:
         self.last_temp_bdd = None
         self.last_product_root = None
         self.last_search_tree = None
-        self.last_root_node = None
+        self.last_assignments = None
 
     def __call__(self, bdd, wrld, qry):
         """
@@ -79,7 +79,7 @@ class PlanningCostEvaluator:
         self.last_search_tree = None
         self.last_temp_bdd = None
         self.last_product_root = None
-        self.last_root_node = None
+        self.last_assignments = None
         gc.collect()
 
         # Create a SEPARATE BDD for the product graph to avoid modifying the original
@@ -121,14 +121,12 @@ class PlanningCostEvaluator:
         initial_resolutions = {}
 
         # During sifting we only need the cost, not the plan.
-        # Use alpha-beta pruning to skip branches that cannot affect
-        # the minimax result (only safe here because we discard the tree
-        # immediately after; plan extraction still uses the un-pruned path).
-        root_node = search_tree.search(initial_robot_map, initial_resolutions)
-        if self.cost_metric == 'time':
-            cost = search_tree.determine_time_with_pruning(root_node)
-        else:
-            cost = search_tree.determine_cost_with_pruning(root_node)
+        # DFS computes the minimax cost without building the search tree,
+        # using O(D) memory instead of storing the entire tree.
+        cost_metric = 'time' if self.cost_metric == 'time' else 'distance'
+        cost, assignments = search_tree.search_dfs(
+            initial_robot_map, initial_resolutions,
+            cost_metric=cost_metric, collect_assignments=True)
 
         # Save state so on_var_sifted can colour the PDF without a
         # redundant search.  _reorder_var_custom_cost re-evaluates at
@@ -136,7 +134,7 @@ class PlanningCostEvaluator:
         self.last_temp_bdd = product_bdd
         self.last_product_root = product_root
         self.last_search_tree = search_tree
-        self.last_root_node = root_node
+        self.last_assignments = assignments
 
         return cost
 

@@ -1,0 +1,139 @@
+# Deep-Decision Archive
+#
+# Three robots start at base. A central desk has an 'index' sign that
+# routes to either the left wing or the right wing. Each wing has a
+# 'tag' sign that further narrows to upper or lower document rooms.
+# The query requires locating a document in the correct pair of rooms,
+# and XOR forces both rooms in the pair to be visited.
+#
+# Layout (y increases upward):
+#
+#   la1(0,115) la2(20,115)          ra1(80,115) ra2(100,115)
+#          \   /                         \   /
+#        wing-l (10,95)              wing-r (90,95)
+#               \                        /
+#                  desk (50,75)   <- index sign
+#                     |
+#                  base (50,50)   <- both robots start here
+#                     |
+#                     |
+#   lb1(0,15)  lb2(20,15)            rb1(80,15)  rb2(100,15)
+#
+# Decision structure:
+#   index(desk) = T  -->  right wing  (ra/rb rooms)
+#   index(desk) = F  -->  left wing   (la/lb rooms)
+#
+#   tag(wing-r) = T  -->  upper right {ra1, ra2}
+#   tag(wing-r) = F  -->  lower right {rb1, rb2}
+#
+#   tag(wing-l) = T  -->  upper left  {la1, la2}
+#   tag(wing-l) = F  -->  lower left  {lb1, lb2}
+#
+# Lower rooms (lb*, rb*) are far from their wing signs and far from
+# base, making correct robot pre-positioning highly valuable and
+# creating large cost differences across orderings.
+
+# LOCATIONS
+location base   at 50,  50
+location desk   at 50,  75
+location wing-l at 10,  95
+location wing-r at 90,  95
+location la1    at  0, 115
+location la2    at 20, 115
+location lb1    at  0,  15
+location lb2    at 20,  15
+location ra1    at 80, 115
+location ra2    at 100, 115
+location rb1    at 80,  15
+location rb2    at 100,  15
+
+# ROBOTS
+robots 2
+robot r1 starts-at base
+robot r2 starts-at base
+
+# PROPERTIES
+recognizable-property index
+recognizable-property tag
+recognizable-property doc
+
+# GROUND FACTS: index exists only at desk
+!index(base)
+!index(wing-l)
+!index(wing-r)
+!index(la1)
+!index(la2)
+!index(lb1)
+!index(lb2)
+!index(ra1)
+!index(ra2)
+!index(rb1)
+!index(rb2)
+
+# GROUND FACTS: tag exists only at wing-l and wing-r
+!tag(base)
+!tag(desk)
+!tag(la1)
+!tag(la2)
+!tag(lb1)
+!tag(lb2)
+!tag(ra1)
+!tag(ra2)
+!tag(rb1)
+!tag(rb2)
+
+# GROUND FACTS: no doc at navigation/observation locations
+!doc(base)
+!doc(desk)
+!doc(wing-l)
+!doc(wing-r)
+
+# WORLD CONSTRAINTS
+# index(desk) routes to one wing exclusively
+{
+  index(desk) -> (!doc(la1) & !doc(la2) & !doc(lb1) & !doc(lb2))
+}
+{
+  !index(desk) -> (!doc(ra1) & !doc(ra2) & !doc(rb1) & !doc(rb2))
+}
+
+# tag(wing-r) determines upper vs lower right (relevant when index=T)
+{
+  (index(desk) & tag(wing-r)) -> (doc(ra1) | doc(ra2))
+}
+{
+  (index(desk) & tag(wing-r)) -> (!doc(rb1) & !doc(rb2))
+}
+{
+  (index(desk) & !tag(wing-r)) -> (doc(rb1) | doc(rb2))
+}
+{
+  (index(desk) & !tag(wing-r)) -> (!doc(ra1) & !doc(ra2))
+}
+
+# tag(wing-l) determines upper vs lower left (relevant when index=F)
+{
+  (!index(desk) & tag(wing-l)) -> (doc(la1) | doc(la2))
+}
+{
+  (!index(desk) & tag(wing-l)) -> (!doc(lb1) & !doc(lb2))
+}
+{
+  (!index(desk) & !tag(wing-l)) -> (doc(lb1) | doc(lb2))
+}
+{
+  (!index(desk) & !tag(wing-l)) -> (!doc(la1) & !doc(la2))
+}
+
+# NOTE: no mutual exclusion within pairs — both rooms in a pair can have
+# docs simultaneously.  This makes XOR genuinely uncertain (true when
+# exactly one room has doc, false when both do), so the product graph is
+# non-trivial and robots must visit both rooms to answer the query.
+
+# QUERY: XOR within the correct pair forces both rooms to be visited
+Query: {
+  (index(desk) & tag(wing-r) & (doc(ra1) ^ doc(ra2))) |
+  (index(desk) & !tag(wing-r) & (doc(rb1) ^ doc(rb2))) |
+  (!index(desk) & tag(wing-l) & (doc(la1) ^ doc(la2))) |
+  (!index(desk) & !tag(wing-l) & (doc(lb1) ^ doc(lb2)))
+}

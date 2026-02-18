@@ -63,8 +63,7 @@ class RobotManager:
             resolved_questions= initial_resolution.copy() if initial_resolution else {},
         )
         self.head_time_step_node.visited_locations = set(initial_visited)
-        self.time_step_queue = []
-        self.time_step_queue.append(start_node)
+        self.time_step_queue = [start_node]
 
     def count_traveling_robots(self, robot_map: RobotMap) -> int:
         """Counts the number of robots that are currently traveling."""
