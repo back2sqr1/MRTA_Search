@@ -14,6 +14,7 @@ Usage:
 import sys
 import os
 import argparse
+import time
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
@@ -26,7 +27,8 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from get_bdd_from_srql import get_bdd_from_srql
 from customdd.autoref import BDD
 from customdd.bdd import custom_reorder
-from sifting import PlanningCostEvaluator, build_adjacency_list, get_code_to_locations_map
+from sifting import (PlanningCostEvaluator, build_adjacency_list,
+                     get_code_to_locations_map, parallel_reorder)
 
 from navigation.navigation.planning.create_plan import SearchTree
 from navigation.navigation.planning.robot_class import Robot, RobotMap
@@ -369,7 +371,12 @@ def main():
                         default=None,
                         help='Cost metric: "distance" (sum of all robot distances) '
                              'or "time" (wall-clock parallel completion time)')
+    parser.add_argument('--workers', type=int, default=None,
+                        help='Parallel worker processes for cost evaluation during sifting '
+                             '(default: os.cpu_count())')
     args = parser.parse_args()
+
+    program_start = time.perf_counter()
 
     cost_metric = args.cost_metric
     if cost_metric is None:
@@ -424,18 +431,23 @@ def main():
         cost_metric=cost_metric)
 
     print("\nSifting in progress...")
-    print("(Each variable is swept across all positions to find optimal placement)\n")
+    print("(Each variable is swept across all positions; searches run in parallel)\n")
 
     sifting_step = [0]
+    sift_times = []          # wall-clock seconds for each variable's sift
+    sift_start = [time.perf_counter()]  # mutable so the closure can update it
 
     def on_var_sifted(var, best_level, cost):
+        elapsed = time.perf_counter() - sift_start[0]
+        sift_times.append(elapsed)
+        sift_start[0] = time.perf_counter()   # reset for next variable
+
         step = sifting_step[0]
         readable = var_to_readable.get(var, var)
-        print(f"  Sifted '{readable}' -> level {best_level}, cost = {cost:.4f}")
+        print(f"  Sifted '{readable}' -> level {best_level}, cost = {cost:.4f}  ({elapsed:.2f}s)")
 
-        # Reuse the search tree that the evaluator already built at the
-        # best position — no redundant search.  Colour is assigned only
-        # once, here, after the variable has been placed.
+        # evaluator cache was refreshed by parallel_reorder before this callback,
+        # so last_temp_bdd / last_product_root / last_assignments are current.
         if evaluator.last_temp_bdd is not None and evaluator.last_search_tree is not None:
             ncm, rcl = None, None
             if evaluator.last_assignments:
@@ -455,7 +467,14 @@ def main():
                 robot_color_legend=rcl)
         sifting_step[0] += 1
 
-    custom_reorder(bdd, w, q, plan_cost_fn=evaluator, on_var_sifted=on_var_sifted)
+    parallel_reorder(bdd, w, q,
+                     elegant_var_dict=elegant_var_dict,
+                     robots=robots,
+                     locs_with_coords=locs_with_coords,
+                     cost_metric=cost_metric,
+                     on_var_sifted=on_var_sifted,
+                     evaluator=evaluator,
+                     n_workers=args.workers)
     print("\nSifting complete!")
 
     # --- After ---
@@ -493,6 +512,14 @@ def main():
         print(f"Improvement: {improvement:.4f} ({pct:.1f}% reduction)")
     else:
         print("Trivial query - no improvement possible")
+
+    total_elapsed = time.perf_counter() - program_start
+    print(f"\nSifting time per variable:")
+    for i, t in enumerate(sift_times):
+        print(f"  Variable {i + 1:2d}: {t:.2f}s")
+    if sift_times:
+        print(f"  Total sifting: {sum(sift_times):.2f}s")
+    print(f"\nTotal program time: {total_elapsed:.2f}s")
 
     print("\nGenerated files:")
     print(f"  - {prefix}_before_sifting.pdf  (Initial variable ordering)")

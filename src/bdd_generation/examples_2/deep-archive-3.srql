@@ -52,9 +52,10 @@ location dL1     at  18,  12
 location dL2     at  90,  22
 
 # ROBOTS
-robots 2
+robots 3
 robot r1 starts-at base
 robot r2 starts-at base
+robot r3 starts-at base
 
 # PROPERTIES
 recognizable-property index

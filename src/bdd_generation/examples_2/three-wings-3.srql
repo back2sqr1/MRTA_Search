@@ -1,0 +1,53 @@
+# Three-Wing Museum Test
+#
+# Robots start at a central hub. Three wings radiate outward,
+# each equidistant (~50 units) from the hub but in different directions.
+#
+#                    c  (North Wing)
+#                    |
+#                    |
+#              hub1 --- hub2   (center)
+#              /             \
+#             /               \
+#        a, b                 d, e
+#   (West Wing)           (East Wing)
+#
+# Query: !art(c) | (art(e) & art(b) & !art(d) & !art(a))
+# Note: the second disjunct contains art(d) & !art(d), which is always false,
+# so the query simplifies to !art(c).
+
+# CENTRAL HUB (robots start here)
+location hub1 at 47, 50
+location hub2 at 53, 50
+
+# WEST WING 
+location a at 25, 25
+location b at 25, 30
+
+# NORTH WING (~50 units from center)
+location c at 50, 100
+
+# EAST WING 
+location d at 75, 75
+location e at 75, 78
+
+robots 3
+robot r1 starts-at hub1
+robot r2 starts-at hub2
+robot r3 starts-at hub2
+
+recognizable-property art
+
+# Artifact is at exactly one location
+{
+  art(a) | art(b) | art(c) | art(d) | art(e)
+}
+
+# Only one artifact exists (mutual exclusion)
+[?u, ?v | ?u != ?v]{
+  art(?u) -> !art(?v)
+}
+
+Query: {
+  (!art(c)) | (art(e) & art(b) & !art(d) & !art(a))
+}

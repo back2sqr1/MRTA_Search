@@ -2,6 +2,7 @@ from copy import deepcopy
 import gc
 import itertools
 import json
+import multiprocessing
 import sys
 import os
 from get_bdd_from_srql import get_bdd_from_srql
@@ -378,6 +379,189 @@ def determine_plan_cost(bdd, product_root, elegant_var_dict, visited=None):
     initial_resolutions = {}
     best_plan, *_ = search_tree.get_best_plan(initial_robot_map, initial_resolutions)
     return best_plan, search_tree.determine_cost(node=search_tree.robot_manager.head_time_step_node)
+
+
+def _extract_planning_data(bdd, wrld, qry, elegant_var_dict):
+    """Extract the product graph at the current BDD variable ordering.
+
+    Does NOT run the search — only builds the graph structures needed to
+    describe the problem to a worker process.
+
+    Returns a dict with 'adjacency_list', 'code_to_locations_map', and
+    'product_root_str', or None if the product graph is trivial.
+    """
+    product_bdd = BDD()
+    for var in sorted(bdd._bdd.vars, key=bdd._bdd.vars.get):
+        product_bdd.add_var(var, None)
+
+    product_root = bdd.form_product_graph(product_bdd, wrld, qry)
+    if abs(int(product_root)) == 1:
+        return None
+
+    adjacency_list = build_adjacency_list(product_bdd, product_root)
+    code_to_locations_map = get_code_to_locations_map(product_bdd, product_root, elegant_var_dict)
+
+    return {
+        'adjacency_list': adjacency_list,
+        'code_to_locations_map': code_to_locations_map,
+        'product_root_str': str(product_root),
+        # Kept in the main process only — never sent to workers.
+        # Used to populate the evaluator cache without an extra search.
+        'product_bdd': product_bdd,
+        'product_root': product_root,
+    }
+
+
+def _run_search_task(task):
+    """Worker function: run planning DFS from pre-extracted product graph data.
+
+    Must be a module-level function so multiprocessing can pickle it.
+
+    Args:
+        task: (position, adjacency_list, code_to_locations_map,
+               product_root_str, locs, robots, cost_metric)
+
+    Returns:
+        (position, cost, assignments)
+    """
+    position, adjacency_list, code_to_locations_map, product_root_str, \
+        locs, robots, cost_metric = task
+
+    if adjacency_list is None:
+        return position, 0, {}
+
+    search_tree = SearchTree()
+    search_tree.bdd_config = search_tree.import_srql_config(
+        adjacency_list, locs, code_to_locations_map, product_root_str)
+
+    r_map = {r['robot_id']: Robot(id=r['robot_id'], position=locs[r['start_location']])
+             for r in robots['robot_starts']}
+
+    cost, assignments = search_tree.search_dfs(
+        RobotMap(r_map), {}, cost_metric=cost_metric, collect_assignments=True)
+
+    return position, cost, assignments
+
+
+def parallel_reorder(bdd, wrld, qry, elegant_var_dict, robots, locs_with_coords,
+                     cost_metric='distance', on_var_sifted=None, evaluator=None,
+                     n_workers=None):
+    """Rudell's sifting with parallelised cost evaluations.
+
+    The BDD variable swaps are inherently sequential (each swap modifies shared
+    state), but the planning search at each position is independent.  This
+    function separates the two phases for each variable:
+
+      Phase 1 — Sequential sweep:
+        Move the variable from its current level to one endpoint, then swap it
+        through every level to the other endpoint.  After each swap, capture
+        the product graph (adjacency list + location map) without running the
+        search.
+
+      Phase 2 — Parallel evaluation:
+        Send all captured graphs to a worker pool simultaneously and collect
+        the planning cost for every position at once.
+
+    The variable is then placed at the minimum-cost level and the outer loop
+    continues with the next variable.
+
+    Args:
+        bdd:              The BDD manager (autoref.BDD wrapper).
+        wrld:             World constraints BDD node.
+        qry:              Query BDD node.
+        elegant_var_dict: Dict mapping readable names to internal BDD var names.
+        robots:           Dict with 'num_robots' and 'robot_starts'.
+        locs_with_coords: Dict mapping location names to {'x': int, 'y': int}.
+        cost_metric:      'distance' or 'time'.
+        on_var_sifted:    Optional callback(var, best_level, cost) after each variable.
+        evaluator:        Optional PlanningCostEvaluator; its cache is refreshed after
+                          each sift so on_var_sifted can still dump coloured PDFs.
+        n_workers:        Worker processes for parallel searches
+                          (default: os.cpu_count()).
+    """
+    from customdd.bdd import _shift
+
+    locs = {name: (c['x'], c['y']) for name, c in locs_with_coords.items()}
+
+    bdd._bdd.collect_garbage()
+
+    # Check for trivial case up front
+    init_data = _extract_planning_data(bdd, wrld, qry, elegant_var_dict)
+    if init_data is None:
+        return
+    _, current_cost, _ = _run_search_task((
+        -1, init_data['adjacency_list'], init_data['code_to_locations_map'],
+        init_data['product_root_str'], locs, robots, cost_metric))
+    if current_cost == 0:
+        return
+
+    n_proc = n_workers or (os.cpu_count() or 1)
+
+    # One persistent pool shared across all variables avoids repeated fork overhead
+    with multiprocessing.Pool(processes=n_proc) as pool:
+        for var in list(bdd._bdd.vars):
+            levels = bdd._bdd._levels()
+            n_vars = len(bdd._bdd.vars) - 1
+            level = bdd._bdd.level_of_var(var)
+
+            # Sift toward the nearer endpoint first (Rudell's heuristic)
+            start, end = 0, n_vars
+            if (2 * level) >= n_vars:
+                start, end = end, start
+
+            # --- Phase 1: sequential sweep, capture graph at every position ---
+            _shift(bdd._bdd, level, start, levels)
+
+            d = 1 if start < end else -1
+            snapshots = {}  # level -> extracted graph data (or None if trivial)
+            snapshots[start] = _extract_planning_data(bdd, wrld, qry, elegant_var_dict)
+
+            for i in range(start, end, d):
+                j = i + d
+                bdd._bdd.swap(i, j, levels)
+                snapshots[j] = _extract_planning_data(bdd, wrld, qry, elegant_var_dict)
+
+            # BDD now has var at level `end`
+
+            # --- Phase 2: parallel search over all captured positions ---
+            tasks = []
+            for pos, snap in snapshots.items():
+                if snap is None:
+                    tasks.append((pos, None, None, None, locs, robots, cost_metric))
+                else:
+                    tasks.append((pos,
+                                  snap['adjacency_list'],
+                                  snap['code_to_locations_map'],
+                                  snap['product_root_str'],
+                                  locs, robots, cost_metric))
+
+            results = pool.map(_run_search_task, tasks)
+
+            costs = {pos: cost for pos, cost, _ in results}
+            assignments_by_pos = {pos: asgn for pos, _, asgn in results}
+            k = min(costs, key=costs.get)
+            current_cost = costs[k]
+
+            # Restore BDD to the best level
+            _shift(bdd._bdd, end, k, levels)
+
+            # Populate evaluator cache from the snapshot already captured at
+            # position k — no extra search needed.
+            if evaluator is not None:
+                snap_k = snapshots[k]
+                if snap_k is not None:
+                    evaluator.last_temp_bdd = snap_k['product_bdd']
+                    evaluator.last_product_root = snap_k['product_root']
+                    evaluator.last_assignments = assignments_by_pos[k]
+                    evaluator.last_search_tree = True  # non-None sentinel; callback only checks is not None
+                else:
+                    evaluator.last_temp_bdd = None
+                    evaluator.last_product_root = None
+                    evaluator.last_assignments = None
+                    evaluator.last_search_tree = None
+
+            if on_var_sifted is not None:
+                on_var_sifted(var, k, current_cost)
 
 
 if __name__ == "__main__":

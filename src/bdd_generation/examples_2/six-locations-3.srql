@@ -1,0 +1,73 @@
+# Six-Location Layout (shifted +20x, +100y so all coords are positive)
+#
+# Original -> Shifted:
+#   a (-20, 20)   -> (0, 120)
+#   b (-20, 10)   -> (0, 110)
+#   u (0, 10)     -> (20, 110)
+#   c (100, 10)   -> (120, 110)
+#   d (0, 0)      -> (20, 100)    <-- robots start here
+#   f (-20, -100) -> (0, 0)
+#
+#   a (0, 120)
+#       \
+#   b (0, 110) --- u (20, 110) --------------- c (120, 110)
+#                   |
+#               d (20, 100)   <-- robots start here
+#                   |
+#                   |
+#                   |
+#               f (0, 0)
+#
+# Sign at u determines where art can be:
+#   sign(u) = true  -> must visit a, c, b
+#   sign(u) = false -> must visit b, f, a
+
+# LOCATIONS
+location d at 20, 100
+location u at 20, 110
+location a at 0, 120
+location b at 0, 110
+location c at 70, 110
+location f at 0, 50
+
+# ROBOTS (start at d)
+robots 3
+robot r1 starts-at d
+robot r2 starts-at d
+robot r3 starts-at d
+
+# PROPERTIES
+recognizable-property art
+recognizable-property sign
+
+# GROUND FACTS: sign only exists at u
+!sign(a)
+!sign(b)
+!sign(c)
+!sign(d)
+!sign(f)
+
+# No art at u (signpost) or d (starting hub)
+!art(u)
+!art(d)
+
+# WORLD CONSTRAINTS
+# sign(u) = true  -> art in {a, b, c}, not in f
+# sign(u) = false -> art in {a, b, f}, not in c
+{
+  sign(u) -> (art(a) | art(b) | art(c))
+}
+{
+  sign(u) -> !art(f)
+}
+{
+  !sign(u) -> (art(a) | art(b) | art(f))
+}
+{
+  !sign(u) -> !art(c)
+}
+
+# QUERY: XOR forces all locations in each branch to be visited (no short-circuit)
+#   sign true  -> must check a, c, b
+#   sign false -> must check b, f, a
+Query: { (sign(u) & (art(a) ^ art(c))) | (!sign(u) & (art(f) ^ art(a))) }

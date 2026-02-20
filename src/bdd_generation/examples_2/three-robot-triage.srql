@@ -1,0 +1,112 @@
+# Three-Robot Triage
+#
+# Exactly one of three key stations is active.  The active key unlocks
+# its corresponding vault, which has two shelves; XOR forces both
+# shelves to be checked to locate the document.
+#
+# Layout (y-axis: up = North):
+#
+#    key-a(10,80)   key-b(50,90)   key-c(90,80)
+#
+#              hub(50,50)
+#
+#    vA1(5,15) vA2(20,15)    vB1(45,15) vB2(55,15)    vC1(80,15) vC2(95,15)
+#    [vault A]               [vault B]                 [vault C]
+#
+# Routing:
+#   key(key-a)=T  →  document in vault A (vA1 or vA2)
+#   key(key-b)=T  →  document in vault B (vB1 or vB2)
+#   key(key-c)=T  →  document in vault C (vC1 or vC2)
+#
+# Why 3 robots are required for the optimal plan (time metric):
+#   There are 3 possible active keys and 2 robots can only check 2
+#   simultaneously.  In the adversarial (minimax) worst case the active
+#   key is whichever was NOT checked first.
+#
+#   With 2 robots: R1→key-a, R2→key-b in parallel.  If both are
+#     inactive, one robot must travel on to key-c (extra phase).
+#     Worst-case makespan = key travel + key-to-key travel + vault travel.
+#
+#   With 3 robots: R1→key-a, R2→key-b, R3→key-c all in parallel.
+#     Active key is always identified in the FIRST phase.  Two robots
+#     then converge on the correct vault (XOR requires both shelves).
+#     Worst-case makespan = max(key travel) + max(key-to-vault travel).
+#
+# With 2 bays and 2 robots, robots can cover every shelf by brute force.
+# With 3 vaults the brute-force strategy requires sequentially visiting
+# all 6 shelves with 2 robots — always slower than 3-robot parallel
+# key checks followed by a single targeted vault visit.
+
+# LOCATIONS
+location hub   at 50, 50
+location key-a at 10, 80
+location key-b at 50, 90
+location key-c at 90, 80
+location vA1   at  5, 15
+location vA2   at 20, 15
+location vB1   at 45, 15
+location vB2   at 55, 15
+location vC1   at 80, 15
+location vC2   at 95, 15
+
+# ROBOTS: three start at the central hub
+robots 2
+robot r1 starts-at hub
+robot r2 starts-at hub
+
+# PROPERTIES
+recognizable-property key
+recognizable-property doc
+
+# GROUND FACTS: key only at the three key stations
+!key(hub)
+!key(vA1)
+!key(vA2)
+!key(vB1)
+!key(vB2)
+!key(vC1)
+!key(vC2)
+
+# GROUND FACTS: doc only in vault shelves
+!doc(hub)
+!doc(key-a)
+!doc(key-b)
+!doc(key-c)
+
+# WORLD CONSTRAINTS
+# Exactly one key is active
+{
+  key(key-a) | key(key-b) | key(key-c)
+}
+[?u, ?v | ?u != ?v] {
+  key(?u) -> !key(?v)
+}
+
+# key-a routes to vault A only
+{
+  key(key-a) -> (doc(vA1) | doc(vA2))
+}
+{
+  key(key-a) -> (!doc(vB1) & !doc(vB2) & !doc(vC1) & !doc(vC2))
+}
+# key-b routes to vault B only
+{
+  key(key-b) -> (doc(vB1) | doc(vB2))
+}
+{
+  key(key-b) -> (!doc(vA1) & !doc(vA2) & !doc(vC1) & !doc(vC2))
+}
+# key-c routes to vault C only
+{
+  key(key-c) -> (doc(vC1) | doc(vC2))
+}
+{
+  key(key-c) -> (!doc(vA1) & !doc(vA2) & !doc(vB1) & !doc(vB2))
+}
+
+# QUERY: identify active key then verify document shelf via XOR
+Query: {
+  (key(key-a) & (doc(vA1) ^ doc(vA2))) |
+  (key(key-b) & (doc(vB1) ^ doc(vB2))) |
+  (key(key-c) & (doc(vC1) ^ doc(vC2)))
+}

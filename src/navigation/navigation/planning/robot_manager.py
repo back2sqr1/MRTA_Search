@@ -1,6 +1,8 @@
 from .robot_class import Robot, RobotMap, clone_robot_map
 from .time_step_node_class import TimeStepNode
+from collections import deque
 import uuid
+import random
 
 def euclidean_distance(pos1, pos2):
     """Calculate the Euclidean distance between two positions."""
@@ -15,12 +17,79 @@ def _known_properties(visited_locations, location_to_prop : dict[str, list[str]]
     return known_props
 
 DISTANCE_TOLERANCE = 0.01
+HEDGE_LOC_PREFIX = '~hedge_'
+
+
+def _trivial_circle(boundary):
+    """Minimum enclosing circle of 0, 1, 2, or 3 boundary points."""
+    if len(boundary) == 0:
+        return ((0.0, 0.0), 0.0)
+    if len(boundary) == 1:
+        return (boundary[0], 0.0)
+    if len(boundary) == 2:
+        cx = (boundary[0][0] + boundary[1][0]) / 2.0
+        cy = (boundary[0][1] + boundary[1][1]) / 2.0
+        r = euclidean_distance(boundary[0], (cx, cy))
+        return ((cx, cy), r)
+    # 3 points: compute circumcenter
+    ax, ay = boundary[0]
+    bx, by = boundary[1]
+    cx, cy = boundary[2]
+    D = 2.0 * (ax * (by - cy) + bx * (cy - ay) + cx * (ay - by))
+    if abs(D) < 1e-10:
+        # Collinear: MEC of the two most distant points
+        d01 = euclidean_distance(boundary[0], boundary[1])
+        d12 = euclidean_distance(boundary[1], boundary[2])
+        d02 = euclidean_distance(boundary[0], boundary[2])
+        if d01 >= d12 and d01 >= d02:
+            return _trivial_circle([boundary[0], boundary[1]])
+        elif d12 >= d01 and d12 >= d02:
+            return _trivial_circle([boundary[1], boundary[2]])
+        else:
+            return _trivial_circle([boundary[0], boundary[2]])
+    sa = ax * ax + ay * ay
+    sb = bx * bx + by * by
+    sc = cx * cx + cy * cy
+    ux = (sa * (by - cy) + sb * (cy - ay) + sc * (ay - by)) / D
+    uy = (sa * (cx - bx) + sb * (ax - cx) + sc * (bx - ax)) / D
+    center = (ux, uy)
+    r = euclidean_distance(center, boundary[0])
+    return (center, r)
+
+
+def _in_circle(circle, p):
+    """Return True if p is inside or on the boundary of circle (with epsilon tolerance)."""
+    center, r = circle
+    return euclidean_distance(center, p) <= r + 1e-10
+
+
+def _welzl(pts, boundary, n):
+    """Recursive Welzl algorithm for minimum enclosing circle of pts[0:n]."""
+    if n == 0 or len(boundary) == 3:
+        return _trivial_circle(boundary)
+    p = pts[n - 1]
+    D = _welzl(pts, boundary, n - 1)
+    if _in_circle(D, p):
+        return D
+    return _welzl(pts, boundary + [p], n - 1)
+
+
+def min_enclosing_circle(points):
+    """Compute the minimum enclosing circle of a list of (x, y) points.
+
+    Uses Welzl's algorithm (O(n) expected time after shuffling).
+    Returns (center, radius) where center is (x, y).
+    """
+    pts = list(points)
+    random.shuffle(pts)
+    return _welzl(pts, [], len(pts))
+
 
 class RobotManager:
     next_question_map : dict[str, list[str]] = {}
     head_time_step_node : TimeStepNode = None
     initial_question : str = ''
-    time_step_queue : list[TimeStepNode] = []
+    time_step_queue: deque = deque()
     props : set[str] = set()
     location_to_pin : dict[str, tuple[int, int]] = {}
     pin_to_location: dict[tuple[int, int], str] = {}
@@ -34,6 +103,7 @@ class RobotManager:
         self.location_to_pin = location_to_pin
         self.pin_to_location = pin_to_location
         self.location_to_prop = location_to_prop
+        self.hedge_locations: set[str] = set()
 
         robot_map_copy = clone_robot_map(robot_map)
 
@@ -63,7 +133,7 @@ class RobotManager:
             resolved_questions= initial_resolution.copy() if initial_resolution else {},
         )
         self.head_time_step_node.visited_locations = set(initial_visited)
-        self.time_step_queue = [start_node]
+        self.time_step_queue = deque([start_node])
 
     def count_traveling_robots(self, robot_map: RobotMap) -> int:
         """Counts the number of robots that are currently traveling."""
@@ -251,7 +321,54 @@ class RobotManager:
         robot = robot_map[robot_id]
         robot.assigned_loc = location
 
+    def _ensure_hedge_registered(self, query) -> set[str]:
+        """Idempotently compute and register a Chebyshev-center hedge for each BDD branch of `query`.
+
+        For each immediate child of `query` in the BDD that is a real proposition
+        (in self.props), computes the MEC center of all locations that satisfy that
+        child and registers it as a virtual hedge location with no props.
+        children[0] is the false branch (_F), children[1] is the true branch (_T).
+        Returns the set of registered hedge keys (0, 1, or 2 entries).
+        """
+        children = self.next_question_map.get(query, [])
+        branch_labels = ['_F', '_T']
+        hedge_keys = set()
+
+        for i, child in enumerate(children):
+            if child not in self.props:
+                continue
+
+            hedge_key = HEDGE_LOC_PREFIX + query + branch_labels[i]
+
+            if hedge_key in self.location_to_pin:
+                hedge_keys.add(hedge_key)
+                continue
+
+            positions = [
+                self.location_to_pin[loc]
+                for loc, props in self.location_to_prop.items()
+                if not loc.startswith(HEDGE_LOC_PREFIX) and child in props
+            ]
+
+            if len(positions) < 2:
+                continue
+
+            center, _ = min_enclosing_circle(positions)
+            center = (round(center[0], 4), round(center[1], 4))
+
+            if center in self.pin_to_location:
+                continue
+
+            self.location_to_pin[hedge_key] = center
+            self.pin_to_location[center] = hedge_key
+            self.location_to_prop[hedge_key] = []
+            self.hedge_locations.add(hedge_key)
+            hedge_keys.add(hedge_key)
+
+        return hedge_keys
+
     def generate_combinations(self, property: str, robot_map: RobotMap, visited_locations: set[str]) -> list[dict[str, str]]:
+        hedge_keys = self._ensure_hedge_registered(property)
         locations = list(self.location_to_pin.keys())
         robot_ids = list(robot_map.keys())
         combinations : list[dict [str, str]] = []
@@ -302,6 +419,8 @@ class RobotManager:
                         break
 
                 for robot in robot_ids:
+                    if flag:
+                        break
                     for loc in property_locations:
                         if self.location_to_pin[loc] == robot_map[robot].position:
                             flag = True
@@ -345,6 +464,9 @@ class RobotManager:
                     if prop not in known_props:
                         skip = False
                         break
+
+                if location in hedge_keys:
+                    skip = False
 
                 if (location not in used_locations) and (location not in en_route_locations) and (not skip):
                     new_assignment = current_assignment.copy()
